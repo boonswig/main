@@ -1,0 +1,345 @@
+{
+  "stages": [
+    {
+      "id": "qualify",
+      "name": "Qualification",
+      "order": 1,
+      "description": "Determine if this prospect is a genuine fit before investing more time. Use BANT as a guide — Budget, Authority, Need, and Timeline.",
+      "color": "blue",
+      "icon": "Target",
+      "questions": [
+        {
+          "id": "q-qual-1",
+          "question": "What's prompting you to explore a solution like this right now?",
+          "purpose": "Understand the triggering event — a problem they can't ignore, a new initiative, or competitive pressure.",
+          "followUps": [
+            "How long has this been an issue?",
+            "What happens if you don't solve this in the next 6 months?"
+          ]
+        },
+        {
+          "id": "q-qual-2",
+          "question": "Do you have a budget set aside for this project, and who controls that budget?",
+          "purpose": "Surface budget existence and identify the economic buyer early.",
+          "followUps": [
+            "Is this coming from an existing budget or would it need to be approved?",
+            "What's the approval process for a purchase of this size?"
+          ]
+        },
+        {
+          "id": "q-qual-3",
+          "question": "Who else is involved in evaluating or making this decision?",
+          "purpose": "Map the buying committee — champion, economic buyer, technical buyer, blocker.",
+          "followUps": [
+            "Would they be open to joining a future call?",
+            "Who has final sign-off authority?"
+          ]
+        },
+        {
+          "id": "q-qual-4",
+          "question": "What does your timeline look like for having something in place?",
+          "purpose": "Understand urgency and whether there's a real deadline driving action.",
+          "followUps": [
+            "Is there a specific date or event driving that timeline?",
+            "What happens if you miss that date?"
+          ]
+        }
+      ],
+      "talkingPoints": [
+        {
+          "id": "tp-qual-1",
+          "title": "Set the agenda",
+          "content": "Briefly explain what you'd like to cover: understand their situation, share how we help similar companies, and determine if there's a fit worth exploring further.",
+          "tips": ["Keep it to 30 seconds", "Make it conversational, not a presentation"]
+        },
+        {
+          "id": "tp-qual-2",
+          "title": "Establish credibility quickly",
+          "content": "Drop a relevant customer name or stat in the first 2 minutes — it signals you understand their world and builds trust.",
+          "tips": ["Match the reference to their industry or company size", "Don't over-pitch — one reference is enough"]
+        }
+      ],
+      "objections": [
+        {
+          "id": "obj-qual-1",
+          "objection": "We're not actively looking right now.",
+          "response": "That's totally fine — most of our best conversations start that way. I'm not here to sell you anything today. I'd just love to understand your current setup and share how we've helped companies like yours. If it's not relevant, I'll tell you. Would 15 minutes still make sense?",
+          "tips": ["Don't get defensive", "Reframe the call as low-stakes exploration"]
+        },
+        {
+          "id": "obj-qual-2",
+          "objection": "We already have something in place.",
+          "response": "Good to know — what are you using? A lot of our customers came to us while using [Competitor]. The thing that usually prompts a conversation is [common pain]. Is that something you've run into?",
+          "tips": ["Get curious, not competitive", "Find the gap they didn't know to mention"]
+        }
+      ]
+    },
+    {
+      "id": "discovery",
+      "name": "Discovery",
+      "order": 2,
+      "description": "Go deep on their current situation, pain points, and what an ideal outcome looks like. Your goal is to understand their world better than they do.",
+      "color": "purple",
+      "icon": "Search",
+      "questions": [
+        {
+          "id": "q-disc-1",
+          "question": "Walk me through how you handle [core use case] today.",
+          "purpose": "Understand their current process in detail — people, tools, steps, and workarounds.",
+          "followUps": [
+            "How much time does that take per week?",
+            "Who owns that process?",
+            "What breaks down most often?"
+          ]
+        },
+        {
+          "id": "q-disc-2",
+          "question": "What's the biggest frustration with how things work today?",
+          "purpose": "Surface the emotional pain, not just the logical problem. People buy on emotion.",
+          "followUps": [
+            "How long has that been the case?",
+            "What have you tried to fix it?"
+          ]
+        },
+        {
+          "id": "q-disc-3",
+          "question": "If you could wave a magic wand and have this working perfectly, what does that look like?",
+          "purpose": "Understand the ideal future state — this becomes the basis of your pitch.",
+          "followUps": [
+            "How would you measure success?",
+            "What would that be worth to your business?"
+          ]
+        },
+        {
+          "id": "q-disc-4",
+          "question": "What does success look like in 12 months if you get this right?",
+          "purpose": "Tie the solution to business outcomes, not just features.",
+          "followUps": [
+            "Who cares most about hitting that goal?",
+            "How does it affect your own performance review?"
+          ]
+        }
+      ],
+      "talkingPoints": [
+        {
+          "id": "tp-disc-1",
+          "title": "Be a consultant, not a vendor",
+          "content": "Your job in discovery is to listen 70% of the time. Ask one question, then be quiet. Let silences breathe — the best intel comes after a pause.",
+          "tips": ["Resist the urge to jump to the product", "Take visible notes — it signals you care"]
+        },
+        {
+          "id": "tp-disc-2",
+          "title": "Quantify the pain",
+          "content": "Push to put numbers on problems. 'Hours per week,' 'deals lost,' 'errors per month' — quantified pain becomes the ROI justification later.",
+          "tips": ["Use 'How often does that happen?' and 'What does that cost you?'", "Even rough estimates are useful"]
+        }
+      ],
+      "objections": [
+        {
+          "id": "obj-disc-1",
+          "objection": "I don't want to share too much before I understand your product.",
+          "response": "Completely fair. Let me give you a 2-minute overview of what we do, and then I'd love to ask a few questions to see if it's even relevant for your situation. Sound good?",
+          "tips": ["Give a crisp overview, then return to questions", "Don't let it turn into a one-way product demo"]
+        }
+      ]
+    },
+    {
+      "id": "pitch",
+      "name": "Product Pitch",
+      "order": 3,
+      "description": "Position the product as the answer to the specific pains uncovered in discovery. Connect features to outcomes — not the other way around.",
+      "color": "green",
+      "icon": "Presentation",
+      "questions": [
+        {
+          "id": "q-pitch-1",
+          "question": "Does this map to what you described earlier?",
+          "purpose": "Check for alignment after each section of the demo — keep them engaged and catch misalignment early.",
+          "followUps": [
+            "Is this closer to what you were imagining?",
+            "What's your reaction to that?"
+          ]
+        },
+        {
+          "id": "q-pitch-2",
+          "question": "How does this compare to what you have today?",
+          "purpose": "Force them to make the comparison themselves — they sell themselves.",
+          "followUps": [
+            "What stands out most?",
+            "Is there anything you'd want to see work differently?"
+          ]
+        }
+      ],
+      "talkingPoints": [
+        {
+          "id": "tp-pitch-1",
+          "title": "Lead with their pain, not your features",
+          "content": "Open with: 'Based on what you shared, you're dealing with [pain]. Here's how we solve that.' Never lead with 'Let me show you our platform.'",
+          "tips": ["Reference specific things they said in discovery", "One pain → one capability → one outcome"]
+        },
+        {
+          "id": "tp-pitch-2",
+          "title": "Use proof at every step",
+          "content": "After each major capability, drop a customer story: '[Company like theirs] used this to achieve [specific outcome].' Keep stories to 30 seconds.",
+          "tips": ["Match the customer to their industry/size", "Use real numbers if you can"]
+        },
+        {
+          "id": "tp-pitch-3",
+          "title": "Demo the 'aha moment' first",
+          "content": "Don't give a full feature tour. Find the one thing that will make them say 'we need this' and show it in the first 10 minutes.",
+          "tips": ["Ask your SE what each persona cares about most", "Skip the login screen and setup — start at the payoff"]
+        }
+      ],
+      "objections": [
+        {
+          "id": "obj-pitch-1",
+          "objection": "That looks complicated.",
+          "response": "I hear that — there's a lot on screen. In practice, [persona] only needs to use [2-3 things] day-to-day. Want me to show you the simplified view most teams actually use?",
+          "tips": ["Don't defend complexity", "Redirect to the simplest workflow"]
+        },
+        {
+          "id": "obj-pitch-2",
+          "objection": "Can you just send me a recording?",
+          "response": "Of course — I'll send a clip of what we just covered. Out of curiosity, is there a specific area you'd want to show someone else internally?",
+          "tips": ["Say yes, then use it to identify internal champions", "Offer to do a separate call with the other stakeholder"]
+        }
+      ]
+    },
+    {
+      "id": "objections",
+      "name": "Objection Handling",
+      "order": 4,
+      "description": "Address concerns with empathy and evidence. An objection is a question in disguise — figure out the real concern before answering.",
+      "color": "orange",
+      "icon": "Shield",
+      "questions": [
+        {
+          "id": "q-obj-1",
+          "question": "Help me understand — is [objection] a dealbreaker, or more of a concern you'd want addressed?",
+          "purpose": "Test whether the objection is fatal or just a question needing an answer.",
+          "followUps": [
+            "If we could address that, is there anything else that would hold you back?",
+            "What would need to be true for this to be a no-brainer?"
+          ]
+        }
+      ],
+      "talkingPoints": [
+        {
+          "id": "tp-obj-1",
+          "title": "The ACRA framework",
+          "content": "Acknowledge → Clarify → Respond → Advance. Never skip Acknowledge — it defuses defensiveness. Never skip Advance — objections without next steps stall deals.",
+          "tips": ["'That's a fair point...' before every response", "Always end with a question or next step"]
+        },
+        {
+          "id": "tp-obj-2",
+          "title": "Isolate before you answer",
+          "content": "Before answering any objection, ask: 'Is that the main thing holding you back, or are there other concerns?' Surface all objections before tackling any one.",
+          "tips": ["Answering one objection at a time reveals more", "Don't chase objections before you know all of them"]
+        }
+      ],
+      "objections": [
+        {
+          "id": "obj-obj-1",
+          "objection": "It's too expensive.",
+          "response": "I hear you on price — let me ask: too expensive compared to what? Your current solution, or the value you'd get from solving this? [Pause]. If we could show you a clear ROI in the first 90 days, would cost still be the blocker?",
+          "tips": ["Never discount before understanding the real objection", "Anchor to value, not features"]
+        },
+        {
+          "id": "obj-obj-2",
+          "objection": "We don't have the bandwidth to implement right now.",
+          "response": "That's the most common thing we hear — and it's exactly why we built our onboarding the way we did. Most teams are live in [X days] with minimal involvement from your side. Can I show you what the first 30 days actually look like?",
+          "tips": ["Have a specific onboarding timeline ready", "Offer to involve their IT team in a separate call"]
+        },
+        {
+          "id": "obj-obj-3",
+          "objection": "We need to evaluate other options first.",
+          "response": "Totally reasonable — you should evaluate. Can I ask what you're looking for that you haven't seen yet? I want to make sure you have what you need to do a fair comparison, and I can be upfront about where we win and where others might be a better fit.",
+          "tips": ["Position yourself as a trusted advisor, not a closer", "Ask what criteria they're using — then map those to your strengths"]
+        },
+        {
+          "id": "obj-obj-4",
+          "objection": "We tried something like this before and it didn't work.",
+          "response": "That's really helpful context — thank you for sharing that. What happened? I want to understand what went wrong so I can tell you honestly if we'd run into the same issue, or if what we do differently would have changed the outcome.",
+          "tips": ["Don't dismiss their past experience", "Find the specific failure point — it's usually implementation, not the category"]
+        },
+        {
+          "id": "obj-obj-5",
+          "objection": "We need to get IT / security / legal involved.",
+          "response": "Absolutely — we'd expect that. We work with enterprise security teams regularly and have SOC 2 Type II, SSO, and a standard security review packet ready. Want me to connect your team directly with our solutions engineer to get that started in parallel?",
+          "tips": ["Have your security docs ready to share", "Offer a direct connection to your SE or CSM"]
+        }
+      ]
+    },
+    {
+      "id": "close",
+      "name": "Close & Next Steps",
+      "order": 5,
+      "description": "Secure a clear commitment — whether that's a trial, a proposal, or a signed contract. Always leave with a specific next step, date, and owner.",
+      "color": "teal",
+      "icon": "CheckCircle",
+      "questions": [
+        {
+          "id": "q-close-1",
+          "question": "Based on everything we've covered, how are you feeling about this as a fit?",
+          "purpose": "Soft temperature check before proposing next steps — surfaces remaining concerns.",
+          "followUps": [
+            "What would make you more confident?",
+            "Is there anyone else who should weigh in before we move forward?"
+          ]
+        },
+        {
+          "id": "q-close-2",
+          "question": "What does your process look like from here to a decision?",
+          "purpose": "Map the buying process — how many steps, who's involved, what could slow it down.",
+          "followUps": [
+            "What typically causes deals like this to stall internally?",
+            "What can I do to make this easy for you to champion internally?"
+          ]
+        },
+        {
+          "id": "q-close-3",
+          "question": "Can we put a specific date on [next step] right now?",
+          "purpose": "Convert vague interest into a calendar commitment.",
+          "followUps": [
+            "Who else should be on that call?",
+            "I'll send a calendar invite — does [specific time] work?"
+          ]
+        }
+      ],
+      "talkingPoints": [
+        {
+          "id": "tp-close-1",
+          "title": "Always leave with a mutual next step",
+          "content": "Before ending every call, confirm: What's the next step? Who owns it? When does it happen? A next step without a date is just a hope.",
+          "tips": ["Say it out loud before hanging up: 'So to confirm, [name] will do X by [date] and I'll send Y by [date]'", "Put it in your follow-up email within an hour"]
+        },
+        {
+          "id": "tp-close-2",
+          "title": "Create urgency without being pushy",
+          "content": "Urgency should come from their pain, not your quota. Reference the cost of inaction: 'Based on what you shared, every month you wait is [quantified impact].'",
+          "tips": ["Use their own words to describe the cost of delay", "Tie urgency to an upcoming event (Q4, renewal date, new initiative)"]
+        },
+        {
+          "id": "tp-close-3",
+          "title": "The trial close",
+          "content": "Before asking for the full commitment, test: 'If the proposal comes back looking like what we discussed today, is there any reason you wouldn't move forward?' Their answer tells you exactly what's left to solve.",
+          "tips": ["Listen carefully — any hesitation is an objection to handle now", "Don't ask this if you haven't addressed all major concerns"]
+        }
+      ],
+      "objections": [
+        {
+          "id": "obj-close-1",
+          "objection": "Let me think about it.",
+          "response": "Of course — what specifically would be helpful to think through? I'd rather help you work through any concerns now than have you sitting on unanswered questions. What's the main thing on your mind?",
+          "tips": ["Never accept 'I'll think about it' without understanding what they're thinking about", "Offer a specific follow-up: 'How about we reconnect Thursday — does 2pm work?'"]
+        },
+        {
+          "id": "obj-close-2",
+          "objection": "I need to talk to my boss first.",
+          "response": "Totally makes sense — and I want to make that conversation easy for you. What's the best way I can help you present this internally? I can put together a one-pager, join a call, or send a business case template — whatever is most useful.",
+          "tips": ["Make them the hero, not the supplicant", "Get a date for the internal conversation and follow up after"]
+        }
+      ]
+    }
+  ]
+}
