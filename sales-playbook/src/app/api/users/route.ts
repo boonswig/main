@@ -1,28 +1,15 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { readUsers, writeUsers } from '@/lib/users'
 import bcrypt from 'bcryptjs'
 import { User } from '@/types'
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
-  if (!session || session.user.role !== 'admin') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const { users } = readUsers()
-  // Never send password hashes to the client
   const safeUsers = users.map(({ id, name, email, role }) => ({ id, name, email, role }))
   return NextResponse.json({ users: safeUsers })
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions)
-  if (!session || session.user.role !== 'admin') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const body = await req.json()
   const { name, email, password, role } = body
 
@@ -52,21 +39,11 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const session = await getServerSession(authOptions)
-  if (!session || session.user.role !== 'admin') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
 
   if (!id) {
     return NextResponse.json({ error: 'Missing user id' }, { status: 400 })
-  }
-
-  // Prevent self-deletion
-  if (id === session.user.id) {
-    return NextResponse.json({ error: 'Cannot delete your own account' }, { status: 400 })
   }
 
   const data = readUsers()
@@ -82,11 +59,6 @@ export async function DELETE(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  const session = await getServerSession(authOptions)
-  if (!session || session.user.role !== 'admin') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   const body = await req.json()
   const { id, name, email, password, role } = body
 

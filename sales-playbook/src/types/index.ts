@@ -4,8 +4,8 @@ export interface Question {
   purpose: string
   followUps: string[]
   keywords?: string[]
-  industries?: string[]               // empty / absent = show for all industries
-  industryTips?: Record<string, string> // industry-specific extra tip
+  industries?: string[]
+  industryTips?: Record<string, string>
 }
 
 export interface TalkingPoint {
@@ -60,6 +60,7 @@ export interface UsersData {
 
 // Pre-call context — stored in localStorage
 export interface PreCallContext {
+  repName: string
   companyName: string
   industry: string
   companySize: string
@@ -70,6 +71,11 @@ export interface PreCallContext {
   contactTitle: string
   bdrNotes: string
   timestamp: string
+  // BANT checklist
+  hasBudget: string
+  hasAuthority: string
+  hasNeed: string
+  hasTimeline: string
 }
 
 export type SearchResultType = 'question' | 'talking-point' | 'objection'
@@ -82,4 +88,44 @@ export interface SearchResult {
   id: string
   title: string
   content: string
+}
+
+// ── Call records (saved to Firestore) ──────────────────────────
+
+export type CallIntent = 'highintent' | 'exploratory' | 'notafit' | 'timing'
+
+export const INTENT_CONFIG: Record<CallIntent, { label: string; tag: string; color: string; bg: string; icon: string }> = {
+  highintent:  { label: 'High Intent',   tag: '#highintent',  color: 'text-emerald-700', bg: 'bg-emerald-100', icon: '🔥' },
+  exploratory: { label: 'Exploratory',   tag: '#exploratory', color: 'text-blue-700',    bg: 'bg-blue-100',    icon: '🔍' },
+  timing:      { label: 'Not Right Time',tag: '#timing',      color: 'text-amber-700',   bg: 'bg-amber-100',   icon: '⏰' },
+  notafit:     { label: 'Not a Fit',     tag: '#notafit',     color: 'text-red-700',     bg: 'bg-red-100',     icon: '✗' },
+}
+
+export const NEXT_STEP_OPTIONS = [
+  'Follow-up email',
+  'Send proposal / quote',
+  'Product demo scheduled',
+  'Discovery call scheduled',
+  'Nurture sequence',
+  'Technical review / POC',
+  'Contract sent',
+  'No next step agreed',
+] as const
+
+export interface CallRecord {
+  id?: string
+  createdAt: string
+  repName: string
+  companyName: string
+  industry: string
+  contactName: string
+  contactTitle: string
+  companySize: string
+  leadSource: string
+  currentSolution: string
+  knownPainPoints: string
+  notes: string
+  intent: CallIntent
+  nextStep: string
+  nextStepNotes: string
 }

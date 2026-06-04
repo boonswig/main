@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Playbook, Stage, Question, TalkingPoint, Objection, StageColor } from '@/types'
 import StageEditor from './StageEditor'
@@ -27,7 +26,6 @@ interface Props {
 type View = 'stage' | 'users'
 
 export default function AdminClient({ initialPlaybook }: Props) {
-  const { data: session } = useSession()
   const [playbook, setPlaybook] = useState<Playbook>(initialPlaybook)
   const [selectedStageId, setSelectedStageId] = useState<string | null>(
     initialPlaybook.stages[0]?.id ?? null
@@ -225,7 +223,6 @@ export default function AdminClient({ initialPlaybook }: Props) {
 
         {/* Footer */}
         <div className="px-3 py-4 border-t border-slate-800 space-y-1">
-          {/* Save status */}
           {saveStatus !== 'idle' && (
             <div className={`text-xs px-3 py-1.5 rounded-lg text-center ${
               saveStatus === 'saved' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-red-900/50 text-red-400'
@@ -238,22 +235,15 @@ export default function AdminClient({ initialPlaybook }: Props) {
               Saving…
             </div>
           )}
-          <div className="flex items-center gap-2 px-3 py-2">
-            <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0">
-              <span className="text-xs text-slate-300 font-medium">
-                {session?.user?.name?.[0]?.toUpperCase() ?? '?'}
-              </span>
-            </div>
-            <span className="text-xs text-slate-400 flex-1 truncate">{session?.user?.name}</span>
-            <button
-              onClick={() => signOut({ callbackUrl: '/login' })}
-              className="text-slate-500 hover:text-slate-300 transition flex-shrink-0"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-            </button>
-          </div>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-slate-200 text-xs transition w-full"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Dashboard
+          </Link>
         </div>
       </div>
 

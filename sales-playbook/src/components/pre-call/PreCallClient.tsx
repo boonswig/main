@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { INDUSTRIES } from '@/lib/industries'
 import { PreCallContext } from '@/types'
 
 const CONTEXT_KEY = 'sales-playbook-context'
 
 const EMPTY: PreCallContext = {
+  repName: '',
   companyName: '',
   industry: '',
   companySize: '',
@@ -19,11 +19,14 @@ const EMPTY: PreCallContext = {
   contactTitle: '',
   bdrNotes: '',
   timestamp: '',
+  hasBudget: '',
+  hasAuthority: '',
+  hasNeed: '',
+  hasTimeline: '',
 }
 
 export default function PreCallClient() {
   const router = useRouter()
-  const { data: session } = useSession()
   const [form, setForm] = useState<PreCallContext>(EMPTY)
   const [bdrNotes, setBdrNotes] = useState('')
   const [extracting, setExtracting] = useState(false)
@@ -102,7 +105,7 @@ export default function PreCallClient() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">Pre-Call Setup</h1>
-              <p className="text-slate-400 text-sm">Hi {session?.user?.name?.split(' ')[0]} — let's prepare for this call</p>
+              <p className="text-slate-400 text-sm">Prepare your context before joining the call</p>
             </div>
           </div>
         </div>
@@ -169,6 +172,19 @@ export default function PreCallClient() {
         {/* Customer info form */}
         <div className="bg-white rounded-2xl shadow-xl p-6 space-y-5">
           <h2 className="text-base font-semibold text-slate-800">Customer Information</h2>
+
+          {/* Rep name */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              Your Name (Rep)
+            </label>
+            <input
+              value={form.repName}
+              onChange={(e) => set('repName', e.target.value)}
+              className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="e.g. Alex Johnson"
+            />
+          </div>
 
           {/* Row 1: Company name + Industry */}
           <div className="grid grid-cols-2 gap-4">

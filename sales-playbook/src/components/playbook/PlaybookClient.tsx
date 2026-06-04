@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Playbook, Stage, PreCallContext } from '@/types'
 import StageSidebar from './StageSidebar'
@@ -9,6 +8,7 @@ import StageContent from './StageContent'
 import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
 import KeywordTriggerBar from './KeywordTriggerBar'
+import EndCallModal from './EndCallModal'
 
 interface Props {
   playbook: Playbook
@@ -19,7 +19,6 @@ const COMPLETED_KEY = 'sales-playbook-completed'
 const CONTEXT_KEY = 'sales-playbook-context'
 
 export default function PlaybookClient({ playbook }: Props) {
-  const { data: session } = useSession()
   const router = useRouter()
   const stages = [...playbook.stages].sort((a, b) => a.order - b.order)
 
@@ -28,6 +27,7 @@ export default function PlaybookClient({ playbook }: Props) {
   const [notes, setNotes] = useState('')
   const [notesOpen, setNotesOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [endCallOpen, setEndCallOpen] = useState(false)
   const [context, setContext] = useState<PreCallContext | null>(null)
   const [triggerKeywords, setTriggerKeywords] = useState<string[]>([])
   const [triggerMatchCount, setTriggerMatchCount] = useState(0)
@@ -81,17 +81,26 @@ export default function PlaybookClient({ playbook }: Props) {
     [completedItems]
   )
 
+  function clearCall() {
+    setCompletedItems({})
+    setNotes('')
+    setContext(null)
+    setActiveStageId(stages[0]?.id ?? '')
+    localStorage.removeItem(NOTES_KEY)
+    localStorage.removeItem(COMPLETED_KEY)
+    localStorage.removeItem(CONTEXT_KEY)
+  }
+
   const handleNewCall = useCallback(() => {
-    if (confirm('Start a new call? This will clear all checked items and notes.')) {
-      setCompletedItems({})
-      setNotes('')
-      setContext(null)
-      setActiveStageId(stages[0]?.id ?? '')
-      localStorage.removeItem(NOTES_KEY)
-      localStorage.removeItem(COMPLETED_KEY)
-      localStorage.removeItem(CONTEXT_KEY)
+    if (confirm('Start a new call? This will clear all checked items and notes without saving.')) {
+      clearCall()
       router.push('/pre-call')
     }
+  }, [stages, router])
+
+  const handleCallSaved = useCallback(() => {
+    clearCall()
+    router.push('/pre-call')
   }, [stages, router])
 
   const activeIdx = stages.findIndex((s) => s.id === activeStageId)
@@ -103,9 +112,8 @@ export default function PlaybookClient({ playbook }: Props) {
         activeStageId={activeStageId}
         onSelectStage={setActiveStageId}
         stageProgress={stageProgress}
-        session={session}
         onNewCall={handleNewCall}
-        onSignOut={() => signOut({ callbackUrl: '/login' })}
+        onEndCall={() => setEndCallOpen(true)}
         context={context}
       />
 
@@ -211,7 +219,7 @@ export default function PlaybookClient({ playbook }: Props) {
             </button>
           )}
           <div className="ml-auto">
-            {activeIdx < stages.length - 1 && (
+            {activeIdx < stages.length - 1 ? (
               <button
                 onClick={() => setActiveStageId(stages[activeIdx + 1].id)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-sm text-white font-medium hover:bg-blue-700 transition"
@@ -220,6 +228,16 @@ export default function PlaybookClient({ playbook }: Props) {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
+              </button>
+            ) : (
+              <button
+                onClick={() => setEndCallOpen(true)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 text-sm text-white font-semibold hover:bg-red-700 transition"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
+                </svg>
+                End Call &amp; Save
               </button>
             )}
           </div>
@@ -244,6 +262,15 @@ export default function PlaybookClient({ playbook }: Props) {
             setActiveStageId(stageId)
             setSearchOpen(false)
           }}
+        />
+      )}
+
+      {endCallOpen && (
+        <EndCallModal
+          context={context}
+          notes={notes}
+          onClose={() => setEndCallOpen(false)}
+          onSaved={handleCallSaved}
         />
       )}
 
