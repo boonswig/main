@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Stage, Question, TalkingPoint, Objection, StageColor } from '@/types'
+import { INDUSTRIES } from '@/lib/industries'
 
 const COLOR_DOT: Record<string, string> = {
   blue: 'bg-blue-500',
@@ -289,6 +290,12 @@ function QuestionCard({ question, onChange, onDelete }: { question: Question; on
           </svg>
         </button>
       </div>
+      <KeywordsIndustriesSection
+        keywords={question.keywords ?? []}
+        industries={question.industries ?? []}
+        onChangeKeywords={(kw) => onChange({ ...question, keywords: kw })}
+        onChangeIndustries={(ind) => onChange({ ...question, industries: ind })}
+      />
     </div>
   )
 }
@@ -362,6 +369,12 @@ function TalkingPointCard({ tp, onChange, onDelete }: { tp: TalkingPoint; onChan
           </svg>
         </button>
       </div>
+      <KeywordsIndustriesSection
+        keywords={tp.keywords ?? []}
+        industries={tp.industries ?? []}
+        onChangeKeywords={(kw) => onChange({ ...tp, keywords: kw })}
+        onChangeIndustries={(ind) => onChange({ ...tp, industries: ind })}
+      />
     </div>
   )
 }
@@ -435,6 +448,118 @@ function ObjectionCard({ objection, onChange, onDelete }: { objection: Objection
           </svg>
         </button>
       </div>
+      <KeywordsIndustriesSection
+        keywords={objection.keywords ?? []}
+        industries={objection.industries ?? []}
+        onChangeKeywords={(kw) => onChange({ ...objection, keywords: kw })}
+        onChangeIndustries={(ind) => onChange({ ...objection, industries: ind })}
+      />
+    </div>
+  )
+}
+
+function KeywordsIndustriesSection({
+  keywords,
+  industries,
+  onChangeKeywords,
+  onChangeIndustries,
+}: {
+  keywords: string[]
+  industries: string[]
+  onChangeKeywords: (kw: string[]) => void
+  onChangeIndustries: (ind: string[]) => void
+}) {
+  const [kwInput, setKwInput] = useState('')
+  const [open, setOpen] = useState(false)
+
+  function addKeyword() {
+    const kw = kwInput.trim().toLowerCase()
+    if (!kw || keywords.includes(kw)) return
+    onChangeKeywords([...keywords, kw])
+    setKwInput('')
+  }
+
+  function removeKeyword(kw: string) {
+    onChangeKeywords(keywords.filter((k) => k !== kw))
+  }
+
+  function toggleIndustry(id: string) {
+    if (industries.includes(id)) {
+      onChangeIndustries(industries.filter((i) => i !== id))
+    } else {
+      onChangeIndustries([...industries, id])
+    }
+  }
+
+  return (
+    <div className="border-t border-slate-100 pt-3 mt-1">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-600 transition"
+      >
+        <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Trigger keywords &amp; industry tags
+        {(keywords.length > 0 || industries.length > 0) && (
+          <span className="ml-1 bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
+            {keywords.length + industries.length}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-3 pl-1">
+          {/* Keywords */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              Keyword triggers
+              <span className="font-normal ml-1 text-slate-400">— words the prospect says that make this item highlight</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {keywords.map((kw) => (
+                <span key={kw} className="inline-flex items-center gap-1 bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">
+                  {kw}
+                  <button onClick={() => removeKeyword(kw)} className="hover:text-red-500">×</button>
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                value={kwInput}
+                onChange={(e) => setKwInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && addKeyword()}
+                className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400"
+                placeholder="e.g. budget, expensive, price…"
+              />
+              <button onClick={addKeyword} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs rounded-lg transition">Add</button>
+            </div>
+          </div>
+
+          {/* Industries */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              Show for industries
+              <span className="font-normal ml-1 text-slate-400">— leave blank for all industries</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5">
+              {INDUSTRIES.map((ind) => (
+                <button
+                  key={ind.id}
+                  onClick={() => toggleIndustry(ind.id)}
+                  className={`text-xs px-2.5 py-1 rounded-full border transition ${
+                    industries.includes(ind.id)
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'border-slate-200 text-slate-500 hover:border-blue-400 hover:text-blue-600'
+                  }`}
+                >
+                  {ind.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

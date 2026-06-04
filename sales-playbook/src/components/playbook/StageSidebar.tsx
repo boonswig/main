@@ -1,8 +1,9 @@
 'use client'
 
-import { Stage } from '@/types'
+import { Stage, PreCallContext } from '@/types'
 import { Session } from 'next-auth'
 import Link from 'next/link'
+import { industryName } from '@/lib/industries'
 
 const COLOR_MAP: Record<string, string> = {
   blue: 'bg-blue-500',
@@ -45,6 +46,7 @@ interface Props {
   session: Session | null
   onNewCall: () => void
   onSignOut: () => void
+  context: PreCallContext | null
 }
 
 export default function StageSidebar({
@@ -55,6 +57,7 @@ export default function StageSidebar({
   session,
   onNewCall,
   onSignOut,
+  context,
 }: Props) {
   return (
     <div className="w-64 flex-shrink-0 bg-slate-900 flex flex-col h-full">
@@ -72,6 +75,22 @@ export default function StageSidebar({
           </div>
         </div>
       </div>
+
+      {/* Customer context */}
+      {context?.companyName && (
+        <div className="px-4 py-3 border-b border-slate-800 bg-slate-800/50">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">On call with</p>
+          <p className="text-white text-sm font-semibold leading-tight truncate">{context.companyName}</p>
+          {context.contactName && (
+            <p className="text-slate-400 text-xs mt-0.5 truncate">{context.contactName}{context.contactTitle ? ` · ${context.contactTitle}` : ''}</p>
+          )}
+          {context.industry && (
+            <span className="inline-block mt-1.5 text-xs bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded-full">
+              {industryName(context.industry)}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* New Call button */}
       <div className="px-3 pt-4 pb-2">

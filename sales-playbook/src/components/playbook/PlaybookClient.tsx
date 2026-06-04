@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession, signOut } from 'next-auth/react'
-import { Playbook, Stage } from '@/types'
+import { useRouter } from 'next/navigation'
+import { Playbook, Stage, PreCallContext } from '@/types'
 import StageSidebar from './StageSidebar'
 import StageContent from './StageContent'
 import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
+import KeywordTriggerBar from './KeywordTriggerBar'
 
 interface Props {
   playbook: Playbook
@@ -14,9 +16,11 @@ interface Props {
 
 const NOTES_KEY = 'sales-playbook-notes'
 const COMPLETED_KEY = 'sales-playbook-completed'
+const CONTEXT_KEY = 'sales-playbook-context'
 
 export default function PlaybookClient({ playbook }: Props) {
   const { data: session } = useSession()
+  const router = useRouter()
   const stages = [...playbook.stages].sort((a, b) => a.order - b.order)
 
   const [activeStageId, setActiveStageId] = useState(stages[0]?.id ?? '')
@@ -24,32 +28,29 @@ export default function PlaybookClient({ playbook }: Props) {
   const [notes, setNotes] = useState('')
   const [notesOpen, setNotesOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [context, setContext] = useState<PreCallContext | null>(null)
+  const [triggerKeywords, setTriggerKeywords] = useState<string[]>([])
+  const [triggerMatchCount, setTriggerMatchCount] = useState(0)
 
-  // Load from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(NOTES_KEY)
-      if (saved) setNotes(saved)
+      const savedNotes = localStorage.getItem(NOTES_KEY)
+      if (savedNotes) setNotes(savedNotes)
       const savedCompleted = localStorage.getItem(COMPLETED_KEY)
       if (savedCompleted) setCompletedItems(JSON.parse(savedCompleted))
+      const savedContext = localStorage.getItem(CONTEXT_KEY)
+      if (savedContext) setContext(JSON.parse(savedContext))
     } catch {}
   }, [])
 
-  // Save notes to localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem(NOTES_KEY, notes)
-    } catch {}
+    try { localStorage.setItem(NOTES_KEY, notes) } catch {}
   }, [notes])
 
-  // Save completed items
   useEffect(() => {
-    try {
-      localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedItems))
-    } catch {}
+    try { localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedItems)) } catch {}
   }, [completedItems])
 
-  // Keyboard shortcut: Cmd/Ctrl+K → search
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -67,7 +68,6 @@ export default function PlaybookClient({ playbook }: Props) {
 
   const activeStage = stages.find((s) => s.id === activeStageId) ?? stages[0]
 
-  // Compute per-stage completion counts
   const stageProgress = useCallback(
     (stage: Stage) => {
       const allIds = [
@@ -85,15 +85,19 @@ export default function PlaybookClient({ playbook }: Props) {
     if (confirm('Start a new call? This will clear all checked items and notes.')) {
       setCompletedItems({})
       setNotes('')
+      setContext(null)
       setActiveStageId(stages[0]?.id ?? '')
       localStorage.removeItem(NOTES_KEY)
       localStorage.removeItem(COMPLETED_KEY)
+      localStorage.removeItem(CONTEXT_KEY)
+      router.push('/pre-call')
     }
-  }, [stages])
+  }, [stages, router])
+
+  const activeIdx = stages.findIndex((s) => s.id === activeStageId)
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
-      {/* Sidebar */}
       <StageSidebar
         stages={stages}
         activeStageId={activeStageId}
@@ -102,14 +106,21 @@ export default function PlaybookClient({ playbook }: Props) {
         session={session}
         onNewCall={handleNewCall}
         onSignOut={() => signOut({ callbackUrl: '/login' })}
+        context={context}
       />
 
-      {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto pb-20">
         {/* Top bar */}
         <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-slate-900">{activeStage?.name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-bold text-slate-900">{activeStage?.name}</h1>
+              {context?.industry && (
+                <span className="text-xs bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">
+                  {context.industry.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                </span>
+              )}
+            </div>
             <p className="text-sm text-slate-500 mt-0.5 max-w-xl">{activeStage?.description}</p>
           </div>
           <div className="flex items-center gap-2">
@@ -138,12 +149,39 @@ export default function PlaybookClient({ playbook }: Props) {
               <span className="hidden sm:inline">Notes</span>
               {notes.length > 0 && (
                 <span className="hidden sm:inline-flex items-center justify-center w-5 h-5 text-xs bg-blue-600 text-white rounded-full">
-                  {notes.length > 99 ? '99+' : notes.split('\n').filter(Boolean).length}
+                  {notes.split('\n').filter(Boolean).length}
                 </span>
               )}
             </button>
           </div>
         </div>
+
+        {/* Context banner */}
+        {context?.companyName && (
+          <div className="mx-6 mt-4 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex items-center gap-4 flex-wrap text-sm">
+            <div className="flex items-center gap-2 font-semibold text-blue-800">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              {context.companyName}
+            </div>
+            {context.contactName && (
+              <span className="text-blue-600">
+                {context.contactName}{context.contactTitle ? ` · ${context.contactTitle}` : ''}
+              </span>
+            )}
+            {context.currentSolution && (
+              <span className="text-blue-500">
+                Currently: <span className="font-medium">{context.currentSolution}</span>
+              </span>
+            )}
+            {context.knownPainPoints && (
+              <span className="text-blue-500 line-clamp-1">
+                Pain: {context.knownPainPoints}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Stage content */}
         <div className="p-6">
@@ -152,36 +190,33 @@ export default function PlaybookClient({ playbook }: Props) {
               stage={activeStage}
               completedItems={completedItems}
               onToggleItem={toggleItem}
+              industry={context?.industry ?? ''}
+              triggerKeywords={triggerKeywords}
+              onMatchCountChange={setTriggerMatchCount}
             />
           )}
         </div>
 
         {/* Stage navigation */}
         <div className="px-6 pb-8 flex justify-between">
-          {stages.findIndex((s) => s.id === activeStageId) > 0 && (
+          {activeIdx > 0 && (
             <button
-              onClick={() => {
-                const idx = stages.findIndex((s) => s.id === activeStageId)
-                setActiveStageId(stages[idx - 1].id)
-              }}
+              onClick={() => setActiveStageId(stages[activeIdx - 1].id)}
               className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-100 transition"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Previous: {stages[stages.findIndex((s) => s.id === activeStageId) - 1]?.name}
+              Previous: {stages[activeIdx - 1]?.name}
             </button>
           )}
           <div className="ml-auto">
-            {stages.findIndex((s) => s.id === activeStageId) < stages.length - 1 && (
+            {activeIdx < stages.length - 1 && (
               <button
-                onClick={() => {
-                  const idx = stages.findIndex((s) => s.id === activeStageId)
-                  setActiveStageId(stages[idx + 1].id)
-                }}
+                onClick={() => setActiveStageId(stages[activeIdx + 1].id)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-sm text-white font-medium hover:bg-blue-700 transition"
               >
-                Next: {stages[stages.findIndex((s) => s.id === activeStageId) + 1]?.name}
+                Next: {stages[activeIdx + 1]?.name}
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -191,17 +226,16 @@ export default function PlaybookClient({ playbook }: Props) {
         </div>
       </main>
 
-      {/* Call notes panel */}
       {notesOpen && (
         <CallNotesPanel
           notes={notes}
           onChange={setNotes}
           onClose={() => setNotesOpen(false)}
           stageName={activeStage?.name}
+          context={context}
         />
       )}
 
-      {/* Search modal */}
       {searchOpen && (
         <SearchModal
           playbook={playbook}
@@ -212,6 +246,12 @@ export default function PlaybookClient({ playbook }: Props) {
           }}
         />
       )}
+
+      <KeywordTriggerBar
+        onTrigger={setTriggerKeywords}
+        onClear={() => setTriggerKeywords([])}
+        matchCount={triggerMatchCount}
+      />
     </div>
   )
 }

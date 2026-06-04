@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      router.replace('/playbook')
+      router.replace('/pre-call')
     }
   }, [status, router])
 

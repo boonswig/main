@@ -3,6 +3,9 @@ export interface Question {
   question: string
   purpose: string
   followUps: string[]
+  keywords?: string[]
+  industries?: string[]               // empty / absent = show for all industries
+  industryTips?: Record<string, string> // industry-specific extra tip
 }
 
 export interface TalkingPoint {
@@ -10,6 +13,9 @@ export interface TalkingPoint {
   title: string
   content: string
   tips: string[]
+  keywords?: string[]
+  industries?: string[]
+  industryTips?: Record<string, string>
 }
 
 export interface Objection {
@@ -17,6 +23,9 @@ export interface Objection {
   objection: string
   response: string
   tips: string[]
+  keywords?: string[]
+  industries?: string[]
+  industryTips?: Record<string, string>
 }
 
 export type StageColor = 'blue' | 'purple' | 'green' | 'orange' | 'teal' | 'red' | 'pink' | 'indigo'
@@ -49,7 +58,20 @@ export interface UsersData {
   users: User[]
 }
 
-// Search result types
+// Pre-call context — stored in localStorage
+export interface PreCallContext {
+  companyName: string
+  industry: string
+  companySize: string
+  leadSource: string
+  currentSolution: string
+  knownPainPoints: string
+  contactName: string
+  contactTitle: string
+  bdrNotes: string
+  timestamp: string
+}
+
 export type SearchResultType = 'question' | 'talking-point' | 'objection'
 
 export interface SearchResult {

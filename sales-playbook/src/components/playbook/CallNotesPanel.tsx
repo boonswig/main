@@ -1,13 +1,16 @@
 'use client'
 
+import { PreCallContext } from '@/types'
+
 interface Props {
   notes: string
   onChange: (v: string) => void
   onClose: () => void
   stageName?: string
+  context?: PreCallContext | null
 }
 
-export default function CallNotesPanel({ notes, onChange, onClose, stageName }: Props) {
+export default function CallNotesPanel({ notes, onChange, onClose, stageName, context }: Props) {
   const wordCount = notes.trim() ? notes.trim().split(/\s+/).length : 0
   const lineCount = notes.split('\n').filter(Boolean).length
 
@@ -17,7 +20,16 @@ export default function CallNotesPanel({ notes, onChange, onClose, stageName }: 
       month: 'long',
       day: 'numeric',
     })
-    const header = `Sales Call Notes — ${date}\n${'='.repeat(50)}\n\n`
+    const contextBlock = context?.companyName
+      ? [
+          `Company:  ${context.companyName}`,
+          context.contactName ? `Contact:  ${context.contactName}${context.contactTitle ? ` (${context.contactTitle})` : ''}` : '',
+          context.industry    ? `Industry: ${context.industry}` : '',
+          context.currentSolution ? `Current solution: ${context.currentSolution}` : '',
+          context.knownPainPoints ? `Known pain points: ${context.knownPainPoints}` : '',
+        ].filter(Boolean).join('\n') + '\n'
+      : ''
+    const header = `Sales Call Notes — ${date}\n${'='.repeat(50)}\n${contextBlock}\n`
     const blob = new Blob([header + notes], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')

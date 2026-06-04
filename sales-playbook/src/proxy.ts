@@ -21,5 +21,5 @@ export const proxy = withAuth(
 )
 
 export const config = {
-  matcher: ['/playbook/:path*', '/admin/:path*'],
+  matcher: ['/playbook/:path*', '/admin/:path*', '/pre-call/:path*'],
 }
