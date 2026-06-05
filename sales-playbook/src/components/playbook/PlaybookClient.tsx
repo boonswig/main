@@ -13,6 +13,7 @@ import SmartPromptCard from './SmartPromptCard'
 import PitchBriefing from './PitchBriefing'
 import CloseOptions from './CloseOptions'
 import DiscoveryTransition from './DiscoveryTransition'
+import PitchTransition from './PitchTransition'
 
 interface Props {
   playbook: Playbook
@@ -263,6 +264,15 @@ export default function PlaybookClient({ playbook }: Props) {
             taggedAnswers={taggedAnswers}
             questions={discoveryQuestions}
             onNavigateToPitch={() => setActiveStageId('pitch')}
+          />
+        )}
+
+        {/* Pitch: buy-in sequence + move to close */}
+        {activeStageId === 'pitch' && (
+          <PitchTransition
+            taggedAnswers={taggedAnswers}
+            questions={discoveryQuestions}
+            onNavigateToClose={() => setActiveStageId('close')}
           />
         )}
 
