@@ -7,88 +7,19 @@ import { industryName } from '@/lib/industries'
 import Link from 'next/link'
 
 export default function DashboardClient() {
-  const [authed, setAuthed] = useState(false)
-  const [password, setPassword] = useState('')
-  const [authError, setAuthError] = useState('')
-  const [authLoading, setAuthLoading] = useState(false)
-
   const [calls, setCalls] = useState<CallRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [filterIntent, setFilterIntent] = useState<CallIntent | ''>('')
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem('dashboard-authed') === 'true') setAuthed(true)
-    } catch {}
-  }, [])
-
-  useEffect(() => {
-    if (!authed) return
     setLoading(true)
     const unsub = subscribeToCalls(
       (records) => { setCalls(records); setLoading(false) },
       filterIntent ? { intent: filterIntent } : undefined,
     )
     return unsub
-  }, [authed, filterIntent])
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setAuthLoading(true)
-    setAuthError('')
-    try {
-      const res = await fetch('/api/dashboard-auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'Wrong password')
-      sessionStorage.setItem('dashboard-authed', 'true')
-      setAuthed(true)
-    } catch (err: unknown) {
-      setAuthError(err instanceof Error ? err.message : 'Auth failed')
-    } finally {
-      setAuthLoading(false)
-    }
-  }
-
-  if (!authed) {
-    return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-        <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8">
-          <div className="mb-6 text-center">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold text-slate-900">Sales Dashboard</h1>
-            <p className="text-sm text-slate-500 mt-1">Enter password to view call records</p>
-          </div>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autoFocus
-            />
-            {authError && <p className="text-sm text-red-600">{authError}</p>}
-            <button
-              type="submit"
-              disabled={authLoading || !password}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-xl transition text-sm"
-            >
-              {authLoading ? 'Checking…' : 'Enter Dashboard'}
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
+  }, [filterIntent])
 
   const intents: CallIntent[] = ['highintent', 'exploratory', 'timing', 'notafit']
   const countByIntent = (intent: CallIntent) => calls.filter((c) => c.intent === intent).length
@@ -105,17 +36,9 @@ export default function DashboardClient() {
           </div>
           <span className="text-white font-semibold text-sm">Sales Dashboard</span>
         </div>
-        <div className="flex items-center gap-4">
-          <Link href="/playbook" className="text-slate-400 hover:text-slate-200 text-xs transition">
-            ← Back to Playbook
-          </Link>
-          <button
-            onClick={() => { sessionStorage.removeItem('dashboard-authed'); setAuthed(false) }}
-            className="text-slate-500 hover:text-slate-300 text-xs transition"
-          >
-            Lock
-          </button>
-        </div>
+        <Link href="/playbook" className="text-slate-400 hover:text-slate-200 text-xs transition">
+          ← Back to Playbook
+        </Link>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8">

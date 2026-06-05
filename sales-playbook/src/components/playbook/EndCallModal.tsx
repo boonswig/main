@@ -228,7 +228,11 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
   const [saved, setSaved] = useState(false)
   const [crmSummary, setCrmSummary] = useState('')
   const [emailDraft, setEmailDraft] = useState('')
+  const [emailSubject, setEmailSubject] = useState('')
   const [generatingEmail, setGeneratingEmail] = useState(false)
+  const [recipientEmail, setRecipientEmail] = useState('')
+  const [sloftStatus, setSloftStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [sloftError, setSloftError] = useState('')
 
   const configured =
     !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
@@ -287,15 +291,18 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
         .then((r) => r.ok ? r.json() : null)
         .then((data) => {
           if (data?.subject && data?.body) {
+            setEmailSubject(data.subject)
             setEmailDraft(`Subject: ${data.subject}\n\n${data.body}`)
           } else {
             // Gemini not configured or errored — fall back to template
             const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
+            setEmailSubject(subject)
             setEmailDraft(`Subject: ${subject}\n\n${body}`)
           }
         })
         .catch(() => {
           const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
+          setEmailSubject(subject)
           setEmailDraft(`Subject: ${subject}\n\n${body}`)
         })
         .finally(() => setGeneratingEmail(false))
@@ -313,6 +320,38 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
       console.error(err)
       setError('Failed to save to Firestore. Check your Firebase config in .env.local.')
       setSaving(false)
+    }
+  }
+
+  async function sendViaSalesloft() {
+    if (!recipientEmail) return
+    setSloftStatus('sending')
+    setSloftError('')
+
+    // Parse body from "Subject: xxx\n\nbody"
+    const bodyOnly = emailDraft.replace(/^Subject:.*\n\n?/, '')
+
+    try {
+      const res = await fetch('/api/send-salesloft-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: recipientEmail,
+          subject: emailSubject || (emailDraft.match(/^Subject:\s*(.+)/m)?.[1] ?? 'Follow-up'),
+          body: bodyOnly,
+          repEmail: context?.repName,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setSloftError(data.error ?? 'Send failed')
+        setSloftStatus('error')
+      } else {
+        setSloftStatus('sent')
+      }
+    } catch {
+      setSloftError('Network error — check connection')
+      setSloftStatus('error')
     }
   }
 
@@ -400,6 +439,87 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
                 </p>
               )}
             </div>
+
+            {/* SalesLoft send */}
+            {!generatingEmail && (
+              <div className="border border-slate-200 rounded-xl overflow-hidden">
+                <div className="flex items-center gap-2.5 px-4 py-3 bg-slate-50 border-b border-slate-200">
+                  {/* SalesLoft logo mark */}
+                  <svg className="w-4 h-4 text-slate-500 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                  <span className="text-sm font-semibold text-slate-700">Send via SalesLoft</span>
+                  {sloftStatus === 'sent' && (
+                    <span className="ml-auto text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Sent
+                    </span>
+                  )}
+                </div>
+                <div className="px-4 py-3 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="email"
+                      value={recipientEmail}
+                      onChange={(e) => { setRecipientEmail(e.target.value); setSloftStatus('idle') }}
+                      placeholder="Recipient email address…"
+                      disabled={sloftStatus === 'sent'}
+                      className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50 disabled:text-slate-400"
+                    />
+                    <button
+                      onClick={sendViaSalesloft}
+                      disabled={!recipientEmail || sloftStatus === 'sending' || sloftStatus === 'sent'}
+                      className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition flex-shrink-0 ${
+                        sloftStatus === 'sent'
+                          ? 'bg-emerald-600 text-white cursor-default'
+                          : sloftStatus === 'sending'
+                          ? 'bg-blue-400 text-white cursor-wait'
+                          : !recipientEmail
+                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                          : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      }`}
+                    >
+                      {sloftStatus === 'sending' ? (
+                        <>
+                          <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Sending…
+                        </>
+                      ) : sloftStatus === 'sent' ? (
+                        <>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Sent
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                          Send
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {sloftStatus === 'error' && sloftError && (
+                    <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                      {sloftError.includes('not configured')
+                        ? <>Add <code className="bg-red-100 px-1 rounded">SALESLOFT_API_KEY</code> to your <code className="bg-red-100 px-1 rounded">.env.local</code> to enable sending.</>
+                        : sloftError}
+                    </p>
+                  )}
+                  <p className="text-xs text-slate-400">
+                    Sends the edited email draft above via SalesLoft and logs it against the contact record.
+                    {' '}Requires <code className="bg-slate-100 px-0.5 rounded">SALESLOFT_API_KEY</code> in <code className="bg-slate-100 px-0.5 rounded">.env.local</code>.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="px-6 py-4 border-t border-slate-200 flex justify-end bg-slate-50">
