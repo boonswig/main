@@ -12,6 +12,7 @@ import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
 import SmartCloseCard from './SmartCloseCard'
 import FloatingObjections from './FloatingObjections'
+import IndustryNotesPanel from './IndustryNotesPanel'
 import PitchBriefing from './PitchBriefing'
 import CloseOptions from './CloseOptions'
 import DiscoveryTransition from './DiscoveryTransition'
@@ -301,6 +302,11 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
               {context.knownPainPoints && (
                 <span className="text-blue-500 line-clamp-1">Pain: {context.knownPainPoints}</span>
               )}
+              {context.bdrNotes && (
+                <span className="w-full text-blue-500 text-xs line-clamp-1 border-t border-blue-200 pt-1.5 mt-0.5">
+                  <span className="font-semibold">BDR:</span> {context.bdrNotes}
+                </span>
+              )}
             </div>
           )}
 
@@ -472,6 +478,12 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
 
       {/* Floating objections panel — accessible from any stage */}
       <FloatingObjections stages={stages} />
+
+      {/* Floating industry notes panel — persistent toggle when industry is known */}
+      <IndustryNotesPanel
+        industryNotes={livePlaybook.industryNotes ?? []}
+        context={context}
+      />
 
       {notesOpen && (
         <CallNotesPanel

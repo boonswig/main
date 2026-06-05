@@ -233,6 +233,7 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
   const [recipientEmail, setRecipientEmail] = useState('')
   const [sloftStatus, setSloftStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [sloftError, setSloftError] = useState('')
+  const [toolRating, setToolRating] = useState<number | null>(null)
 
   const configured =
     !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
@@ -259,6 +260,8 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
       intent,
       nextStep,
       nextStepNotes,
+      signals: signals.length > 0 ? signals : undefined,
+      toolRating: toolRating ?? undefined,
     }
 
     const crm = generateCRMSummary(context, signals, intent, nextStep, nextStepNotes, editedNotes)
@@ -632,6 +635,36 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
               className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder="No notes taken during this call."
             />
+          </div>
+
+          {/* Tool rating */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
+              How useful was the playbook today?
+            </label>
+            <div className="flex items-center gap-1">
+              {[1,2,3,4,5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => setToolRating(toolRating === star ? null : star)}
+                  className="transition-transform hover:scale-110"
+                  title={['', 'Not useful', 'Slightly useful', 'Useful', 'Very useful', 'Excellent'][star]}
+                >
+                  <svg
+                    className={`w-7 h-7 transition-colors ${star <= (toolRating ?? 0) ? 'text-amber-400' : 'text-slate-200 hover:text-amber-200'}`}
+                    fill="currentColor" viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </button>
+              ))}
+              {toolRating && (
+                <span className="ml-2 text-xs text-slate-500">
+                  {['', 'Not useful', 'Slightly useful', 'Useful', 'Very useful', 'Excellent'][toolRating]}
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-400 mt-1">Optional — helps improve the tool over time</p>
           </div>
 
           {error && (

@@ -73,6 +73,20 @@ export interface OpenerRule {
   priority: number         // higher wins; default = 0
 }
 
+export interface IndustryTalkingPoint {
+  id: string
+  title: string
+  content: string
+  tips?: string[]
+}
+
+export interface IndustryNote {
+  id: string
+  industry: string              // matches INDUSTRIES id
+  label: string                 // display name
+  talkingPoints: IndustryTalkingPoint[]
+}
+
 export interface CloseRecommendation {
   id: string
   chipIds: string[]        // any tagged chip from this list triggers this rec
@@ -86,6 +100,7 @@ export interface Playbook {
   closeRecommendations?: CloseRecommendation[]
   openerRules?: OpenerRule[]
   openerStyles?: OpenerStyle[]
+  industryNotes?: IndustryNote[]
 }
 
 export interface User {
@@ -170,4 +185,6 @@ export interface CallRecord {
   intent: CallIntent
   nextStep: string
   nextStepNotes: string
+  signals?: string[]     // tagged discovery chip labels
+  toolRating?: number    // 1–5 rep feedback on playbook usefulness
 }

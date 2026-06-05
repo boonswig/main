@@ -791,6 +791,163 @@
       "priority": 5
     }
   ],
+  "industryNotes": [
+    {
+      "id": "in-financial-services",
+      "industry": "financial-services",
+      "label": "Financial Services",
+      "talkingPoints": [
+        {
+          "id": "fs-tp-compliance",
+          "title": "Regulatory compliance (FCA / PCI-DSS)",
+          "content": "Unmanaged browsers are a routine finding in FCA supervisory reviews and PCI-DSS audits. The browser is where card data, client data, and trading instructions flow — and most firms have no controls on it. CEP closes that gap with enforceable policies and a full audit trail.",
+          "tips": [
+            "Ask about their last PCI or FCA audit — whether browser controls came up",
+            "Reference FCA Consumer Duty: firms must evidence controls over data handling end-to-end",
+            "PCI-DSS v4.0 explicitly requires controls on browser-based access to cardholder data"
+          ]
+        },
+        {
+          "id": "fs-tp-dlp",
+          "title": "Data leakage via personal cloud uploads",
+          "content": "In financial services, employees routinely handle price-sensitive information, client portfolios, and M&A data. Without DLP controls on the browser, a user can upload a spreadsheet to personal Google Drive or Dropbox in seconds — with no audit trail and no alert.",
+          "tips": [
+            "Ask if they have controls preventing uploads to personal cloud storage from managed devices",
+            "Market abuse and insider trading risk applies here — not just data breach",
+            "CEP DLP rules can be set by file type, destination, or data classification"
+          ]
+        },
+        {
+          "id": "fs-tp-trading-desk",
+          "title": "Trading / dealing desk browser controls",
+          "content": "Dealing desks often run legacy applications alongside web-based trading platforms. Cameyo virtualises legacy apps so they run browser-side — no thick client, no VDI, no separate managed build for traders.",
+          "tips": [
+            "Ask if any trading platforms still require Windows thick clients or Java",
+            "Reference the complexity of managing multiple desktop images for different desk types",
+            "Cameyo is FCA-audit-friendly: all app access is browser-based and logable"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in-technology",
+      "industry": "technology",
+      "label": "Technology / SaaS",
+      "talkingPoints": [
+        {
+          "id": "tech-tp-developer",
+          "title": "Developer-targeted browser attacks",
+          "content": "Tech companies are high-value targets for browser-based credential theft. OAuth token hijacking and browser session theft are how attackers move laterally after the initial compromise. Developers are disproportionately targeted because their accounts have elevated access to source code and cloud infrastructure.",
+          "tips": [
+            "Ask if they've had any OAuth token theft or session hijacking incidents",
+            "Reference the recent wave of developer-targeted infostealer malware",
+            "CEP Chrome Safe Browsing Enterprise catches these at the browser level before exfiltration"
+          ]
+        },
+        {
+          "id": "tech-tp-saas-sprawl",
+          "title": "SaaS sprawl and shadow IT",
+          "content": "Tech companies accumulate SaaS tools fast. CEP gives IT full visibility into which web applications employees are accessing — useful for licence management, shadow IT discovery, and data governance.",
+          "tips": [
+            "Ask how they currently track which SaaS tools staff are using",
+            "CEP URL reporting shows every domain accessed across the managed fleet",
+            "Useful for SOC 2 Type II evidence as well as general hygiene"
+          ]
+        },
+        {
+          "id": "tech-tp-contractor",
+          "title": "Contractor and remote access without VPN",
+          "content": "Tech companies frequently use contractors, agencies, and remote staff who work on personal devices. Without VDI or managed devices, you have no control over their browser. CEP Managed Profile gives contractors a secure work context in Chrome — IT-controlled, without touching their personal device.",
+          "tips": [
+            "Ask what percentage of their workforce is contractors or agency staff",
+            "Current solutions are usually VPN (fragile, expensive) or nothing",
+            "CEP profile approach is self-service: contractor installs Chrome, signs in with work email, policies apply instantly"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in-retail",
+      "industry": "retail",
+      "label": "Retail / E-commerce",
+      "talkingPoints": [
+        {
+          "id": "retail-tp-pci",
+          "title": "PCI-DSS at the point of sale",
+          "content": "Retail is squarely in scope for PCI-DSS. The browser is increasingly the POS interface — web-based checkouts, web POS systems, and order management all run browser-side. Unmanaged browsers in POS environments create PCI scope creep and audit risk.",
+          "tips": [
+            "Ask whether their POS or order management system runs in a browser",
+            "PCI requires controls on what can be accessed from a device that touches cardholder data",
+            "CEP kiosk mode locks a browser to a specific URL — commonly used for POS terminals"
+          ]
+        },
+        {
+          "id": "retail-tp-seasonal",
+          "title": "Seasonal and temporary workforce",
+          "content": "Retail hires thousands of seasonal staff who need quick, secure access to systems — and then need to be off-boarded just as fast. Managed Chrome profiles make this instant: the rep logs in with their work account, gets full IT-controlled access, and the profile is wiped when they leave.",
+          "tips": [
+            "Ask how they currently onboard / offboard seasonal staff to IT systems",
+            "Current pain: IT tickets, device provisioning queues, forgotten offboarding",
+            "CEP + Google Workspace = self-service onboarding in minutes, not days"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in-manufacturing",
+      "industry": "manufacturing",
+      "label": "Manufacturing",
+      "talkingPoints": [
+        {
+          "id": "mfg-tp-legacy-erp",
+          "title": "Legacy ERP and production software",
+          "content": "Manufacturing runs on legacy — SAP, Oracle ERP, MES systems, bespoke production scheduling tools. Most were never designed for modern devices. Cameyo virtualises these so they run in a Chrome browser tab with no local install, no VDI infrastructure, and no dependency on Windows build versions.",
+          "tips": [
+            "Ask what ERP or production scheduling software they run",
+            "Ask about the pain of managing Windows builds for shop floor vs office staff",
+            "Reference the cost of maintaining Citrix or RDS just to deliver one or two legacy apps"
+          ]
+        },
+        {
+          "id": "mfg-tp-shop-floor",
+          "title": "Shop floor / thin client modernisation",
+          "content": "Chromebooks and thin clients running Chrome OS are increasingly replacing ageing Windows PCs on the factory floor. They're cheaper, more secure (no local software to patch), and centrally managed via the Chrome Admin Console. CEP turns this into a fully manageable, locked-down fleet.",
+          "tips": [
+            "Ask about the age and management overhead of their shop floor terminals",
+            "Reference the Zero Trust angle: no local attack surface on a Chrome OS device",
+            "CEP kiosk mode can lock shop floor terminals to specific production apps only"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "in-professional-services",
+      "industry": "professional-services",
+      "label": "Professional Services",
+      "talkingPoints": [
+        {
+          "id": "ps-tp-client-data",
+          "title": "Client confidentiality and data controls",
+          "content": "Agencies, consultancies, and law firms handle highly sensitive client data — commercially sensitive strategies, legal privileged documents, financial models. The browser is the primary work surface, and without DLP controls, client data can leak via personal uploads, clipboard, or printing.",
+          "tips": [
+            "Ask whether they have any controls preventing client files being uploaded to personal cloud storage",
+            "Legal privilege is lost if data is mishandled — frame as professional liability",
+            "CEP screen capture controls, download restrictions, and clipboard DLP all apply here"
+          ]
+        },
+        {
+          "id": "ps-tp-byod-staff",
+          "title": "BYOD for senior staff and partners",
+          "content": "Professional services firms often resist managing partner and senior employee devices. CEP Managed Profile solves this: IT manages the work browser profile, not the device. Partners keep their personal MacBook or Windows laptop; IT gets control over the work context only.",
+          "tips": [
+            "Address the cultural resistance to MDM head-on: 'We're not managing the device, just the work profile'",
+            "Partners are often the highest-risk users — they have the most sensitive data access",
+            "Works on Mac, Windows, and Chrome OS without touching personal files or apps"
+          ]
+        }
+      ]
+    }
+  ],
   "openerStyles": [
     {
       "id": "consultative",

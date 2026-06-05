@@ -2,12 +2,13 @@
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
-import { Playbook, Stage, StageColor, CloseRecommendation, OpenerStyle, OpenerRule } from '@/types'
+import { Playbook, Stage, StageColor, CloseRecommendation, OpenerStyle, OpenerRule, IndustryNote } from '@/types'
 import { savePlaybook as firestoreSavePlaybook, firestoreConfigured } from '@/lib/firestore'
 import StageEditor from './StageEditor'
 import UserManager from './UserManager'
 import CloseRecommendationsEditor from './CloseRecommendationsEditor'
 import OpenerEditor from './OpenerEditor'
+import IndustryNotesEditor from './IndustryNotesEditor'
 
 const COLORS: StageColor[] = ['blue', 'purple', 'green', 'orange', 'teal', 'red', 'pink', 'indigo']
 
@@ -26,7 +27,7 @@ interface Props {
   initialPlaybook: Playbook
 }
 
-type View = 'stage' | 'close' | 'opener' | 'users'
+type View = 'stage' | 'close' | 'opener' | 'industry' | 'users'
 
 export default function AdminClient({ initialPlaybook }: Props) {
   const [playbook, setPlaybook] = useState<Playbook>(initialPlaybook)
@@ -105,6 +106,15 @@ export default function AdminClient({ initialPlaybook }: Props) {
     [playbook]
   )
 
+  const updateIndustryNotes = useCallback(
+    (industryNotes: IndustryNote[]) => {
+      const updated: Playbook = { ...playbook, industryNotes }
+      setPlaybook(updated)
+      savePlaybook(updated)
+    },
+    [playbook]
+  )
+
   function addStage() {
     const maxOrder = stages.reduce((max, s) => Math.max(max, s.order), 0)
     const newStage: Stage = {
@@ -173,6 +183,15 @@ export default function AdminClient({ initialPlaybook }: Props) {
       icon: (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'industry',
+      label: 'Industry Notes',
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
       ),
     },
@@ -317,6 +336,11 @@ export default function AdminClient({ initialPlaybook }: Props) {
             rules={playbook.openerRules ?? []}
             onChangeStyles={updateOpenerStyles}
             onChangeRules={updateOpenerRules}
+          />
+        ) : view === 'industry' ? (
+          <IndustryNotesEditor
+            notes={playbook.industryNotes ?? []}
+            onChange={updateIndustryNotes}
           />
         ) : selectedStage ? (
           <StageEditor
