@@ -27,6 +27,8 @@ function buildPrompt(d: GenerateEmailPayload): string {
     ? d.signals.join(', ')
     : 'general interest in modernising browser management or app delivery'
 
+  const contactFirst = d.contactName?.split(' ')[0] || 'there'
+
   return `You are ${d.repName || 'a Google Chrome Enterprise sales rep'} writing a follow-up email immediately after a sales call.
 
 CALL CONTEXT:
@@ -34,25 +36,30 @@ CALL CONTEXT:
 ${d.currentSolution ? `- Current solution they're replacing or supplementing: ${d.currentSolution}` : ''}
 - What they told you they care about / pain points from the call: ${signalsLine}
 - Agreed next step: ${d.nextStep || 'follow up'}
-${d.nextStepNotes ? `- Next step specifics: ${d.nextStepNotes}` : ''}
+${d.nextStepNotes ? `- Next step specifics (date, attendees, focus): ${d.nextStepNotes}` : ''}
 ${d.notes?.trim() ? `- Your notes from the call: ${d.notes.trim()}` : ''}
 
-WRITE a short follow-up email that sounds like a real person wrote it right after hanging up — not an AI, not a template.
+WRITE a short, warm follow-up email. The goal: make the customer feel genuinely heard, clearly confirm or drive the next step, and leave them looking forward to it.
 
-RULES — follow all of these:
-1. Do NOT open with any of these: "I hope this email finds you well", "Great speaking with you today", "It was great to connect", "I wanted to reach out", "Just following up", "Touching base", "Circling back", "Per our conversation", "As discussed"
-2. Open with something specific to what they said — reference the pain points or context directly in the first sentence
-3. Body: 3–5 sentences MAX. No walls of text. No bullet point lists of product features.
-4. One clear call to action that matches the agreed next step
-5. Tone: direct, warm, and consultative — trusted advisor, not a sales rep reading a script
-6. Forbidden words and phrases: "synergy", "leverage", "solution" (as a noun), "game-changer", "exciting opportunity", "best-in-class", "seamlessly", "robust", "empower"
-7. Do not summarise the whole call or list everything discussed. Pick one or two things and be specific.
-8. Sign off with the first name only: ${repFirst || '[your name]'}
+STRUCTURE — follow this exactly:
+1. Greeting: "Hi ${contactFirst},"
+2. 1–2 sentences that show you were listening — reference something specific they said (a pain point, a project, a constraint, something from the notes). Do not be generic.
+3. 1 sentence connecting what they described to why the next step is worth their time. Be specific, not vague.
+4. The next step stated clearly and with momentum. If a date/time was mentioned, name it ("I'll send a calendar invite for Thursday — does that still work?"). If not, suggest two specific slots rather than saying "let me know a time".
+5. One short closing line that builds confidence or anticipation — make them feel the next step is worth showing up to.
+6. Sign off: "${repFirst || '[your name]'}"
 
-FORMAT — respond with exactly this structure, nothing else before or after:
-SUBJECT: [subject line — concise, no marketing speak]
+RULES:
+- Use contractions throughout (I'm, we'll, you'll, they'll) — "I am" and "we will" sound stiff and formal
+- Do NOT open with: "I hope this email finds you well", "Great speaking with you", "I wanted to reach out", "Just following up", "Touching base", "Circling back", "Per our conversation", "As discussed"
+- Do NOT use: "synergy", "leverage", "solution" (as a noun), "game-changer", "exciting opportunity", "best-in-class", "seamlessly", "robust", "empower", "deep dive" (as a verb)
+- No bullet points. No feature lists. No walls of text.
+- Sound like a person who was actually on the call, not a template
 
-[email body — start directly with the first sentence, no greeting label]`
+FORMAT — respond with exactly this, nothing else before or after:
+SUBJECT: [subject line — specific to their situation, no marketing speak]
+
+[email body]`
 }
 
 export async function POST(req: NextRequest) {
