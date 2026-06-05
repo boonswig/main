@@ -4,18 +4,21 @@ import { useState } from 'react'
 import { PreCallContext, CallIntent, INTENT_CONFIG, NEXT_STEP_OPTIONS, CallRecord } from '@/types'
 import { saveCall } from '@/lib/firestore'
 import { industryName } from '@/lib/industries'
+import { SIGNALS } from '@/lib/signals'
 
 interface Props {
   context: PreCallContext | null
   notes: string
+  signals?: string[]
+  preferredNextStep?: string
   onClose: () => void
   onSaved: () => void
 }
 
-export default function EndCallModal({ context, notes, onClose, onSaved }: Props) {
+export default function EndCallModal({ context, notes, signals = [], preferredNextStep = '', onClose, onSaved }: Props) {
   const [editedNotes, setEditedNotes] = useState(notes)
   const [intent, setIntent] = useState<CallIntent | null>(null)
-  const [nextStep, setNextStep] = useState('')
+  const [nextStep, setNextStep] = useState(preferredNextStep)
   const [nextStepNotes, setNextStepNotes] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -86,6 +89,24 @@ export default function EndCallModal({ context, notes, onClose, onSaved }: Props
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* Identified gaps summary */}
+          {signals.length > 0 && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Gaps identified this call</p>
+              <div className="flex flex-wrap gap-1.5">
+                {signals.map((id) => {
+                  const sig = SIGNALS.find((s) => s.id === id)
+                  if (!sig) return null
+                  return (
+                    <span key={id} className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">
+                      {sig.emoji} {sig.label}
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Firebase not configured warning */}
           {!configured && (
             <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">

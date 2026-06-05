@@ -10,6 +10,9 @@ import SearchModal from './SearchModal'
 import KeywordTriggerBar from './KeywordTriggerBar'
 import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
+import SignalChips from './SignalChips'
+import PitchBriefing from './PitchBriefing'
+import CloseOptions from './CloseOptions'
 
 interface Props {
   playbook: Playbook
@@ -18,6 +21,7 @@ interface Props {
 const NOTES_KEY = 'sales-playbook-notes'
 const COMPLETED_KEY = 'sales-playbook-completed'
 const CONTEXT_KEY = 'sales-playbook-context'
+const SIGNALS_KEY = 'sales-playbook-signals'
 
 export default function PlaybookClient({ playbook }: Props) {
   const router = useRouter()
@@ -32,6 +36,8 @@ export default function PlaybookClient({ playbook }: Props) {
   const [context, setContext] = useState<PreCallContext | null>(null)
   const [triggerKeywords, setTriggerKeywords] = useState<string[]>([])
   const [triggerMatchCount, setTriggerMatchCount] = useState(0)
+  const [signals, setSignals] = useState<string[]>([])
+  const [preferredNextStep, setPreferredNextStep] = useState('')
 
   useEffect(() => {
     try {
@@ -41,6 +47,8 @@ export default function PlaybookClient({ playbook }: Props) {
       if (savedCompleted) setCompletedItems(JSON.parse(savedCompleted))
       const savedContext = localStorage.getItem(CONTEXT_KEY)
       if (savedContext) setContext(JSON.parse(savedContext))
+      const savedSignals = localStorage.getItem(SIGNALS_KEY)
+      if (savedSignals) setSignals(JSON.parse(savedSignals))
     } catch {}
   }, [])
 
@@ -51,6 +59,10 @@ export default function PlaybookClient({ playbook }: Props) {
   useEffect(() => {
     try { localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedItems)) } catch {}
   }, [completedItems])
+
+  useEffect(() => {
+    try { localStorage.setItem(SIGNALS_KEY, JSON.stringify(signals)) } catch {}
+  }, [signals])
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
@@ -86,10 +98,13 @@ export default function PlaybookClient({ playbook }: Props) {
     setCompletedItems({})
     setNotes('')
     setContext(null)
+    setSignals([])
+    setPreferredNextStep('')
     setActiveStageId(stages[0]?.id ?? '')
     localStorage.removeItem(NOTES_KEY)
     localStorage.removeItem(COMPLETED_KEY)
     localStorage.removeItem(CONTEXT_KEY)
+    localStorage.removeItem(SIGNALS_KEY)
   }
 
   const handleNewCall = useCallback(() => {
@@ -194,6 +209,21 @@ export default function PlaybookClient({ playbook }: Props) {
 
         <SmartPromptCard context={context} activeStageId={activeStageId} />
 
+        {/* Discovery: gap signal chips */}
+        {activeStageId === 'discovery' && (
+          <SignalChips selected={signals} onChange={setSignals} />
+        )}
+
+        {/* Pitch: tailored briefing based on identified gaps */}
+        {activeStageId === 'pitch' && (
+          <PitchBriefing signalIds={signals} />
+        )}
+
+        {/* Close: agreed next step selector */}
+        {activeStageId === 'close' && (
+          <CloseOptions selected={preferredNextStep} onSelect={setPreferredNextStep} />
+        )}
+
         {/* Stage content */}
         <div className="p-6">
           {activeStage && (
@@ -272,6 +302,8 @@ export default function PlaybookClient({ playbook }: Props) {
         <EndCallModal
           context={context}
           notes={notes}
+          signals={signals}
+          preferredNextStep={preferredNextStep}
           onClose={() => setEndCallOpen(false)}
           onSaved={handleCallSaved}
         />
