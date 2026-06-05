@@ -14,6 +14,7 @@ import PitchBriefing from './PitchBriefing'
 import CloseOptions from './CloseOptions'
 import DiscoveryTransition from './DiscoveryTransition'
 import PitchTransition from './PitchTransition'
+import CallOpener from './CallOpener'
 
 interface Props {
   playbook: Playbook
@@ -225,6 +226,11 @@ export default function PlaybookClient({ playbook }: Props) {
               </span>
             )}
           </div>
+        )}
+
+        {/* Discovery: call opener script */}
+        {activeStageId === 'discovery' && (
+          <CallOpener context={context} />
         )}
 
         {/* Context-aware next question — only useful on objections / close */}
