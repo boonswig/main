@@ -10,7 +10,6 @@ import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
 import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
-import FloatingObjections from './FloatingObjections'
 import IndustryNotesPanel from './IndustryNotesPanel'
 import PitchBriefing from './PitchBriefing'
 import CloseStage from './CloseStage'
@@ -323,6 +322,11 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
             <PitchBriefing taggedAnswers={taggedAnswers} questions={discoveryQuestions} />
           )}
 
+          {/* Discovery + Pitch + Objections: context-aware prompt card */}
+          {(activeStageId === 'discovery' || activeStageId === 'pitch' || activeStageId === 'objections') && (
+            <SmartPromptCard context={context} activeStageId={activeStageId} />
+          )}
+
           {/* Close: unified close stage — guide, AI recommendation, next step picker, CTA */}
           {activeStageId === 'close' && (
             <CloseStage
@@ -335,10 +339,6 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
             />
           )}
 
-          {/* Objections: smart prompt */}
-          {activeStageId === 'objections' && (
-            <SmartPromptCard context={context} activeStageId={activeStageId} />
-          )}
 
           {/* Stage content */}
           <div className="p-6">
@@ -467,9 +467,6 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
 
         </div>
       </div>
-
-      {/* Floating objections panel — accessible from any stage */}
-      <FloatingObjections stages={stages} />
 
       {/* Floating industry notes panel — persistent toggle when industry is known */}
       <IndustryNotesPanel

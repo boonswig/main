@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { INDUSTRIES } from '@/lib/industries'
-import { PreCallContext } from '@/types'
+import { PreCallContext, CallRecord } from '@/types'
+import { fetchRecentCalls, firestoreConfigured } from '@/lib/firestore'
 
 const CONTEXT_KEY = 'sales-playbook-context'
 
@@ -33,6 +34,12 @@ export default function PreCallClient() {
   const [extractError, setExtractError] = useState('')
   const [showNotes, setShowNotes] = useState(false)
 
+  // Previous call search
+  const [recentCalls, setRecentCalls]   = useState<CallRecord[]>([])
+  const [searchTerm, setSearchTerm]     = useState('')
+  const [searchOpen, setSearchOpen]     = useState(false)
+  const searchRef                       = useRef<HTMLDivElement>(null)
+
   // Pre-fill from existing context if returning mid-session
   useEffect(() => {
     try {
@@ -44,6 +51,55 @@ export default function PreCallClient() {
       }
     } catch {}
   }, [])
+
+  // Load recent calls for search
+  useEffect(() => {
+    if (!firestoreConfigured) return
+    fetchRecentCalls(100).then(setRecentCalls).catch(() => {})
+  }, [])
+
+  // Close search dropdown on outside click
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const searchResults = searchTerm.trim().length > 1
+    ? recentCalls
+        .filter((c) =>
+          c.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.contactName?.toLowerCase().includes(searchTerm.toLowerCase()),
+        )
+        .slice(0, 6)
+    : []
+
+  function resumeCall(record: CallRecord) {
+    setForm((prev) => ({
+      ...prev,
+      companyName:     record.companyName     || prev.companyName,
+      contactName:     record.contactName     || prev.contactName,
+      contactTitle:    record.contactTitle    || prev.contactTitle,
+      industry:        record.industry        || prev.industry,
+      companySize:     record.companySize     || prev.companySize,
+      leadSource:      record.leadSource      || prev.leadSource,
+      currentSolution: record.currentSolution || prev.currentSolution,
+      knownPainPoints: record.knownPainPoints || prev.knownPainPoints,
+    }))
+    if (record.notes) setBdrNotes(record.notes)
+    setSearchTerm('')
+    setSearchOpen(false)
+  }
+
+  function formatDate(iso: string) {
+    try {
+      return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    } catch { return '' }
+  }
 
   function set(field: keyof PreCallContext, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -109,6 +165,69 @@ export default function PreCallClient() {
             </div>
           </div>
         </div>
+
+        {/* ── Resume previous call ───────────────────────────── */}
+        {firestoreConfigured && (
+          <div ref={searchRef} className="relative mb-5">
+            <div className={`bg-white/5 border rounded-2xl px-4 py-3 transition-colors ${searchOpen ? 'border-blue-400/50' : 'border-white/10'}`}>
+              <div className="flex items-center gap-3">
+                <svg className="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => { setSearchTerm(e.target.value); setSearchOpen(true) }}
+                  onFocus={() => setSearchOpen(true)}
+                  placeholder="Find a previous call — type company or contact name…"
+                  className="flex-1 bg-transparent text-sm text-slate-200 placeholder-slate-500 focus:outline-none"
+                />
+                {searchTerm && (
+                  <button onClick={() => { setSearchTerm(''); setSearchOpen(false) }} className="text-slate-500 hover:text-slate-300 transition">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Results dropdown */}
+            {searchOpen && searchResults.length > 0 && (
+              <div className="absolute left-0 right-0 top-full mt-1 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                {searchResults.map((record) => (
+                  <button
+                    key={record.id}
+                    onClick={() => resumeCall(record)}
+                    className="w-full flex items-start gap-3 px-4 py-3 hover:bg-slate-700 transition text-left border-b border-slate-700 last:border-0"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-semibold text-white">{record.companyName}</span>
+                        {record.contactName && (
+                          <span className="text-xs text-slate-400">{record.contactName}{record.contactTitle ? ` · ${record.contactTitle}` : ''}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3 mt-0.5">
+                        {record.nextStep && (
+                          <span className="text-xs text-slate-500">{record.nextStep}</span>
+                        )}
+                        <span className="text-xs text-slate-600">{formatDate(record.createdAt)}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-semibold text-blue-400 flex-shrink-0 mt-0.5">Resume →</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {searchOpen && searchTerm.trim().length > 1 && searchResults.length === 0 && (
+              <div className="absolute left-0 right-0 top-full mt-1 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-50 px-4 py-3">
+                <p className="text-sm text-slate-500">No previous calls found for &ldquo;{searchTerm}&rdquo;</p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* BDR Notes section */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-5">

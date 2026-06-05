@@ -83,6 +83,9 @@ export default function CloseStage({
     ? findBestRec(closeRecommendations, taggedAnswers)
     : null
 
+  // Always surface ONE recommended option — AI pick if chips matched, otherwise demo
+  const recommendedNextStep = best?.rec.nextStep ?? 'Product demo scheduled'
+
   const allTagged = new Set(Object.values(taggedAnswers).flat())
   const matchedLabels = best
     ? questions
@@ -91,6 +94,13 @@ export default function CloseStage({
         .map((c) => c.label)
         .slice(0, 3)
     : []
+
+  // Put recommended option first in the grid
+  const sortedOptions = [...OPTIONS].sort((a, b) => {
+    if (a.nextStep === recommendedNextStep) return -1
+    if (b.nextStep === recommendedNextStep) return 1
+    return 0
+  })
 
   function copyText(text: string, id: string) {
     navigator.clipboard.writeText(text).catch(() => {})
@@ -139,7 +149,7 @@ export default function CloseStage({
         </div>
       )}
 
-      {/* ── AI-powered recommendation ────────────────────────── */}
+      {/* ── Admin-configured words to say (if chip-matched rec exists) ── */}
       {best && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl overflow-hidden">
           <div className="flex items-center justify-between px-4 pt-3 pb-2 gap-2">
@@ -147,71 +157,42 @@ export default function CloseStage({
               <svg className="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wide">Ask for this</span>
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wide">Suggested words</span>
               {matchedLabels.map((label) => (
                 <span key={label} className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{label}</span>
               ))}
             </div>
-            <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 border border-emerald-200 px-2.5 py-0.5 rounded-full flex-shrink-0">
-              {best.rec.nextStep}
-            </span>
-          </div>
-
-          <div className="px-4 pb-2">
-            <p className="text-xs text-emerald-600">{best.rec.rationale}</p>
-          </div>
-
-          <div className="mx-4 mb-3 bg-white border border-emerald-200 rounded-lg px-4 py-3">
-            <p className="text-sm text-slate-900 leading-relaxed">&ldquo;{best.rec.askThis}&rdquo;</p>
-          </div>
-
-          <div className="px-4 pb-3 flex items-center justify-between gap-2">
-            <button
-              onClick={() => onSelect(selected === best.rec.nextStep ? '' : best.rec.nextStep)}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
-                selected === best.rec.nextStep
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50'
-              }`}
-            >
-              {selected === best.rec.nextStep ? '✓ Selected as next step' : 'Select as next step'}
-            </button>
             <button
               onClick={() => copyText(best.rec.askThis, 'rec')}
-              className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition ${
+              className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition flex-shrink-0 ${
                 copiedId === 'rec'
                   ? 'bg-emerald-600 border-emerald-600 text-white'
                   : 'bg-white border-emerald-200 text-emerald-700 hover:bg-emerald-50'
               }`}
             >
               {copiedId === 'rec' ? (
-                <>
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Copied
-                </>
+                <><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>Copied</>
               ) : (
-                <>
-                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  Copy
-                </>
+                <><svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>Copy</>
               )}
             </button>
+          </div>
+          <div className="px-4 pb-2">
+            <p className="text-xs text-emerald-600 mb-1.5">{best.rec.rationale}</p>
+          </div>
+          <div className="mx-4 mb-3 bg-white border border-emerald-200 rounded-lg px-4 py-3">
+            <p className="text-sm text-slate-900 leading-relaxed">&ldquo;{best.rec.askThis}&rdquo;</p>
           </div>
         </div>
       )}
 
       {/* ── Next step picker ─────────────────────────────────── */}
       <div>
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2.5">
-          {best ? 'Or choose a different next step' : 'Agree a next step'}
-        </p>
+        <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2.5">Agree a next step</p>
         <div className="grid grid-cols-2 gap-2.5">
-          {OPTIONS.map((opt) => {
-            const isSelected = selected === opt.nextStep
+          {sortedOptions.map((opt) => {
+            const isSelected    = selected === opt.nextStep
+            const isRecommended = opt.nextStep === recommendedNextStep && !isSelected
             return (
               <button
                 key={opt.id}
@@ -219,25 +200,31 @@ export default function CloseStage({
                 className={`text-left p-3.5 rounded-xl border-2 transition ${
                   isSelected
                     ? 'border-blue-500 bg-blue-50 shadow-sm'
+                    : isRecommended
+                    ? 'border-emerald-400 bg-emerald-50 hover:border-emerald-500'
                     : 'border-slate-200 bg-white hover:border-blue-200 hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-start justify-between gap-1 mb-1">
                   <div className="flex items-center gap-2">
                     <span className="text-base leading-none">{opt.emoji}</span>
-                    <span className={`text-sm font-bold leading-tight ${isSelected ? 'text-blue-800' : 'text-slate-800'}`}>
+                    <span className={`text-sm font-bold leading-tight ${isSelected ? 'text-blue-800' : isRecommended ? 'text-emerald-800' : 'text-slate-800'}`}>
                       {opt.title}
                     </span>
                   </div>
-                  {isSelected && (
+                  {isSelected ? (
                     <div className="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center mt-0.5">
                       <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                  )}
+                  ) : isRecommended ? (
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 border border-emerald-200 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                      Suggested
+                    </span>
+                  ) : null}
                 </div>
-                <p className={`text-xs ${isSelected ? 'text-blue-500' : 'text-slate-400'}`}>
+                <p className={`text-xs ${isSelected ? 'text-blue-500' : isRecommended ? 'text-emerald-600' : 'text-slate-400'}`}>
                   {opt.timing}
                 </p>
               </button>
