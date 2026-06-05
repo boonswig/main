@@ -42,22 +42,22 @@
         {
           "id": "d-q-devices",
           "question": "What's the mix of company-managed devices versus personal, unmanaged, or contractor devices in your organisation?",
-          "purpose": "BYOD and unmanaged endpoints are the biggest gap CEP fills. Users on personal devices are completely outside IT's control — most customers haven't fully reckoned with this.",
+          "purpose": "BYOD and unmanaged endpoints are the biggest gap CEP fills. Users on personal devices are completely outside IT's control today — and most customers haven't fully reckoned with this.",
           "followUps": [
             "How do contractors or temps access your systems?",
             "Can IT push security controls to a personal device?",
-            "When a contractor finishes their engagement, can you revoke access to data they may have already downloaded?"
+            "When a contractor finishes, can you revoke access to data they've already downloaded?"
           ],
           "keywords": ["byod", "unmanaged", "personal", "device", "contractor", "remote", "laptop", "chromebook", "bring your own"],
           "industryTips": {
-            "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks — often completely unaddressed.",
-            "professional-services": "Contractors accessing client data from personal devices is a liability issue many firms haven't formally addressed — it's a DLP conversation waiting to happen."
+            "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks — and often completely unaddressed.",
+            "professional-services": "Contractors accessing client data from personal devices is a liability many firms haven't fully addressed — it's a DLP conversation waiting to happen."
           }
         },
         {
           "id": "d-q-security",
           "question": "Has your organisation experienced any security incidents, phishing attempts, or malware in the past 12 months — even near-misses?",
-          "purpose": "Establish security as a current, lived business problem rather than a theoretical risk. Urgency lives here.",
+          "purpose": "Establish security as a current, lived business problem rather than a theoretical risk. This is where urgency lives.",
           "followUps": [
             "What was the impact — downtime, data loss, regulatory exposure?",
             "Was the browser involved in any of those incidents?",
@@ -65,8 +65,8 @@
           ],
           "keywords": ["phishing", "malware", "ransomware", "breach", "incident", "attack", "hack", "security", "compromise"],
           "industryTips": {
-            "financial-services": "Financial services is the #1 target for phishing globally. Even a near-miss carries significant regulatory and reputational cost — ask specifically about browser-based incidents.",
-            "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft. Ask about those attack vectors specifically."
+            "financial-services": "Financial services is the #1 target for phishing globally. Even a near-miss carries significant regulatory and reputational cost.",
+            "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft — ask about those specifically."
           }
         },
         {
@@ -80,20 +80,20 @@
           ],
           "keywords": ["dlp", "data loss", "download", "upload", "copy", "paste", "sensitive", "confidential", "exfiltration", "prevent"],
           "industryTips": {
-            "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling — frame it as a compliance investment.",
-            "technology": "Source code and IP exfiltration via personal cloud storage is a major risk for SaaS companies. CEP's DLP controls can block this at the browser layer."
+            "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling — it's a compliance investment, not just security.",
+            "technology": "Source code and IP exfiltration via personal cloud storage is a serious risk for SaaS companies — CEP's DLP controls can block this at the browser layer."
           }
         },
         {
           "id": "d-q-it-visibility",
           "question": "Does your IT team have any visibility into what's happening inside the browser today — sites visited, extensions installed, file downloads, data transfers?",
-          "purpose": "Surface the visibility gap. IT can often see the network perimeter but is completely blind inside the browser — this insight creates urgency.",
+          "purpose": "Surface the visibility gap. IT can often see the network perimeter but is completely blind inside the browser — this is the insight that creates urgency.",
           "followUps": [
-            "If a user installs a malicious extension today, how long until IT knows?",
+            "If a user installs a malicious extension today, would IT know?",
             "Is browser activity included in your SIEM or security monitoring?",
-            "How long would it take to detect data exfiltration via the browser?"
+            "How long would it take to detect a data exfiltration via the browser?"
           ],
-          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight", "blind"]
+          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight"]
         }
       ],
       "talkingPoints": [],
@@ -117,7 +117,7 @@
             "Ask: 'What does your current security stack cost per user vs what CEP adds — and what's the cost of one incident?'",
             "For Google Workspace customers: mention they may already have entitlements included"
           ],
-          "keywords": ["zero trust", "security", "browser", "vpn", "dlp", "policy", "threat", "phishing", "perimeter"],
+          "keywords": ["zero trust", "security", "browser", "vpn", "dlp", "policy", "threat", "phishing"],
           "industryTips": {
             "financial-services": "CEP's DLP and screen-capture controls map directly to PCI-DSS and FCA requirements — frame it as a compliance investment. Regulators are increasingly asking about browser controls.",
             "technology": "For SaaS companies, CEP protects against OAuth token theft and credential harvesting — the #1 attack vector against tech-forward teams."
