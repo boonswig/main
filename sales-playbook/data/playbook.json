@@ -114,7 +114,7 @@
           "content": "Your team already spends 80%+ of their working day in a browser. Chrome Enterprise Premium turns that surface into a zero-trust security perimeter — policy-controlled, threat-protected, and DLP-enforced. No VPN required. No new hardware. Deploys to existing Chrome browsers in hours.",
           "tips": [
             "Lead with: 'The browser is now the #1 attack surface — yet most security budgets allocate less than 10% to it'",
-            "Ask: 'What does your current security stack cost per user vs what CEP adds — and what's the cost of one incident?'",
+            "Ask: 'What does your current security stack cost per user vs. what CEP adds — and what's the cost of one incident?'",
             "For Google Workspace customers: mention they may already have entitlements included"
           ],
           "keywords": ["zero trust", "security", "browser", "vpn", "dlp", "policy", "threat", "phishing"],
@@ -130,7 +130,7 @@
           "tips": [
             "If they have Citrix: get the per-seat cost before presenting Cameyo pricing — the TCO comparison is the close",
             "Key message: 'Your users don't change anything — the Windows app just opens in a tab'",
-            "Speed angle: 'You could have 10 users running [specific app] by end of this week'"
+            "Speed angle: 'You could have 10 users running [specific app name] by end of this week'"
           ],
           "keywords": ["citrix", "vdi", "rdp", "rds", "windows", "legacy", "application", "vmware", "infrastructure", "tco"],
           "industryTips": {
@@ -140,10 +140,10 @@
         },
         {
           "id": "p-tp-byod",
-          "title": "Corporate browser controls on personal devices — without touching the device",
+          "title": "Corporate browser controls on personal and unmanaged devices — without touching the device",
           "content": "For BYOD, contractor, and remote workers, CEP deploys a managed Chrome profile that enforces corporate policies within the browser, while leaving the personal side of the device completely untouched. Users get their personal Chrome profile; IT controls the work profile. The change is invisible to users; the control is real for IT.",
           "tips": [
-            "This is often the 'wow' moment for HR and legal — corporate DLP on personal devices without MDM",
+            "This is often the 'wow' moment for HR and legal — corporate DLP on personal devices without MDM is a novel concept for most customers",
             "Ask first: 'What's your current policy for contractors accessing client data from their own laptop?' — silence is the answer you want"
           ],
           "keywords": ["byod", "contractor", "unmanaged", "personal", "profile", "mdm", "bring your own device"]
@@ -151,13 +151,13 @@
         {
           "id": "p-tp-deployment",
           "title": "Hours to deploy — not a 6-month infrastructure project",
-          "content": "CEP policy rollout to existing Chrome browsers takes hours. If on Google Workspace, many settings are pre-configured. Cameyo app onboarding is days. Compare that to a traditional Citrix or VDI rollout — which typically runs 3–9 months and requires dedicated infrastructure teams.",
+          "content": "CEP policy rollout to existing Chrome browsers takes hours. If the customer is on Google Workspace, many settings are pre-configured. Cameyo app onboarding is days. Compare that to a Citrix or traditional VDI rollout — which typically runs 3–9 months and requires dedicated infrastructure teams.",
           "tips": [
             "Speed is a major differentiator vs. legacy security and virtualisation vendors",
             "Good pilot close: 'What if we had 10 users running [specific use case] by end of next week?'",
-            "For sceptical IT buyers: low-risk pilot is more compelling than a lengthy business case"
+            "For sceptical IT buyers: low-risk pilot is more compelling than a long business case"
           ],
-          "keywords": ["deploy", "rollout", "pilot", "implementation", "timeline", "fast", "quick", "speed", "hours"]
+          "keywords": ["deploy", "rollout", "pilot", "implementation", "timeline", "fast", "quick", "speed"]
         },
         {
           "id": "p-tp-integration",
@@ -165,7 +165,7 @@
           "content": "For Google Workspace customers, the Chrome Admin Console is included and may already have licences. For Microsoft-first environments, CEP integrates with Entra ID (Azure AD) via SAML/SCIM and works alongside Intune for device context. No new identity platform. No rip-and-replace.",
           "tips": [
             "For Workspace customers: 'You may already be paying for this — let's check your entitlements'",
-            "For Microsoft shops: don't fight the stack — show how CEP augments Entra and Intune",
+            "For Microsoft shops: don't fight the stack — show how CEP augments Entra and Intune rather than replacing them",
             "Cameyo similarly integrates with Azure AD and Okta for SSO"
           ],
           "keywords": ["workspace", "google", "microsoft", "intune", "azure ad", "entra", "saml", "sso", "okta", "integration"],
@@ -178,11 +178,11 @@
     },
     {
       "id": "objections",
-      "name": "Objection Handling",
+      "name": "Objections",
       "order": 3,
-      "description": "Address concerns about incumbent solutions, cost, change management, and IT complexity. Every objection is information — stay curious before responding.",
+      "description": "Address concerns about incumbent solutions, cost, change management, and IT complexity. Stay curious — every objection is information.",
       "color": "orange",
-      "icon": "Shield",
+      "icon": "ShieldAlert",
       "questions": [],
       "talkingPoints": [],
       "objections": [
@@ -192,15 +192,15 @@
           "response": "Intune manages the device — what happens inside the browser is invisible to it. CEP fills exactly that gap: browser-layer DLP, threat protection, and policy enforcement that Intune simply can't see. They're additive, not competing. Intune handles device compliance; CEP handles what happens at the application layer. You keep everything you have and gain visibility where you currently have none.",
           "tips": [
             "Ask: 'Can Intune tell you what your users are downloading from the web today?'",
-            "The 'additive, not competing' framing is essential — never position as a replacement",
-            "Follow up: 'If a user installs a malicious extension tomorrow, how long until IT knows?'"
+            "The 'additive, not competing' framing is essential — don't position as a replacement",
+            "Follow up with the visibility gap question: 'If a user installs a malicious extension tomorrow, how long until IT knows?'"
           ],
           "keywords": ["intune", "sccm", "mdm", "endpoint", "device management", "microsoft", "already have"]
         },
         {
           "id": "o-edge",
           "objection": "We're a Microsoft shop — we use Edge / M365 / Azure",
-          "response": "Completely valid — and CEP is built for exactly this. It integrates natively with Entra ID, Intune, and Azure AD. You're not abandoning Microsoft; you're adding a browser-layer security control that augments your existing stack. Managed Chrome and managed Edge can coexist on the same machine for different use cases. A 30-day pilot on 10 users costs nothing to find out whether the added security layer is worth it.",
+          "response": "Completely valid — and CEP is built for exactly this. It integrates natively with Entra ID, Intune, and Azure AD, so you're not abandoning Microsoft; you're adding a browser-layer security control that augments your existing stack. Managed Chrome and managed Edge can also coexist on the same machine for different use cases. A 30-day pilot on 10 users costs nothing to find out whether the added security layer is worth it.",
           "tips": [
             "Never fight the Microsoft stack — always position as complementary",
             "If Edge commitment is immovable, pivot to Cameyo as the entry point instead",
@@ -222,11 +222,11 @@
         {
           "id": "o-change-mgmt",
           "objection": "My users won't change browsers / we can't force a tool change on the business",
-          "response": "Users don't change anything. CEP deploys as a managed profile alongside their existing Chrome install — they keep their bookmarks, extensions, history, and muscle memory. For Cameyo, the Windows app opens in a Chrome tab. Most users don't know they're in a virtual session. The change is invisible to end users; the security control is entirely visible to IT. That's the point.",
+          "response": "Users don't change anything. CEP deploys as a managed profile alongside their existing Chrome install — they keep their bookmarks, extensions, history, and muscle memory. For Cameyo, the Windows app opens in a Chrome tab. Most users don't know they're in a virtual session. The change is entirely invisible to end users; the security control is entirely visible to IT. That's the point.",
           "tips": [
             "Lead with: 'This is an IT control, not a user-facing product change'",
             "Good closer: 'What if we ran a 10-user pilot and asked them for feedback after a week?'",
-            "For Microsoft orgs: managed Chrome profile doesn't replace Edge — it coexists"
+            "For orgs with a strong Microsoft culture: point out that managed Chrome profile doesn't replace Edge — it coexists"
           ],
           "keywords": ["change management", "adoption", "users", "training", "change", "force", "resistance", "won't use"]
         },
@@ -245,9 +245,9 @@
         {
           "id": "o-security-covered",
           "objection": "We already have security covered — antivirus, firewall, VPN",
-          "response": "Those are network perimeter controls — they protect the edge. But modern attacks live inside the browser: phishing via legitimate-looking sites, drive-by downloads, malicious extensions, OAuth token theft. None of these trip a firewall. Antivirus can't see what a user does in a web application. CEP fills the security gap that sits between the network perimeter and the user's fingers — the fastest-growing attack surface in enterprise today.",
+          "response": "Those are network perimeter controls — they protect the edge. But most modern attacks live entirely inside the browser: phishing via legitimate-looking sites, drive-by downloads, malicious extensions, OAuth token theft. None of these trip a firewall. Antivirus can't see what a user does in a web application. CEP fills the security gap that sits between the network perimeter and the user's fingers — and it's the fastest-growing attack surface in enterprise today.",
           "tips": [
-            "Stat to use: 'The browser is involved in over 80% of enterprise security incidents — yet most stacks are completely blind inside it'",
+            "Stat to use: 'The browser is involved in over 80% of enterprise security incidents — yet most security stacks are blind inside it'",
             "Ask: 'Does your current security stack give you visibility into browser-level activity — downloads, extension installs, site visits?'",
             "Don't dismiss their stack — acknowledge it, then show what it can't see"
           ],
@@ -257,22 +257,22 @@
     },
     {
       "id": "close",
-      "name": "Close & Next Steps",
+      "name": "Close",
       "order": 4,
-      "description": "Confirm the use case, identify the buying committee, and land on a clear pilot or commercial next step. Always leave with a specific next step, date, and owner.",
+      "description": "Confirm the use case, identify the buying committee, and land on a clear pilot or commercial next step. The goal is a specific commitment, not a vague 'let's keep talking'.",
       "color": "green",
       "icon": "CheckCircle",
       "questions": [
         {
           "id": "c-q-usecase",
-          "question": "Based on what we've discussed, does browser security, legacy app delivery, or both resonate as the right starting point for your organisation?",
-          "purpose": "Get verbal confirmation on the primary use case before moving to commercial discussion. Surfaces remaining misalignment early.",
+          "question": "Based on what we've discussed, does [browser security / legacy app delivery / both] resonate as the right starting point for your organisation?",
+          "purpose": "Get verbal confirmation on the primary use case before moving to commercial discussion. This surfaces any remaining misalignment early.",
           "followUps": [
             "Is there a specific team, office, or user group that would make the most compelling pilot?",
             "Is the priority security, cost reduction, or both?",
             "Does IT or the business own this decision?"
           ],
-          "keywords": ["use case", "starting point", "priority", "focus", "direction", "security", "app delivery"]
+          "keywords": ["use case", "starting point", "priority", "focus", "direction"]
         },
         {
           "id": "c-q-success",
@@ -288,22 +288,22 @@
         {
           "id": "c-q-stakeholders",
           "question": "Who else needs to be part of the technical evaluation or commercial conversation — IT, security, procurement, a CISO?",
-          "purpose": "Multi-thread the deal and identify the full buying committee. Single-threaded deals die at procurement.",
+          "purpose": "Multi-thread the deal and identify the full buying committee before a proposal goes in. Single-threaded deals die at procurement.",
           "followUps": [
             "Is there a CISO or IT director who would need to sign off?",
             "Does procurement get involved at this stage or later?",
-            "Is there an internal security review or vendor evaluation process we should plan for?"
+            "Is there an internal security review or vendor evaluation process?"
           ],
           "keywords": ["stakeholders", "it", "ciso", "security", "procurement", "decision maker", "sign off", "committee"]
         },
         {
           "id": "c-q-pilot",
           "question": "Would a 30-day, 10-seat pilot help build internal confidence and give your IT team a chance to evaluate the platform hands-on?",
-          "purpose": "Low-friction next step that creates forward momentum and surfaces remaining blockers in a safe, reversible way.",
+          "purpose": "Low-friction next step that creates forward momentum and surfaces any remaining blockers in a safe, reversible way.",
           "followUps": [
             "Which use case would you want to validate — browser security, app delivery, or both?",
             "Who on the IT team would own the technical evaluation?",
-            "What does internal sign-off look like to get a pilot approved?"
+            "What does the internal sign-off process look like to get a pilot approved?"
           ],
           "keywords": ["pilot", "trial", "poc", "proof of concept", "evaluation", "30 day", "test", "try"]
         }
@@ -314,22 +314,22 @@
           "title": "Proposed pilot structure",
           "content": "10 users, 30 days, one focused use case (browser security or app delivery), evaluated by the IT owner. No infrastructure investment. Clear success criteria agreed upfront. At day 30, review against criteria and decide together on commercial pathway.",
           "tips": [
-            "Keep it simple — one use case, one team, clear criteria agreed before day 1",
+            "Keep it simple — one use case, one team, clear criteria",
             "Offer to write the internal business case for them if needed",
-            "Pilot momentum beats perfect business case every time for sub-1000 seat customers"
+            "Pilot momentum beats perfect business case every time for SMB"
           ],
-          "keywords": ["pilot", "structure", "30 days", "evaluation", "criteria"]
+          "keywords": ["pilot", "structure", "30 days", "evaluation"]
         },
         {
           "id": "c-tp-pathway",
-          "title": "Commercial pathway: pilot to full deployment",
+          "title": "Commercial pathway from pilot to deployment",
           "content": "Pilot → internal review → commercial agreement → phased rollout. For sub-1000 seat customers, full deployment is typically achievable within 60–90 days of commercial sign-off. No professional services engagement required for standard deployments.",
           "tips": [
             "Emphasise speed-to-value for smaller customers — this isn't an 18-month enterprise project",
-            "If procurement is involved: get them a written proposal early so it doesn't block momentum",
+            "If procurement is involved: get them a written proposal template early",
             "Cameyo + CEP together: position as a bundled browser platform deal, not two separate purchases"
           ],
-          "keywords": ["pathway", "deployment", "timeline", "commercial", "rollout", "60 days", "90 days"]
+          "keywords": ["pathway", "deployment", "timeline", "commercial", "rollout"]
         }
       ],
       "objections": []
