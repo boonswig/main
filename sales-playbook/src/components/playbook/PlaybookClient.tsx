@@ -10,11 +10,10 @@ import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
 import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
-import SmartCloseCard from './SmartCloseCard'
 import FloatingObjections from './FloatingObjections'
 import IndustryNotesPanel from './IndustryNotesPanel'
 import PitchBriefing from './PitchBriefing'
-import CloseOptions from './CloseOptions'
+import CloseStage from './CloseStage'
 import DiscoveryTransition from './DiscoveryTransition'
 import PitchTransition from './PitchTransition'
 import CallOpener from './CallOpener'
@@ -324,24 +323,20 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
             <PitchBriefing taggedAnswers={taggedAnswers} questions={discoveryQuestions} />
           )}
 
-          {/* Close: next step selector — primary action, comes first */}
+          {/* Close: unified close stage — guide, AI recommendation, next step picker, CTA */}
           {activeStageId === 'close' && (
-            <CloseOptions selected={preferredNextStep} onSelect={setPreferredNextStep} />
-          )}
-
-          {/* Close: chip-based smart recommendation */}
-          {activeStageId === 'close' && (livePlaybook.closeRecommendations?.length ?? 0) > 0 && (
-            <SmartCloseCard
-              closeRecommendations={livePlaybook.closeRecommendations!}
+            <CloseStage
+              closeRecommendations={livePlaybook.closeRecommendations}
               taggedAnswers={taggedAnswers}
               questions={discoveryQuestions}
-              selectedNextStep={preferredNextStep}
-              onSelectNextStep={setPreferredNextStep}
+              selected={preferredNextStep}
+              onSelect={setPreferredNextStep}
+              onEndCall={() => setEndCallOpen(true)}
             />
           )}
 
-          {/* Objections + Close: smart prompt */}
-          {(activeStageId === 'objections' || activeStageId === 'close') && (
+          {/* Objections: smart prompt */}
+          {activeStageId === 'objections' && (
             <SmartPromptCard context={context} activeStageId={activeStageId} />
           )}
 
@@ -380,11 +375,8 @@ export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
             />
           )}
 
-          {/* Objections: adoption roadmap */}
+          {/* Objections: adoption roadmap — shows how deployment actually works */}
           {activeStageId === 'objections' && <AdoptionRoadmap variant="objection" />}
-
-          {/* Close: adoption roadmap */}
-          {activeStageId === 'close' && <AdoptionRoadmap variant="close" />}
 
           <div className="pb-4" />
         </main>
