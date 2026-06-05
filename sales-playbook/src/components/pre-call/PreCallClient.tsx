@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { INDUSTRIES } from '@/lib/industries'
 import { PreCallContext, CallRecord } from '@/types'
-import { fetchRecentCalls, firestoreConfigured } from '@/lib/firestore'
+import { fetchAllCalls, firestoreConfigured } from '@/lib/firestore'
 
 const CONTEXT_KEY = 'sales-playbook-context'
 
@@ -55,7 +55,7 @@ export default function PreCallClient() {
   // Load recent calls for search
   useEffect(() => {
     if (!firestoreConfigured) return
-    fetchRecentCalls(100).then(setRecentCalls).catch(() => {})
+    fetchAllCalls().then(setRecentCalls).catch(() => {})
   }, [])
 
   // Close search dropdown on outside click

@@ -60,6 +60,44 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
+// ── CSV export ─────────────────────────────────────────────────────────────
+
+const CSV_COLUMNS: { header: string; get: (c: CallRecord) => string }[] = [
+  { header: 'Date',             get: (c) => c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-AU') : '' },
+  { header: 'Rep Name',         get: (c) => c.repName ?? '' },
+  { header: 'Company',          get: (c) => c.companyName ?? '' },
+  { header: 'Contact Name',     get: (c) => c.contactName ?? '' },
+  { header: 'Contact Title',    get: (c) => c.contactTitle ?? '' },
+  { header: 'Industry',         get: (c) => c.industry ? industryName(c.industry) : '' },
+  { header: 'Company Size',     get: (c) => c.companySize ?? '' },
+  { header: 'Lead Source',      get: (c) => c.leadSource ?? '' },
+  { header: 'Current Solution', get: (c) => c.currentSolution ?? '' },
+  { header: 'Known Pain Points',get: (c) => c.knownPainPoints ?? '' },
+  { header: 'Intent',           get: (c) => c.intent ? INTENT_CONFIG[c.intent]?.label ?? c.intent : '' },
+  { header: 'Next Step',        get: (c) => c.nextStep ?? '' },
+  { header: 'Next Step Notes',  get: (c) => c.nextStepNotes ?? '' },
+  { header: 'Signals Tagged',   get: (c) => (c.signals ?? []).join(' | ') },
+  { header: 'Tool Rating',      get: (c) => c.toolRating != null ? String(c.toolRating) : '' },
+  { header: 'Call Notes',       get: (c) => c.notes ?? '' },
+]
+
+function toCsvRow(values: string[]): string {
+  return values.map((v) => `"${v.replace(/"/g, '""')}"`).join(',')
+}
+
+function downloadCsv(records: CallRecord[]) {
+  const header = toCsvRow(CSV_COLUMNS.map((col) => col.header))
+  const rows = records.map((r) => toCsvRow(CSV_COLUMNS.map((col) => col.get(r))))
+  const csv = [header, ...rows].join('\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `call-records-${new Date().toISOString().slice(0, 10)}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 // ── Weekly buckets ─────────────────────────────────────────────────────────
 
 function getWeekLabel(dateStr: string): string {
@@ -375,8 +413,24 @@ export default function DashboardClient() {
 
         {/* ── Call log ─────────────────────────────────────────────── */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h3 className="text-sm font-bold text-slate-800">Call Log</h3>
+          <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
+            <div>
+              <h3 className="text-sm font-bold text-slate-800">Call Log</h3>
+              {calls.length > 0 && (
+                <p className="text-xs text-slate-400 mt-0.5">{calls.length} record{calls.length !== 1 ? 's' : ''}{filterIntent ? ' (filtered)' : ''}</p>
+              )}
+            </div>
+            {calls.length > 0 && (
+              <button
+                onClick={() => downloadCsv(calls)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export CSV
+              </button>
+            )}
           </div>
           {loading ? (
             <div className="flex items-center justify-center py-12 text-slate-400 text-sm">Loading…</div>

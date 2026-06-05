@@ -13,7 +13,6 @@ import {
   serverTimestamp,
   where,
   getDocs,
-  limit as firestoreLimit,
   QueryConstraint,
 } from 'firebase/firestore'
 import { CallRecord, Playbook } from '@/types'
@@ -25,13 +24,9 @@ export const firestoreConfigured = !!(
   process.env.NEXT_PUBLIC_FIREBASE_API_KEY
 )
 
-export async function fetchRecentCalls(count = 50): Promise<CallRecord[]> {
+export async function fetchAllCalls(): Promise<CallRecord[]> {
   if (!firestoreConfigured) return []
-  const q = query(
-    collection(db, COLLECTION),
-    orderBy('createdAt', 'desc'),
-    firestoreLimit(count),
-  )
+  const q = query(collection(db, COLLECTION), orderBy('createdAt', 'desc'))
   const snapshot = await getDocs(q)
   return snapshot.docs.map((d) => ({
     id: d.id,
