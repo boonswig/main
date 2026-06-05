@@ -3,6 +3,46 @@ import { NextRequest, NextResponse } from 'next/server'
 const GEMINI_MODEL = 'gemini-1.5-flash'
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`
 
+// ─── Google Vertex AI data store (knowledge grounding) ──────────────────────
+//
+// To ground Gemini responses in your own product knowledge base (e.g. CEP
+// feature docs, battle cards, pricing sheets, case studies), create a
+// Vertex AI Search data store and fill in the env vars below.
+//
+// Setup steps:
+//   1. Go to console.cloud.google.com → Vertex AI Search & Conversation
+//   2. Create a data store, upload your documents (PDFs, HTML, GCS bucket)
+//   3. Note the data store ID — looks like: "my-store_1234567890123"
+//   4. Add to .env.local:
+//        VERTEX_AI_PROJECT_ID=your-gcp-project-id
+//        VERTEX_AI_LOCATION=global          # or us-central1
+//        VERTEX_AI_DATA_STORE_ID=your-data-store-id
+//
+// When all three vars are present, the request below switches to the Vertex AI
+// endpoint and adds grounding — Gemini will cite and use your docs when
+// generating the email. Remove the comment block and set USE_DATA_STORE=true.
+//
+// const USE_DATA_STORE =
+//   !!process.env.VERTEX_AI_PROJECT_ID &&
+//   !!process.env.VERTEX_AI_DATA_STORE_ID
+//
+// const VERTEX_URL = `https://${process.env.VERTEX_AI_LOCATION ?? 'global'}-aiplatform.googleapis.com/v1/projects/${process.env.VERTEX_AI_PROJECT_ID}/locations/${process.env.VERTEX_AI_LOCATION ?? 'global'}/publishers/google/models/${GEMINI_MODEL}:generateContent`
+//
+// Grounding config to add inside the request body when USE_DATA_STORE is true:
+// "tools": [{
+//   "retrieval": {
+//     "vertex_ai_search": {
+//       "datastore": `projects/${process.env.VERTEX_AI_PROJECT_ID}/locations/${process.env.VERTEX_AI_LOCATION ?? 'global'}/collections/default_collection/dataStores/${process.env.VERTEX_AI_DATA_STORE_ID}`
+//     }
+//   }
+// }]
+//
+// Note: Vertex AI endpoint uses OAuth (service account), not an API key.
+// Add GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json to .env.local
+// and install: npm install google-auth-library
+// Then replace the ?key= query param with an Authorization: Bearer token.
+// ────────────────────────────────────────────────────────────────────────────
+
 export interface GenerateEmailPayload {
   repName: string
   contactName: string

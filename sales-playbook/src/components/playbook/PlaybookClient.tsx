@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Playbook, Stage, PreCallContext } from '@/types'
 import StageSidebar from './StageSidebar'
@@ -28,6 +28,7 @@ const TAGGED_ANSWERS_KEY = 'sales-playbook-tagged-answers'
 
 export default function PlaybookClient({ playbook }: Props) {
   const router = useRouter()
+  const mainRef = useRef<HTMLElement>(null)
   const stages = [...playbook.stages].sort((a, b) => a.order - b.order)
 
   const [activeStageId, setActiveStageId] = useState(stages[0]?.id ?? '')
@@ -66,6 +67,10 @@ export default function PlaybookClient({ playbook }: Props) {
   useEffect(() => {
     try { localStorage.setItem(TAGGED_ANSWERS_KEY, JSON.stringify(taggedAnswers)) } catch {}
   }, [taggedAnswers])
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeStageId])
 
   const discoveryStage = stages.find((s) => s.id === 'discovery')
   const discoveryQuestions = discoveryStage?.questions ?? []
@@ -155,7 +160,7 @@ export default function PlaybookClient({ playbook }: Props) {
         context={context}
       />
 
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main ref={mainRef} className="flex-1 overflow-y-auto pb-20">
         {/* Top bar */}
         <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
           <div>
