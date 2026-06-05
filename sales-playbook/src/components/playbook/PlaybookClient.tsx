@@ -9,6 +9,7 @@ import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
 import KeywordTriggerBar from './KeywordTriggerBar'
 import EndCallModal from './EndCallModal'
+import SmartPromptCard from './SmartPromptCard'
 
 interface Props {
   playbook: Playbook
@@ -190,6 +191,8 @@ export default function PlaybookClient({ playbook }: Props) {
             )}
           </div>
         )}
+
+        <SmartPromptCard context={context} activeStageId={activeStageId} />
 
         {/* Stage content */}
         <div className="p-6">

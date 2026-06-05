@@ -4,315 +4,254 @@
       "id": "discovery",
       "name": "Discovery",
       "order": 1,
-      "description": "Go deep on their current situation, pain points, and what an ideal outcome looks like. Your goal is to understand their world better than they do.",
-      "color": "purple",
+      "description": "Uncover the customer's current browser environment, legacy app dependencies, security posture, and device landscape before pitching.",
+      "color": "blue",
       "icon": "Search",
       "questions": [
         {
-          "id": "q-disc-1",
-          "question": "Walk me through how you handle [core use case] today.",
-          "purpose": "Understand their current process in detail — people, tools, steps, and workarounds.",
+          "id": "d-q-browser-mgmt",
+          "question": "How are your employees' browsers currently managed — does IT push policies centrally, or are users running whatever they like?",
+          "purpose": "Determine whether there's any existing browser governance — the starting point for the CEP conversation. Most orgs have zero visibility here.",
           "followUps": [
-            "How much time does that take per week?",
-            "Who owns that process?",
-            "What breaks down most often?"
+            "Who in IT owns browser policy today?",
+            "Are browser updates handled centrally or left to individual users?",
+            "Do you have visibility into which extensions employees have installed?"
           ],
-          "keywords": ["process", "workflow", "current", "today", "manual", "handle", "manage", "tools", "system"]
-        },
-        {
-          "id": "q-disc-2",
-          "question": "What's the biggest frustration with how things work today?",
-          "purpose": "Surface the emotional pain, not just the logical problem. People buy on emotion.",
-          "followUps": [
-            "How long has that been the case?",
-            "What have you tried to fix it?"
-          ],
-          "keywords": ["frustration", "problem", "pain", "annoying", "broken", "struggle", "challenge", "difficult", "hate"]
-        },
-        {
-          "id": "q-disc-3",
-          "question": "If you could wave a magic wand and have this working perfectly, what does that look like?",
-          "purpose": "Understand the ideal future state — this becomes the basis of your pitch.",
-          "followUps": [
-            "How would you measure success?",
-            "What would that be worth to your business?"
-          ],
-          "keywords": ["ideal", "perfect", "wish", "goal", "dream", "vision", "better", "improve", "future"]
-        },
-        {
-          "id": "q-disc-4",
-          "question": "What does success look like in 12 months if you get this right?",
-          "purpose": "Tie the solution to business outcomes, not just features.",
-          "followUps": [
-            "Who cares most about hitting that goal?",
-            "How does it affect your own performance review?"
-          ],
-          "keywords": ["success", "outcome", "goal", "target", "KPI", "metric", "result", "measure", "12 months", "year"]
-        },
-        {
-          "id": "q-disc-fs-1",
-          "question": "How are your compliance and audit reporting requirements currently managed?",
-          "purpose": "Uncover the regulatory burden and manual effort involved in compliance workflows — a major pain point in financial services.",
-          "followUps": [
-            "How much time does your team spend on audit prep each quarter?",
-            "Have you had any findings or close calls in recent audits?",
-            "Which regulations are most burdensome right now — FCA, GDPR, something else?"
-          ],
-          "keywords": ["compliance", "audit", "regulation", "reporting", "GDPR", "FCA", "regulatory", "risk", "controls"],
-          "industries": ["financial-services"]
-        },
-        {
-          "id": "q-disc-mfg-1",
-          "question": "Where do you lose the most time or materials in your current production workflow?",
-          "purpose": "Identify the highest-cost inefficiencies in their production process — downtime, waste, and rework are common entry points.",
-          "followUps": [
-            "How do you currently track downtime or waste?",
-            "Which line or process causes the most unplanned stops?",
-            "Does your ERP give you visibility into that in real time, or is it always after the fact?"
-          ],
-          "keywords": ["production", "downtime", "waste", "throughput", "inventory", "ERP", "manufacturing", "line", "output", "yield"],
-          "industries": ["manufacturing"]
-        },
-        {
-          "id": "q-disc-ret-1",
-          "question": "How do you currently manage inventory visibility across channels?",
-          "purpose": "Surface fragmentation between in-store, warehouse, and online inventory — a near-universal pain in retail.",
-          "followUps": [
-            "How often do stockouts or oversells happen?",
-            "Is your ecommerce platform talking to your warehouse system in real time?",
-            "How do you handle returns across channels?"
-          ],
-          "keywords": ["inventory", "stock", "omnichannel", "ecommerce", "fulfilment", "retail", "channel", "warehouse", "online", "store"],
-          "industries": ["retail"]
-        }
-      ],
-      "talkingPoints": [
-        {
-          "id": "tp-disc-1",
-          "title": "Be a consultant, not a vendor",
-          "content": "Your job in discovery is to listen 70% of the time. Ask one question, then be quiet. Let silences breathe — the best intel comes after a pause.",
-          "tips": ["Resist the urge to jump to the product", "Take visible notes — it signals you care"],
-          "keywords": ["listen", "questions", "understand", "learn", "curious", "explore"]
-        },
-        {
-          "id": "tp-disc-2",
-          "title": "Quantify the pain",
-          "content": "Push to put numbers on problems. 'Hours per week,' 'deals lost,' 'errors per month' — quantified pain becomes the ROI justification later.",
-          "tips": ["Use 'How often does that happen?' and 'What does that cost you?'", "Even rough estimates are useful"],
-          "keywords": ["cost", "time", "hours", "money", "ROI", "waste", "losses", "quantify", "numbers", "impact"],
+          "keywords": ["browser", "chrome", "edge", "firefox", "managed", "policy", "extension", "update"],
           "industryTips": {
-            "financial-services": "Push for compliance-related cost estimates — time spent on audit prep, cost of a regulatory finding, or FTE hours on manual reporting. These numbers are compelling in business cases.",
-            "manufacturing": "Frame around OEE (Overall Equipment Effectiveness) and cost-per-hour of downtime. Even a rough per-hour figure makes the ROI case concrete.",
-            "retail": "Tie quantification to lost sales from stockouts, markdown losses from overstock, or fulfilment error rates — all are measurable and meaningful to retail buyers."
+            "financial-services": "Unmanaged browsers are a frequent finding in FCA and PCI-DSS audits — frame browser governance as a compliance gap, not just an IT preference.",
+            "technology": "Even tech-savvy teams often have blind spots here — browser-based credential harvesting and OAuth token theft target developers specifically."
           }
+        },
+        {
+          "id": "d-q-legacy-apps",
+          "question": "Do any of your teams rely on Windows-based or legacy applications that need a specific environment to run?",
+          "purpose": "Surface the Cameyo opportunity. Any Windows or legacy app dependency — Citrix, RDS, local installs — is a direct use case for app delivery in the browser.",
+          "followUps": [
+            "How are those apps delivered today — Citrix, RDS, local install?",
+            "How many users need access, and on what types of devices?",
+            "What's the current cost per seat for that infrastructure — licenses, servers, IT support?"
+          ],
+          "keywords": ["legacy", "windows", "citrix", "rdp", "rds", "vdi", "vmware", "horizon", "xenapp", "application", "erp", "sap", "software"],
+          "industryTips": {
+            "manufacturing": "Manufacturing teams almost always have legacy ERP, MES, or SCADA systems that need Windows. Ask specifically about shop floor access.",
+            "retail": "Back-office and POS management tools are often Windows-only — Cameyo delivers these to any device, including Chromebooks in stores.",
+            "professional-services": "Ask about legacy time-billing, case management, or document management systems — these are often the last reason a firm maintains Windows infrastructure."
+          }
+        },
+        {
+          "id": "d-q-devices",
+          "question": "What's the mix of company-managed devices versus personal, unmanaged, or contractor devices in your organisation?",
+          "purpose": "BYOD and unmanaged endpoints are the biggest gap CEP fills. Users on personal devices are completely outside IT's control — most customers haven't fully reckoned with this.",
+          "followUps": [
+            "How do contractors or temps access your systems?",
+            "Can IT push security controls to a personal device?",
+            "When a contractor finishes their engagement, can you revoke access to data they may have already downloaded?"
+          ],
+          "keywords": ["byod", "unmanaged", "personal", "device", "contractor", "remote", "laptop", "chromebook", "bring your own"],
+          "industryTips": {
+            "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks — often completely unaddressed.",
+            "professional-services": "Contractors accessing client data from personal devices is a liability issue many firms haven't formally addressed — it's a DLP conversation waiting to happen."
+          }
+        },
+        {
+          "id": "d-q-security",
+          "question": "Has your organisation experienced any security incidents, phishing attempts, or malware in the past 12 months — even near-misses?",
+          "purpose": "Establish security as a current, lived business problem rather than a theoretical risk. Urgency lives here.",
+          "followUps": [
+            "What was the impact — downtime, data loss, regulatory exposure?",
+            "Was the browser involved in any of those incidents?",
+            "Did you have visibility into what the user was doing in the browser at the time?"
+          ],
+          "keywords": ["phishing", "malware", "ransomware", "breach", "incident", "attack", "hack", "security", "compromise"],
+          "industryTips": {
+            "financial-services": "Financial services is the #1 target for phishing globally. Even a near-miss carries significant regulatory and reputational cost — ask specifically about browser-based incidents.",
+            "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft. Ask about those attack vectors specifically."
+          }
+        },
+        {
+          "id": "d-q-dlp",
+          "question": "What controls do you have today to prevent sensitive data leaving via the browser — downloads to personal devices, uploads to personal cloud storage, copy-paste to external tools?",
+          "purpose": "DLP at the browser layer is a key CEP differentiator. Most organisations realise they have zero controls here once asked directly.",
+          "followUps": [
+            "What happens if an employee copies a client list to their personal Google Drive or Dropbox?",
+            "Can IT audit what's been downloaded from your web applications?",
+            "How do you handle contractors who need to access sensitive data?"
+          ],
+          "keywords": ["dlp", "data loss", "download", "upload", "copy", "paste", "sensitive", "confidential", "exfiltration", "prevent"],
+          "industryTips": {
+            "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling — frame it as a compliance investment.",
+            "technology": "Source code and IP exfiltration via personal cloud storage is a major risk for SaaS companies. CEP's DLP controls can block this at the browser layer."
+          }
+        },
+        {
+          "id": "d-q-it-visibility",
+          "question": "Does your IT team have any visibility into what's happening inside the browser today — sites visited, extensions installed, file downloads, data transfers?",
+          "purpose": "Surface the visibility gap. IT can often see the network perimeter but is completely blind inside the browser — this insight creates urgency.",
+          "followUps": [
+            "If a user installs a malicious extension today, how long until IT knows?",
+            "Is browser activity included in your SIEM or security monitoring?",
+            "How long would it take to detect data exfiltration via the browser?"
+          ],
+          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight", "blind"]
         }
       ],
-      "objections": [
-        {
-          "id": "obj-disc-1",
-          "objection": "I don't want to share too much before I understand your product.",
-          "response": "Completely fair. Let me give you a 2-minute overview of what we do, and then I'd love to ask a few questions to see if it's even relevant for your situation. Sound good?",
-          "tips": ["Give a crisp overview, then return to questions", "Don't let it turn into a one-way product demo"],
-          "keywords": ["share", "information", "tell", "product", "overview", "understand", "first", "before"]
-        }
-      ]
+      "talkingPoints": [],
+      "objections": []
     },
     {
       "id": "pitch",
-      "name": "Product Pitch",
+      "name": "Pitch",
       "order": 2,
-      "description": "Position the product as the answer to the specific pains uncovered in discovery. Connect features to outcomes — not the other way around.",
-      "color": "green",
+      "description": "Present Chrome Enterprise Premium and Cameyo as the browser-first platform that solves exactly what you uncovered in discovery. Lead with their pain, not product features.",
+      "color": "purple",
       "icon": "Presentation",
-      "questions": [
-        {
-          "id": "q-pitch-1",
-          "question": "Does this map to what you described earlier?",
-          "purpose": "Check for alignment after each section of the demo — keep them engaged and catch misalignment early.",
-          "followUps": [
-            "Is this closer to what you were imagining?",
-            "What's your reaction to that?"
-          ],
-          "keywords": ["map", "match", "align", "relevant", "fit", "right", "describe", "imagining", "reaction"]
-        },
-        {
-          "id": "q-pitch-2",
-          "question": "How does this compare to what you have today?",
-          "purpose": "Force them to make the comparison themselves — they sell themselves.",
-          "followUps": [
-            "What stands out most?",
-            "Is there anything you'd want to see work differently?"
-          ],
-          "keywords": ["compare", "difference", "versus", "today", "current", "better", "stands out", "different", "improvement"]
-        }
-      ],
+      "questions": [],
       "talkingPoints": [
         {
-          "id": "tp-pitch-1",
-          "title": "Lead with their pain, not your features",
-          "content": "Open with: 'Based on what you shared, you're dealing with [pain]. Here's how we solve that.' Never lead with 'Let me show you our platform.'",
-          "tips": ["Reference specific things they said in discovery", "One pain → one capability → one outcome"],
-          "keywords": ["pain", "problem", "challenge", "solve", "address", "help", "solution", "fix"]
-        },
-        {
-          "id": "tp-pitch-2",
-          "title": "Use proof at every step",
-          "content": "After each major capability, drop a customer story: '[Company like theirs] used this to achieve [specific outcome].' Keep stories to 30 seconds.",
-          "tips": ["Match the customer to their industry/size", "Use real numbers if you can"],
-          "keywords": ["proof", "customer", "case study", "example", "story", "result", "outcome", "reference", "evidence"],
+          "id": "p-tp-cep",
+          "title": "Chrome Enterprise Premium: the browser is your new security perimeter",
+          "content": "Your team already spends 80%+ of their working day in a browser. Chrome Enterprise Premium turns that surface into a zero-trust security perimeter — policy-controlled, threat-protected, and DLP-enforced. No VPN required. No new hardware. Deploys to existing Chrome browsers in hours.",
+          "tips": [
+            "Lead with: 'The browser is now the #1 attack surface — yet most security budgets allocate less than 10% to it'",
+            "Ask: 'What does your current security stack cost per user vs what CEP adds — and what's the cost of one incident?'",
+            "For Google Workspace customers: mention they may already have entitlements included"
+          ],
+          "keywords": ["zero trust", "security", "browser", "vpn", "dlp", "policy", "threat", "phishing", "perimeter"],
           "industryTips": {
-            "financial-services": "Reference regulated customers (banks, insurers, wealth managers) explicitly — compliance-conscious buyers want to know peers in their regulatory environment have validated the product.",
-            "manufacturing": "Use metrics like percentage reduction in downtime or improvement in OEE — plant managers and ops directors respond to operational numbers far more than generic 'efficiency' claims.",
-            "retail": "Cite sell-through rates, stockout reduction percentages, or fulfilment accuracy improvements. Retail buyers are data-driven and will ask for proof — have it ready."
+            "financial-services": "CEP's DLP and screen-capture controls map directly to PCI-DSS and FCA requirements — frame it as a compliance investment. Regulators are increasingly asking about browser controls.",
+            "technology": "For SaaS companies, CEP protects against OAuth token theft and credential harvesting — the #1 attack vector against tech-forward teams."
           }
         },
         {
-          "id": "tp-pitch-3",
-          "title": "Demo the 'aha moment' first",
-          "content": "Don't give a full feature tour. Find the one thing that will make them say 'we need this' and show it in the first 10 minutes.",
-          "tips": ["Ask your SE what each persona cares about most", "Skip the login screen and setup — start at the payoff"],
-          "keywords": ["demo", "show", "feature", "wow", "impressive", "need", "want", "see", "demonstrate"]
+          "id": "p-tp-cameyo",
+          "title": "Cameyo: your Windows apps in a Chrome tab — no Citrix, no VDI infrastructure",
+          "content": "Any application that runs on Windows can be delivered as a web app via Cameyo. Users open a Chrome tab, the app streams from the cloud. No servers to build or maintain. No client software to install. Typical deployment: days, not months. Customers replace Citrix at 40–60% lower TCO.",
+          "tips": [
+            "If they have Citrix: get the per-seat cost before presenting Cameyo pricing — the TCO comparison is the close",
+            "Key message: 'Your users don't change anything — the Windows app just opens in a tab'",
+            "Speed angle: 'You could have 10 users running [specific app] by end of this week'"
+          ],
+          "keywords": ["citrix", "vdi", "rdp", "rds", "windows", "legacy", "application", "vmware", "infrastructure", "tco"],
+          "industryTips": {
+            "manufacturing": "Position as a Citrix replacement for ERP and MES access — especially for shop floor workers who need one app, not a full Windows desktop.",
+            "retail": "Ideal for delivering back-office and POS management tools to Chromebooks or thin clients in stores — zero Windows infrastructure required."
+          }
         },
         {
-          "id": "tp-pitch-fs-1",
-          "title": "Compliance-ready by default",
-          "content": "Lead with the fact that audit trails, access controls, and regulatory reporting are built into the core product — not add-ons or professional services work. Compliance teams in financial services are used to paying for compliance as an afterthought; position this as structurally different.",
+          "id": "p-tp-byod",
+          "title": "Corporate browser controls on personal devices — without touching the device",
+          "content": "For BYOD, contractor, and remote workers, CEP deploys a managed Chrome profile that enforces corporate policies within the browser, while leaving the personal side of the device completely untouched. Users get their personal Chrome profile; IT controls the work profile. The change is invisible to users; the control is real for IT.",
           "tips": [
-            "Name the specific regulations or standards they mentioned in discovery",
-            "Offer to share the SOC 2 report and data processing addendum proactively — it signals maturity",
-            "If they have a CISO or DPO, offer a direct technical call early"
+            "This is often the 'wow' moment for HR and legal — corporate DLP on personal devices without MDM",
+            "Ask first: 'What's your current policy for contractors accessing client data from their own laptop?' — silence is the answer you want"
           ],
-          "keywords": ["compliance", "audit", "regulation", "SOC", "GDPR", "FCA", "reporting", "controls", "security"],
-          "industries": ["financial-services"]
+          "keywords": ["byod", "contractor", "unmanaged", "personal", "profile", "mdm", "bring your own device"]
         },
         {
-          "id": "tp-pitch-mfg-1",
-          "title": "Operational continuity",
-          "content": "Emphasise that deployment is designed around zero-downtime integration with existing ERP and MES systems. Plants can't afford a rip-and-replace — position the product as an intelligence layer on top of what's already there, not a replacement of it.",
+          "id": "p-tp-deployment",
+          "title": "Hours to deploy — not a 6-month infrastructure project",
+          "content": "CEP policy rollout to existing Chrome browsers takes hours. If on Google Workspace, many settings are pre-configured. Cameyo app onboarding is days. Compare that to a traditional Citrix or VDI rollout — which typically runs 3–9 months and requires dedicated infrastructure teams.",
           "tips": [
-            "Ask which ERP/MES they're running early in the pitch — having a pre-built connector to their system is a strong closer",
-            "Frame implementation in terms of production schedule, not IT sprints — 'You can be live before your next planned maintenance window'",
-            "OEE improvement benchmarks from similar plants land better than generic ROI claims"
+            "Speed is a major differentiator vs. legacy security and virtualisation vendors",
+            "Good pilot close: 'What if we had 10 users running [specific use case] by end of next week?'",
+            "For sceptical IT buyers: low-risk pilot is more compelling than a lengthy business case"
           ],
-          "keywords": ["downtime", "ERP", "integration", "operations", "OEE", "MES", "uptime", "production", "manufacturing", "continuity"],
-          "industries": ["manufacturing"]
+          "keywords": ["deploy", "rollout", "pilot", "implementation", "timeline", "fast", "quick", "speed", "hours"]
+        },
+        {
+          "id": "p-tp-integration",
+          "title": "Works with what you already have — Google Workspace or Microsoft",
+          "content": "For Google Workspace customers, the Chrome Admin Console is included and may already have licences. For Microsoft-first environments, CEP integrates with Entra ID (Azure AD) via SAML/SCIM and works alongside Intune for device context. No new identity platform. No rip-and-replace.",
+          "tips": [
+            "For Workspace customers: 'You may already be paying for this — let's check your entitlements'",
+            "For Microsoft shops: don't fight the stack — show how CEP augments Entra and Intune",
+            "Cameyo similarly integrates with Azure AD and Okta for SSO"
+          ],
+          "keywords": ["workspace", "google", "microsoft", "intune", "azure ad", "entra", "saml", "sso", "okta", "integration"],
+          "industryTips": {
+            "technology": "SaaS-native companies on Google Workspace likely already own the Chrome Admin Console — CEP is an uplift to infrastructure they're already paying for."
+          }
         }
       ],
-      "objections": [
-        {
-          "id": "obj-pitch-1",
-          "objection": "That looks complicated.",
-          "response": "I hear that — there's a lot on screen. In practice, [persona] only needs to use [2-3 things] day-to-day. Want me to show you the simplified view most teams actually use?",
-          "tips": ["Don't defend complexity", "Redirect to the simplest workflow"],
-          "keywords": ["complicated", "complex", "overwhelming", "confusing", "too much", "hard", "difficult", "steep", "learning curve"]
-        },
-        {
-          "id": "obj-pitch-2",
-          "objection": "Can you just send me a recording?",
-          "response": "Of course — I'll send a clip of what we just covered. Out of curiosity, is there a specific area you'd want to show someone else internally?",
-          "tips": ["Say yes, then use it to identify internal champions", "Offer to do a separate call with the other stakeholder"],
-          "keywords": ["recording", "video", "send", "share", "watch later", "show", "colleague", "internally", "team"]
-        }
-      ]
+      "objections": []
     },
     {
       "id": "objections",
       "name": "Objection Handling",
       "order": 3,
-      "description": "Address concerns with empathy and evidence. An objection is a question in disguise — figure out the real concern before answering.",
+      "description": "Address concerns about incumbent solutions, cost, change management, and IT complexity. Every objection is information — stay curious before responding.",
       "color": "orange",
       "icon": "Shield",
-      "questions": [
-        {
-          "id": "q-obj-1",
-          "question": "Help me understand — is [objection] a dealbreaker, or more of a concern you'd want addressed?",
-          "purpose": "Test whether the objection is fatal or just a question needing an answer.",
-          "followUps": [
-            "If we could address that, is there anything else that would hold you back?",
-            "What would need to be true for this to be a no-brainer?"
-          ],
-          "keywords": ["dealbreaker", "concern", "worry", "issue", "problem", "blocker", "hold back", "hesitant", "unsure"]
-        }
-      ],
-      "talkingPoints": [
-        {
-          "id": "tp-obj-1",
-          "title": "The ACRA framework",
-          "content": "Acknowledge → Clarify → Respond → Advance. Never skip Acknowledge — it defuses defensiveness. Never skip Advance — objections without next steps stall deals.",
-          "tips": ["'That's a fair point...' before every response", "Always end with a question or next step"],
-          "keywords": ["framework", "approach", "acknowledge", "respond", "handle", "method", "technique"]
-        },
-        {
-          "id": "tp-obj-2",
-          "title": "Isolate before you answer",
-          "content": "Before answering any objection, ask: 'Is that the main thing holding you back, or are there other concerns?' Surface all objections before tackling any one.",
-          "tips": ["Answering one objection at a time reveals more", "Don't chase objections before you know all of them"],
-          "keywords": ["isolate", "main", "other concerns", "holding back", "surface", "all objections", "uncover", "identify"]
-        }
-      ],
+      "questions": [],
+      "talkingPoints": [],
       "objections": [
         {
-          "id": "obj-obj-1",
-          "objection": "It's too expensive.",
-          "response": "I hear you on price — let me ask: too expensive compared to what? Your current solution, or the value you'd get from solving this? [Pause]. If we could show you a clear ROI in the first 90 days, would cost still be the blocker?",
-          "tips": ["Never discount before understanding the real objection", "Anchor to value, not features"],
-          "keywords": ["expensive", "cost", "price", "budget", "afford", "money", "cheap", "pricey", "too much", "ROI"],
-          "industryTips": {
-            "financial-services": "Emphasise audit trail and compliance ROI, not just efficiency gains — the cost of a single regulatory finding or audit remediation often dwarfs the annual contract value.",
-            "manufacturing": "Frame ROI around uptime and throughput, not headcount — plant managers think in cost-per-hour-of-downtime, not FTE savings."
-          }
-        },
-        {
-          "id": "obj-obj-2",
-          "objection": "We don't have the bandwidth to implement right now.",
-          "response": "That's the most common thing we hear — and it's exactly why we built our onboarding the way we did. Most teams are live in [X days] with minimal involvement from your side. Can I show you what the first 30 days actually look like?",
-          "tips": ["Have a specific onboarding timeline ready", "Offer to involve their IT team in a separate call"],
-          "keywords": ["bandwidth", "capacity", "time", "resource", "busy", "stretched", "staff", "headcount", "implement", "onboard"]
-        },
-        {
-          "id": "obj-obj-3",
-          "objection": "We need to evaluate other options first.",
-          "response": "Totally reasonable — you should evaluate. Can I ask what you're looking for that you haven't seen yet? I want to make sure you have what you need to do a fair comparison, and I can be upfront about where we win and where others might be a better fit.",
-          "tips": ["Position yourself as a trusted advisor, not a closer", "Ask what criteria they're using — then map those to your strengths"],
-          "keywords": ["evaluate", "compare", "options", "alternatives", "competitors", "RFP", "shortlist", "market", "others", "vendors"]
-        },
-        {
-          "id": "obj-obj-4",
-          "objection": "We tried something like this before and it didn't work.",
-          "response": "That's really helpful context — thank you for sharing that. What happened? I want to understand what went wrong so I can tell you honestly if we'd run into the same issue, or if what we do differently would have changed the outcome.",
-          "tips": ["Don't dismiss their past experience", "Find the specific failure point — it's usually implementation, not the category"],
-          "keywords": ["tried", "failed", "before", "didn't work", "past", "previous", "bad experience", "burned", "sceptical", "similar"]
-        },
-        {
-          "id": "obj-obj-5",
-          "objection": "We need to get IT / security / legal involved.",
-          "response": "Absolutely — we'd expect that. We work with enterprise security teams regularly and have SOC 2 Type II, SSO, and a standard security review packet ready. Want me to connect your team directly with our solutions engineer to get that started in parallel?",
-          "tips": ["Have your security docs ready to share", "Offer a direct connection to your SE or CSM"],
-          "keywords": ["IT", "security", "legal", "procurement", "review", "approval", "compliance", "sign-off", "CISO", "InfoSec"]
-        },
-        {
-          "id": "obj-obj-fs-1",
-          "objection": "We have strict IT security and procurement requirements.",
-          "response": "Completely understood — and we'd be concerned if you didn't. We go through enterprise security reviews regularly with banks, insurers, and asset managers. We're SOC 2 Type II certified, support SSO and MFA, and have a full security review packet ready to go. I'd suggest we loop in your CISO and procurement team early so it runs in parallel with the commercial process — want me to set up a separate technical call with our solutions engineer this week?",
+          "id": "o-intune",
+          "objection": "We already manage endpoints with Intune / SCCM / MDM",
+          "response": "Intune manages the device — what happens inside the browser is invisible to it. CEP fills exactly that gap: browser-layer DLP, threat protection, and policy enforcement that Intune simply can't see. They're additive, not competing. Intune handles device compliance; CEP handles what happens at the application layer. You keep everything you have and gain visibility where you currently have none.",
           "tips": [
-            "Have the security review packet, SOC 2 report, and data processing addendum ready to send immediately",
-            "Offer to involve your SE or security team directly — don't try to answer technical security questions yourself",
-            "Frame it as 'we've done this before with firms like yours' — name-drop peer institutions if you can"
+            "Ask: 'Can Intune tell you what your users are downloading from the web today?'",
+            "The 'additive, not competing' framing is essential — never position as a replacement",
+            "Follow up: 'If a user installs a malicious extension tomorrow, how long until IT knows?'"
           ],
-          "keywords": ["security", "procurement", "IT", "CISO", "compliance", "approval", "InfoSec", "SOC", "review", "requirements"],
-          "industries": ["financial-services"]
+          "keywords": ["intune", "sccm", "mdm", "endpoint", "device management", "microsoft", "already have"]
         },
         {
-          "id": "obj-obj-ret-1",
-          "objection": "Our peak season is coming up — we can't take on something new right now.",
-          "response": "That makes complete sense — the last thing you need is a distraction heading into peak. What I'd suggest is this: we use the next few weeks to do the planning and scoping work now, so that when peak is behind you, you're not starting from scratch — you're ready to move immediately. We've actually had retailers onboard in the run-up to peak and found it paid off because the new visibility helped them manage the season better. Would it be worth a quick conversation about what a post-peak timeline could look like?",
+          "id": "o-edge",
+          "objection": "We're a Microsoft shop — we use Edge / M365 / Azure",
+          "response": "Completely valid — and CEP is built for exactly this. It integrates natively with Entra ID, Intune, and Azure AD. You're not abandoning Microsoft; you're adding a browser-layer security control that augments your existing stack. Managed Chrome and managed Edge can coexist on the same machine for different use cases. A 30-day pilot on 10 users costs nothing to find out whether the added security layer is worth it.",
           "tips": [
-            "Don't push for a rushed implementation — validate their concern fully",
-            "Have a post-peak timeline ready with specific milestones",
-            "Reference a retailer case study that onboarded pre-peak or used the product to navigate a peak season — social proof is powerful here"
+            "Never fight the Microsoft stack — always position as complementary",
+            "If Edge commitment is immovable, pivot to Cameyo as the entry point instead",
+            "Key question: 'Does managed Edge give you DLP controls at the browser layer today?'"
           ],
-          "keywords": ["peak", "busy", "seasonal", "launch", "timing", "Christmas", "Black Friday", "Q4", "capacity", "not now"],
-          "industries": ["retail"]
+          "keywords": ["microsoft", "edge", "m365", "office 365", "azure", "teams", "entra", "microsoft shop"]
+        },
+        {
+          "id": "o-vdi-painful",
+          "objection": "We tried VDI / Citrix before and it was too complex or expensive",
+          "response": "That pain is exactly why Cameyo was built. Traditional VDI means servers, sizing, licensing, and months of project work. Cameyo is fully SaaS — no infrastructure to build or maintain, no upfront capital spend. Customers go from decision to users streaming apps in under a week. The complexity and cost you experienced with Citrix is the specific problem Cameyo eliminates.",
+          "tips": [
+            "Validate the pain first: 'What made it painful — cost, performance, ongoing maintenance?'",
+            "Then: 'What if you could deliver the same apps with no servers and no infrastructure team?'",
+            "Offer a proof: 'We could have a test environment running in 24 hours — want to see it?'"
+          ],
+          "keywords": ["vdi", "citrix", "vmware", "rdp", "painful", "complex", "expensive", "failed", "tried before", "infrastructure"]
+        },
+        {
+          "id": "o-change-mgmt",
+          "objection": "My users won't change browsers / we can't force a tool change on the business",
+          "response": "Users don't change anything. CEP deploys as a managed profile alongside their existing Chrome install — they keep their bookmarks, extensions, history, and muscle memory. For Cameyo, the Windows app opens in a Chrome tab. Most users don't know they're in a virtual session. The change is invisible to end users; the security control is entirely visible to IT. That's the point.",
+          "tips": [
+            "Lead with: 'This is an IT control, not a user-facing product change'",
+            "Good closer: 'What if we ran a 10-user pilot and asked them for feedback after a week?'",
+            "For Microsoft orgs: managed Chrome profile doesn't replace Edge — it coexists"
+          ],
+          "keywords": ["change management", "adoption", "users", "training", "change", "force", "resistance", "won't use"]
+        },
+        {
+          "id": "o-budget",
+          "objection": "We're not ready to budget for this / it's not a priority this year",
+          "response": "Understood — let's make sure you have the numbers to build the case when the window opens. What does your current Citrix or VDI cost per user per year, including support and infrastructure? And what's the cost of one security incident for your organisation — downtime, remediation, regulatory fine? For most customers, CEP pays for itself within the first avoided incident. We can build that TCO model together so it's ready when budget comes around.",
+          "tips": [
+            "This is a 'not yet' not a 'no' — keep the deal warm",
+            "Offer a business case / TCO template as a leave-behind",
+            "Identify whether the blocker is budget cycle timing or internal priority — different solutions",
+            "Ask: 'When does your budget cycle open — and what would you need to have ready for it?'"
+          ],
+          "keywords": ["budget", "cost", "expensive", "pricing", "not a priority", "next year", "roi", "justify", "business case"]
+        },
+        {
+          "id": "o-security-covered",
+          "objection": "We already have security covered — antivirus, firewall, VPN",
+          "response": "Those are network perimeter controls — they protect the edge. But modern attacks live inside the browser: phishing via legitimate-looking sites, drive-by downloads, malicious extensions, OAuth token theft. None of these trip a firewall. Antivirus can't see what a user does in a web application. CEP fills the security gap that sits between the network perimeter and the user's fingers — the fastest-growing attack surface in enterprise today.",
+          "tips": [
+            "Stat to use: 'The browser is involved in over 80% of enterprise security incidents — yet most stacks are completely blind inside it'",
+            "Ask: 'Does your current security stack give you visibility into browser-level activity — downloads, extension installs, site visits?'",
+            "Don't dismiss their stack — acknowledge it, then show what it can't see"
+          ],
+          "keywords": ["antivirus", "firewall", "vpn", "already covered", "security", "protection", "crowdstrike", "defender", "endpoint protection"]
         }
       ]
     },
@@ -320,84 +259,80 @@
       "id": "close",
       "name": "Close & Next Steps",
       "order": 4,
-      "description": "Secure a clear commitment — whether that's a trial, a proposal, or a signed contract. Always leave with a specific next step, date, and owner.",
-      "color": "teal",
+      "description": "Confirm the use case, identify the buying committee, and land on a clear pilot or commercial next step. Always leave with a specific next step, date, and owner.",
+      "color": "green",
       "icon": "CheckCircle",
       "questions": [
         {
-          "id": "q-close-1",
-          "question": "Based on everything we've covered, how are you feeling about this as a fit?",
-          "purpose": "Soft temperature check before proposing next steps — surfaces remaining concerns.",
+          "id": "c-q-usecase",
+          "question": "Based on what we've discussed, does browser security, legacy app delivery, or both resonate as the right starting point for your organisation?",
+          "purpose": "Get verbal confirmation on the primary use case before moving to commercial discussion. Surfaces remaining misalignment early.",
           "followUps": [
-            "What would make you more confident?",
-            "Is there anyone else who should weigh in before we move forward?"
+            "Is there a specific team, office, or user group that would make the most compelling pilot?",
+            "Is the priority security, cost reduction, or both?",
+            "Does IT or the business own this decision?"
           ],
-          "keywords": ["feeling", "fit", "confidence", "comfortable", "think", "sense", "overall", "impression", "ready"]
+          "keywords": ["use case", "starting point", "priority", "focus", "direction", "security", "app delivery"]
         },
         {
-          "id": "q-close-2",
-          "question": "What does your process look like from here to a decision?",
-          "purpose": "Map the buying process — how many steps, who's involved, what could slow it down.",
+          "id": "c-q-success",
+          "question": "What would success look like for you in the first 90 days of a deployment?",
+          "purpose": "Anchor the conversation to measurable outcomes and surface any unstated success criteria or stakeholder expectations.",
           "followUps": [
-            "What typically causes deals like this to stall internally?",
-            "What can I do to make this easy for you to champion internally?"
+            "Who internally would define and measure success?",
+            "Is there a security review, IT audit, or compliance milestone this could feed into?",
+            "What would make this an easy internal sell to your IT leadership?"
           ],
-          "keywords": ["process", "decision", "steps", "timeline", "approval", "sign-off", "internal", "procurement", "next steps", "how long"]
+          "keywords": ["success", "outcomes", "90 days", "measure", "kpi", "results", "prove"]
         },
         {
-          "id": "q-close-3",
-          "question": "Can we put a specific date on [next step] right now?",
-          "purpose": "Convert vague interest into a calendar commitment.",
+          "id": "c-q-stakeholders",
+          "question": "Who else needs to be part of the technical evaluation or commercial conversation — IT, security, procurement, a CISO?",
+          "purpose": "Multi-thread the deal and identify the full buying committee. Single-threaded deals die at procurement.",
           "followUps": [
-            "Who else should be on that call?",
-            "I'll send a calendar invite — does [specific time] work?"
+            "Is there a CISO or IT director who would need to sign off?",
+            "Does procurement get involved at this stage or later?",
+            "Is there an internal security review or vendor evaluation process we should plan for?"
           ],
-          "keywords": ["date", "calendar", "schedule", "book", "commit", "when", "time", "meeting", "call", "next step"]
+          "keywords": ["stakeholders", "it", "ciso", "security", "procurement", "decision maker", "sign off", "committee"]
+        },
+        {
+          "id": "c-q-pilot",
+          "question": "Would a 30-day, 10-seat pilot help build internal confidence and give your IT team a chance to evaluate the platform hands-on?",
+          "purpose": "Low-friction next step that creates forward momentum and surfaces remaining blockers in a safe, reversible way.",
+          "followUps": [
+            "Which use case would you want to validate — browser security, app delivery, or both?",
+            "Who on the IT team would own the technical evaluation?",
+            "What does internal sign-off look like to get a pilot approved?"
+          ],
+          "keywords": ["pilot", "trial", "poc", "proof of concept", "evaluation", "30 day", "test", "try"]
         }
       ],
       "talkingPoints": [
         {
-          "id": "tp-close-1",
-          "title": "Always leave with a mutual next step",
-          "content": "Before ending every call, confirm: What's the next step? Who owns it? When does it happen? A next step without a date is just a hope.",
-          "tips": ["Say it out loud before hanging up: 'So to confirm, [name] will do X by [date] and I'll send Y by [date]'", "Put it in your follow-up email within an hour"],
-          "keywords": ["next step", "follow up", "action", "owner", "date", "confirm", "commitment", "agree", "summary"]
+          "id": "c-tp-pilot",
+          "title": "Proposed pilot structure",
+          "content": "10 users, 30 days, one focused use case (browser security or app delivery), evaluated by the IT owner. No infrastructure investment. Clear success criteria agreed upfront. At day 30, review against criteria and decide together on commercial pathway.",
+          "tips": [
+            "Keep it simple — one use case, one team, clear criteria agreed before day 1",
+            "Offer to write the internal business case for them if needed",
+            "Pilot momentum beats perfect business case every time for sub-1000 seat customers"
+          ],
+          "keywords": ["pilot", "structure", "30 days", "evaluation", "criteria"]
         },
         {
-          "id": "tp-close-2",
-          "title": "Create urgency without being pushy",
-          "content": "Urgency should come from their pain, not your quota. Reference the cost of inaction: 'Based on what you shared, every month you wait is [quantified impact].'",
-          "tips": ["Use their own words to describe the cost of delay", "Tie urgency to an upcoming event (Q4, renewal date, new initiative)"],
-          "keywords": ["urgency", "delay", "cost", "wait", "inaction", "deadline", "quarter", "renewal", "time", "risk"],
-          "industryTips": {
-            "financial-services": "Tie urgency to a regulatory deadline, upcoming audit cycle, or a recent enforcement action in their sector — these create genuine, non-pushy urgency.",
-            "retail": "Tie urgency to the retail calendar — peak season, a planned range reset, or a new channel launch. Retailers think in seasons, not quarters."
-          }
-        },
-        {
-          "id": "tp-close-3",
-          "title": "The trial close",
-          "content": "Before asking for the full commitment, test: 'If the proposal comes back looking like what we discussed today, is there any reason you wouldn't move forward?' Their answer tells you exactly what's left to solve.",
-          "tips": ["Listen carefully — any hesitation is an objection to handle now", "Don't ask this if you haven't addressed all major concerns"],
-          "keywords": ["trial close", "proposal", "move forward", "commit", "reason", "hesitation", "objection", "ready", "proceed"]
+          "id": "c-tp-pathway",
+          "title": "Commercial pathway: pilot to full deployment",
+          "content": "Pilot → internal review → commercial agreement → phased rollout. For sub-1000 seat customers, full deployment is typically achievable within 60–90 days of commercial sign-off. No professional services engagement required for standard deployments.",
+          "tips": [
+            "Emphasise speed-to-value for smaller customers — this isn't an 18-month enterprise project",
+            "If procurement is involved: get them a written proposal early so it doesn't block momentum",
+            "Cameyo + CEP together: position as a bundled browser platform deal, not two separate purchases"
+          ],
+          "keywords": ["pathway", "deployment", "timeline", "commercial", "rollout", "60 days", "90 days"]
         }
       ],
-      "objections": [
-        {
-          "id": "obj-close-1",
-          "objection": "Let me think about it.",
-          "response": "Of course — what specifically would be helpful to think through? I'd rather help you work through any concerns now than have you sitting on unanswered questions. What's the main thing on your mind?",
-          "tips": ["Never accept 'I'll think about it' without understanding what they're thinking about", "Offer a specific follow-up: 'How about we reconnect Thursday — does 2pm work?'"],
-          "keywords": ["think about it", "consider", "not sure", "need time", "get back", "unsure", "decide", "ponder", "hesitant"]
-        },
-        {
-          "id": "obj-close-2",
-          "objection": "I need to talk to my boss first.",
-          "response": "Totally makes sense — and I want to make that conversation easy for you. What's the best way I can help you present this internally? I can put together a one-pager, join a call, or send a business case template — whatever is most useful.",
-          "tips": ["Make them the hero, not the supplicant", "Get a date for the internal conversation and follow up after"],
-          "keywords": ["boss", "manager", "leadership", "approval", "internally", "present", "sign-off", "director", "CEO", "CFO"]
-        }
-      ]
+      "objections": []
     }
   ]
 }
