@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Stage, Question, TalkingPoint, Objection } from '@/types'
+import { Stage } from '@/types'
 
 const SECTION_COLOR: Record<string, string> = {
   blue: 'border-blue-200 bg-blue-50',
@@ -34,6 +34,7 @@ interface Props {
   onMatchCountChange: (count: number) => void
   taggedAnswers?: Record<string, string[]>
   onToggleAnswer?: (questionId: string, chipId: string) => void
+  collapseSections?: ('talkingPoints' | 'objections')[]
 }
 
 function itemMatchesIndustry(item: { industries?: string[] }, industry: string): boolean {
@@ -48,6 +49,17 @@ function itemMatchesKeywords(item: { keywords?: string[] }, terms: string[]): bo
   return terms.some((t) => keywords.some((k) => k.includes(t)))
 }
 
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={`w-3.5 h-3.5 text-slate-400 transition-transform ${open ? '' : '-rotate-90'}`}
+      fill="none" viewBox="0 0 24 24" stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  )
+}
+
 export default function StageContent({
   stage,
   completedItems,
@@ -57,21 +69,38 @@ export default function StageContent({
   onMatchCountChange,
   taggedAnswers = {},
   onToggleAnswer,
+  collapseSections = [],
 }: Props) {
   const [expandedQuestions, setExpandedQuestions] = useState<Record<string, boolean>>({})
   const [expandedObjections, setExpandedObjections] = useState<Record<string, boolean>>({})
+  const [tpOpen, setTpOpen] = useState(!collapseSections.includes('talkingPoints'))
+  const [objOpen, setObjOpen] = useState(!collapseSections.includes('objections'))
+  const [objFilter, setObjFilter] = useState('')
 
   const toggleQuestion = (id: string) =>
     setExpandedQuestions((prev) => ({ ...prev, [id]: !prev[id] }))
   const toggleObjection = (id: string) =>
     setExpandedObjections((prev) => ({ ...prev, [id]: !prev[id] }))
 
-  // Filter by industry
   const questions     = stage.questions.filter((q) => itemMatchesIndustry(q, industry))
   const talkingPoints = stage.talkingPoints.filter((t) => itemMatchesIndustry(t, industry))
   const objections    = stage.objections.filter((o) => itemMatchesIndustry(o, industry))
 
-  // Count keyword matches and report up
+  // Filter objections by text, auto-expand matches
+  const filteredObjections = objFilter.trim()
+    ? objections.filter((o) => o.objection.toLowerCase().includes(objFilter.toLowerCase()))
+    : objections
+
+  useEffect(() => {
+    if (!objFilter.trim()) return
+    const matchIds = filteredObjections.map((o) => o.id)
+    setExpandedObjections((prev) => {
+      const next = { ...prev }
+      matchIds.forEach((id) => { next[id] = true })
+      return next
+    })
+  }, [objFilter])
+
   useEffect(() => {
     if (triggerKeywords.length === 0) { onMatchCountChange(0); return }
     const count =
@@ -94,7 +123,8 @@ export default function StageContent({
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
-      {/* Questions */}
+
+      {/* ── Questions ─────────────────────────────────────────── */}
       {questions.length > 0 && (
         <section>
           <div className="flex items-center gap-3 mb-4">
@@ -145,7 +175,6 @@ export default function StageContent({
                       <p className={`text-sm font-medium leading-snug ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
                         {q.question}
                       </p>
-                      {/* Answer chips — always visible */}
                       {q.answerChips && q.answerChips.length > 0 && onToggleAnswer && (
                         <div className="flex flex-wrap gap-1.5 mt-2.5">
                           {q.answerChips.map((chip) => {
@@ -166,7 +195,6 @@ export default function StageContent({
                           })}
                         </div>
                       )}
-                      {/* Expanded: follow-ups, why, industry tip */}
                       {q.purpose && !expanded && !q.answerChips?.length && (
                         <p className="text-xs text-slate-400 mt-1 line-clamp-1">{q.purpose}</p>
                       )}
@@ -191,7 +219,6 @@ export default function StageContent({
                               </ul>
                             </div>
                           )}
-                          {/* Say-this hints for tagged chips */}
                           {q.answerChips && (taggedAnswers[q.id] ?? []).length > 0 && (
                             <div className="space-y-2">
                               {(taggedAnswers[q.id] ?? []).map((chipId) => {
@@ -230,186 +257,222 @@ export default function StageContent({
         </section>
       )}
 
-      {/* Talking Points */}
+      {/* ── Talking Points (collapsible) ───────────────────────── */}
       {talkingPoints.length > 0 && (
         <section>
-          <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => setTpOpen((v) => !v)}
+            className="flex items-center gap-2.5 mb-4 group w-full text-left"
+          >
             <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge}`}>Talking Points</span>
             <span className="text-sm text-slate-400">
               {talkingPoints.filter((t) => completedItems[t.id]).length}/{talkingPoints.length} covered
             </span>
-          </div>
-          <div className="space-y-3">
-            {talkingPoints.map((tp) => {
-              const done = completedItems[tp.id]
-              const highlighted = kwHighlight(tp)
-              const indTip = industryTip(tp)
-              return (
-                <div
-                  key={tp.id}
-                  className={`rounded-xl border p-4 transition-all ${
-                    highlighted
-                      ? 'border-amber-400 bg-amber-50 shadow-md shadow-amber-100 ring-1 ring-amber-300'
-                      : done
-                      ? 'border-emerald-200 bg-emerald-50/50'
-                      : 'border-slate-200 bg-white'
-                  }`}
-                >
-                  {highlighted && (
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      <span className="text-xs font-semibold text-amber-600">Keyword match</span>
-                    </div>
-                  )}
-                  <div className="flex items-start gap-3">
-                    <button
-                      onClick={() => onToggleItem(tp.id)}
-                      className={`mt-0.5 w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition ${
-                        done ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300 hover:border-emerald-400'
-                      }`}
-                    >
-                      {done && (
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                    </button>
-                    <div className="flex-1">
-                      <p className={`text-sm font-semibold ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>{tp.title}</p>
-                      <p className={`text-sm mt-1 leading-relaxed ${done ? 'text-slate-400' : 'text-slate-600'}`}>{tp.content}</p>
-                      {(tp.tips.length > 0 || indTip) && (
-                        <div className={`mt-3 rounded-lg p-3 ${sectionBg}`}>
-                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">💡 Tips</p>
-                          <ul className="space-y-1">
-                            {tp.tips.map((tip, i) => (
-                              <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
-                                <span className="text-slate-400 flex-shrink-0">•</span>{tip}
-                              </li>
-                            ))}
-                            {indTip && (
-                              <li className="text-xs text-blue-700 flex items-start gap-2 mt-1 pt-1 border-t border-blue-100">
-                                <span className="text-blue-400 flex-shrink-0">★</span>
-                                <span><strong>Industry:</strong> {indTip}</span>
-                              </li>
-                            )}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Objections */}
-      {objections.length > 0 && (
-        <section>
-          <div className="flex items-center gap-3 mb-4">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge}`}>Objection Handlers</span>
-            <span className="text-sm text-slate-400">
-              {objections.filter((o) => completedItems[o.id]).length}/{objections.length} handled
-            </span>
-          </div>
-          <div className="space-y-3">
-            {objections.map((obj) => {
-              const done = completedItems[obj.id]
-              const expanded = expandedObjections[obj.id]
-              const highlighted = kwHighlight(obj)
-              const indTip = industryTip(obj)
-              return (
-                <div
-                  key={obj.id}
-                  className={`rounded-xl border overflow-hidden transition-all ${
-                    highlighted
-                      ? 'border-amber-400 shadow-md shadow-amber-100 ring-1 ring-amber-300'
-                      : done
-                      ? 'border-emerald-200'
-                      : 'border-slate-200'
-                  }`}
-                >
+            <ChevronIcon open={tpOpen} />
+            {!tpOpen && <span className="text-xs text-slate-400 italic ml-1">tap to expand</span>}
+          </button>
+          {tpOpen && (
+            <div className="space-y-3">
+              {talkingPoints.map((tp) => {
+                const done = completedItems[tp.id]
+                const highlighted = kwHighlight(tp)
+                const indTip = industryTip(tp)
+                return (
                   <div
-                    className={`flex items-start gap-3 p-4 cursor-pointer ${
-                      highlighted ? 'bg-amber-50' : done ? 'bg-emerald-50/50' : 'bg-white hover:bg-slate-50'
+                    key={tp.id}
+                    className={`rounded-xl border p-4 transition-all ${
+                      highlighted
+                        ? 'border-amber-400 bg-amber-50 shadow-md shadow-amber-100 ring-1 ring-amber-300'
+                        : done
+                        ? 'border-emerald-200 bg-emerald-50/50'
+                        : 'border-slate-200 bg-white'
                     }`}
-                    onClick={() => toggleObjection(obj.id)}
                   >
                     {highlighted && (
-                      <div className="absolute top-2 right-2 flex items-center gap-1">
+                      <div className="flex items-center gap-1.5 mb-2">
                         <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
+                        <span className="text-xs font-semibold text-amber-600">Keyword match</span>
                       </div>
                     )}
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onToggleItem(obj.id) }}
-                      className={`mt-0.5 w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition ${
-                        done ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300 hover:border-emerald-400'
-                      }`}
-                    >
-                      {done && (
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                    </button>
-                    <div className="flex-1 min-w-0">
-                      {highlighted && (
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <div className="flex items-start gap-3">
+                      <button
+                        onClick={() => onToggleItem(tp.id)}
+                        className={`mt-0.5 w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition ${
+                          done ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300 hover:border-emerald-400'
+                        }`}
+                      >
+                        {done && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
-                          <span className="text-xs font-semibold text-amber-600">Keyword match</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold text-red-500 uppercase tracking-wide">Objection</span>
+                        )}
+                      </button>
+                      <div className="flex-1">
+                        <p className={`text-sm font-semibold ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>{tp.title}</p>
+                        <p className={`text-sm mt-1 leading-relaxed ${done ? 'text-slate-400' : 'text-slate-600'}`}>{tp.content}</p>
+                        {(tp.tips.length > 0 || indTip) && (
+                          <div className={`mt-3 rounded-lg p-3 ${sectionBg}`}>
+                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">💡 Tips</p>
+                            <ul className="space-y-1">
+                              {tp.tips.map((tip, i) => (
+                                <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
+                                  <span className="text-slate-400 flex-shrink-0">•</span>{tip}
+                                </li>
+                              ))}
+                              {indTip && (
+                                <li className="text-xs text-blue-700 flex items-start gap-2 mt-1 pt-1 border-t border-blue-100">
+                                  <span className="text-blue-400 flex-shrink-0">★</span>
+                                  <span><strong>Industry:</strong> {indTip}</span>
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                      <p className={`text-sm font-medium italic ${done ? 'line-through text-slate-400' : 'text-slate-700'}`}>
-                        &ldquo;{obj.objection}&rdquo;
-                      </p>
                     </div>
-                    <svg
-                      className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform mt-0.5 ${expanded ? 'rotate-180' : ''}`}
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
                   </div>
-                  {expanded && (
-                    <div className="border-t border-slate-100 bg-emerald-50 p-4 space-y-3">
-                      <div>
-                        <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Your response</span>
-                        <p className="text-sm text-slate-700 mt-1.5 leading-relaxed">{obj.response}</p>
-                      </div>
-                      {(obj.tips.length > 0 || indTip) && (
-                        <div className="rounded-lg bg-white/70 border border-emerald-100 p-3">
-                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">💡 Tips</p>
-                          <ul className="space-y-1">
-                            {obj.tips.map((tip, i) => (
-                              <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
-                                <span className="text-slate-400 flex-shrink-0">•</span>{tip}
-                              </li>
-                            ))}
-                            {indTip && (
-                              <li className="text-xs text-blue-700 flex items-start gap-2 mt-1 pt-1 border-t border-blue-100">
-                                <span className="text-blue-400 flex-shrink-0">★</span>
-                                <span><strong>Industry:</strong> {indTip}</span>
-                              </li>
-                            )}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Objection Handlers (collapsible + filterable) ─────── */}
+      {objections.length > 0 && (
+        <section>
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <button
+              onClick={() => setObjOpen((v) => !v)}
+              className="flex items-center gap-2.5 group text-left"
+            >
+              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge}`}>Objection Handlers</span>
+              <span className="text-sm text-slate-400">
+                {objections.filter((o) => completedItems[o.id]).length}/{objections.length} handled
+              </span>
+              <ChevronIcon open={objOpen} />
+              {!objOpen && <span className="text-xs text-slate-400 italic ml-1">tap to expand</span>}
+            </button>
+
+            {/* Filter input — only shown when section is open */}
+            {objOpen && (
+              <div className="ml-auto flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-2.5 py-1.5">
+                <svg className="w-3 h-3 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={objFilter}
+                  onChange={(e) => setObjFilter(e.target.value)}
+                  placeholder="Filter objections…"
+                  className="w-32 text-xs bg-transparent focus:outline-none text-slate-600 placeholder-slate-400"
+                />
+                {objFilter && (
+                  <button onClick={() => setObjFilter('')} className="text-slate-400 hover:text-slate-600 transition">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+
+          {objOpen && (
+            <div className="space-y-3">
+              {filteredObjections.length === 0 && objFilter && (
+                <p className="text-sm text-slate-400 text-center py-4">No objections match &ldquo;{objFilter}&rdquo;</p>
+              )}
+              {filteredObjections.map((obj) => {
+                const done = completedItems[obj.id]
+                const expanded = expandedObjections[obj.id]
+                const highlighted = kwHighlight(obj)
+                const indTip = industryTip(obj)
+                return (
+                  <div
+                    key={obj.id}
+                    className={`rounded-xl border overflow-hidden transition-all ${
+                      highlighted
+                        ? 'border-amber-400 shadow-md shadow-amber-100 ring-1 ring-amber-300'
+                        : done
+                        ? 'border-emerald-200'
+                        : 'border-slate-200'
+                    }`}
+                  >
+                    <div
+                      className={`flex items-start gap-3 p-4 cursor-pointer ${
+                        highlighted ? 'bg-amber-50' : done ? 'bg-emerald-50/50' : 'bg-white hover:bg-slate-50'
+                      }`}
+                      onClick={() => toggleObjection(obj.id)}
+                    >
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onToggleItem(obj.id) }}
+                        className={`mt-0.5 w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition ${
+                          done ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300 hover:border-emerald-400'
+                        }`}
+                      >
+                        {done && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                      <div className="flex-1 min-w-0">
+                        {highlighted && (
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            <span className="text-xs font-semibold text-amber-600">Keyword match</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-semibold text-red-500 uppercase tracking-wide">Objection</span>
+                        </div>
+                        <p className={`text-sm font-medium italic ${done ? 'line-through text-slate-400' : 'text-slate-700'}`}>
+                          &ldquo;{obj.objection}&rdquo;
+                        </p>
+                      </div>
+                      <svg
+                        className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform mt-0.5 ${expanded ? 'rotate-180' : ''}`}
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                    {expanded && (
+                      <div className="border-t border-slate-100 bg-emerald-50 p-4 space-y-3">
+                        <div>
+                          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Your response</span>
+                          <p className="text-sm text-slate-700 mt-1.5 leading-relaxed">{obj.response}</p>
+                        </div>
+                        {(obj.tips.length > 0 || indTip) && (
+                          <div className="rounded-lg bg-white/70 border border-emerald-100 p-3">
+                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">💡 Tips</p>
+                            <ul className="space-y-1">
+                              {obj.tips.map((tip, i) => (
+                                <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
+                                  <span className="text-slate-400 flex-shrink-0">•</span>{tip}
+                                </li>
+                              ))}
+                              {indTip && (
+                                <li className="text-xs text-blue-700 flex items-start gap-2 mt-1 pt-1 border-t border-blue-100">
+                                  <span className="text-blue-400 flex-shrink-0">★</span>
+                                  <span><strong>Industry:</strong> {indTip}</span>
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </section>
       )}
 
