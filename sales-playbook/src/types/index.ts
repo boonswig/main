@@ -3,6 +3,11 @@ export interface AnswerChip {
   label: string
   pitchBullet: string
   sayThis?: string
+  deepDive?: {
+    howItWorks: string
+    additionalProtections: string[]
+    proofPoint?: string
+  }
 }
 
 export interface Question {

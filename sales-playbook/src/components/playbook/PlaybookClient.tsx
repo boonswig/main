@@ -15,6 +15,7 @@ import CloseOptions from './CloseOptions'
 import DiscoveryTransition from './DiscoveryTransition'
 import PitchTransition from './PitchTransition'
 import CallOpener from './CallOpener'
+import AdoptionRoadmap from './AdoptionRoadmap'
 
 interface Props {
   playbook: Playbook
@@ -236,6 +237,16 @@ export default function PlaybookClient({ playbook }: Props) {
         {/* Context-aware next question — only useful on objections / close */}
         {(activeStageId === 'objections' || activeStageId === 'close') && (
           <SmartPromptCard context={context} activeStageId={activeStageId} />
+        )}
+
+        {/* Objections: adoption roadmap for change-management concerns */}
+        {activeStageId === 'objections' && (
+          <AdoptionRoadmap variant="objection" />
+        )}
+
+        {/* Close: adoption roadmap — proactive trusted-advisor positioning */}
+        {activeStageId === 'close' && (
+          <AdoptionRoadmap variant="close" />
         )}
 
         {/* Pitch: tailored briefing from tagged discovery answers */}
