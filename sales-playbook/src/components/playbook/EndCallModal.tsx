@@ -255,12 +255,18 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
       nextStepNotes,
     }
 
+    const crm = generateCRMSummary(context, signals, intent, nextStep, nextStepNotes, editedNotes)
+    const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
+    setCrmSummary(crm)
+    setEmailDraft(`Subject: ${subject}\n\n${body}`)
+
+    if (!configured) {
+      setSaved(true)
+      return
+    }
+
     try {
       await saveCall(record)
-      const crm = generateCRMSummary(context, signals, intent, nextStep, nextStepNotes, editedNotes)
-      const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
-      setCrmSummary(crm)
-      setEmailDraft(`Subject: ${subject}\n\n${body}`)
       setSaved(true)
     } catch (err) {
       console.error(err)
