@@ -1,3 +1,10 @@
+export interface AnswerChip {
+  id: string
+  label: string
+  pitchBullet: string
+  sayThis?: string
+}
+
 export interface Question {
   id: string
   question: string
@@ -6,6 +13,7 @@ export interface Question {
   keywords?: string[]
   industries?: string[]
   industryTips?: Record<string, string>
+  answerChips?: AnswerChip[]
 }
 
 export interface TalkingPoint {

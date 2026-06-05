@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { PreCallContext, CallIntent, INTENT_CONFIG, NEXT_STEP_OPTIONS, CallRecord } from '@/types'
 import { saveCall } from '@/lib/firestore'
 import { industryName } from '@/lib/industries'
-import { SIGNALS } from '@/lib/signals'
 
 interface Props {
   context: PreCallContext | null
@@ -94,15 +93,11 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
             <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
               <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Gaps identified this call</p>
               <div className="flex flex-wrap gap-1.5">
-                {signals.map((id) => {
-                  const sig = SIGNALS.find((s) => s.id === id)
-                  if (!sig) return null
-                  return (
-                    <span key={id} className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">
-                      {sig.emoji} {sig.label}
-                    </span>
-                  )
-                })}
+                {signals.map((label, i) => (
+                  <span key={i} className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">
+                    {label}
+                  </span>
+                ))}
               </div>
             </div>
           )}

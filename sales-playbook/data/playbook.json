@@ -21,7 +21,33 @@
           "industryTips": {
             "financial-services": "Unmanaged browsers are a frequent finding in FCA and PCI-DSS audits — frame browser governance as a compliance gap, not just an IT preference.",
             "technology": "Even tech-savvy teams often have blind spots here — browser-based credential harvesting and OAuth token theft target developers specifically."
-          }
+          },
+          "answerChips": [
+            {
+              "id": "no-central-policy",
+              "label": "No central browser policy",
+              "pitchBullet": "Chrome Admin Console pushes security policies to every managed browser instantly — no user prompt or action required",
+              "sayThis": "So today, any employee can change their browser settings or disable protections without IT knowing. That's the exact gap CEP closes."
+            },
+            {
+              "id": "no-extension-control",
+              "label": "No extension visibility/control",
+              "pitchBullet": "CEP shows every extension installed across the entire fleet in real time, and lets IT block risky ones or force-install approved ones centrally",
+              "sayThis": "Browser extensions can read every page a user opens — including login screens and sensitive documents. Without visibility, you have no idea what's running across your org."
+            },
+            {
+              "id": "manual-updates",
+              "label": "Users self-update (or don't)",
+              "pitchBullet": "CEP enforces silent Chrome auto-updates across all managed browsers — always current, no user prompt, no exceptions",
+              "sayThis": "Outdated browsers are one of the top five exploit entry points. If updates depend on users, you'll always have a tail of vulnerable versions."
+            },
+            {
+              "id": "mixed-browsers",
+              "label": "Mixed / uncontrolled browsers",
+              "pitchBullet": "CEP deploys a managed Chrome profile that coexists with personal browsers — no user change required, full IT policy control in the work profile",
+              "sayThis": "You can't enforce consistent security policies across Chrome, Edge, and Firefox simultaneously. CEP makes Chrome the managed work browser without asking anyone to switch their personal setup."
+            }
+          ]
         },
         {
           "id": "d-q-legacy-apps",
@@ -37,7 +63,33 @@
             "manufacturing": "Manufacturing teams almost always have legacy ERP, MES, or SCADA systems that need Windows. Ask specifically about shop floor access.",
             "retail": "Back-office and POS management tools are often Windows-only — Cameyo delivers these to any device, including Chromebooks in stores.",
             "professional-services": "Ask about legacy time-billing, case management, or document management systems — these are often the last reason a firm maintains Windows infrastructure."
-          }
+          },
+          "answerChips": [
+            {
+              "id": "has-citrix-rds",
+              "label": "Has Citrix / RDS / VDI",
+              "pitchBullet": "Cameyo replaces Citrix and RDS infrastructure entirely — Windows apps stream in a Chrome tab at 40–60% lower TCO, with zero servers to maintain",
+              "sayThis": "What are you paying per seat for Citrix today — including licenses, servers, and IT support? That number is usually where the conversation gets very interesting."
+            },
+            {
+              "id": "local-windows-installs",
+              "label": "Local Windows app installs",
+              "pitchBullet": "Cameyo delivers any Windows app as a cloud-hosted web session — nothing installed on end-user devices, works on any device including Chromebooks",
+              "sayThis": "Every local Windows install is an IT management overhead and a potential attack surface. Cameyo moves those apps to the cloud without rewriting a single line of code."
+            },
+            {
+              "id": "legacy-erp",
+              "label": "Legacy ERP / specialist software",
+              "pitchBullet": "Cameyo virtualises any application — SAP, legacy ERP, line-of-business tools — no rewrite or migration needed, users see no difference",
+              "sayThis": "The beauty of Cameyo is you never touch the application itself. It runs exactly as-is, streamed via Chrome. No redevelopment, no user retraining."
+            },
+            {
+              "id": "multi-device-access",
+              "label": "Needs multi-device / thin client access",
+              "pitchBullet": "Cameyo runs those apps on any device — Chromebook, tablet, thin client — without modifying the application at all",
+              "sayThis": "Imagine giving shop floor workers or remote teams access to that application on a Chromebook that costs a fraction of a Windows laptop."
+            }
+          ]
         },
         {
           "id": "d-q-devices",
@@ -52,7 +104,33 @@
           "industryTips": {
             "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks — and often completely unaddressed.",
             "professional-services": "Contractors accessing client data from personal devices is a liability many firms haven't fully addressed — it's a DLP conversation waiting to happen."
-          }
+          },
+          "answerChips": [
+            {
+              "id": "high-byod",
+              "label": "High BYOD / personal device use",
+              "pitchBullet": "CEP's managed Chrome profile enforces full corporate DLP and security policies inside the browser on personal devices — without MDM, without touching the personal side of the device",
+              "sayThis": "Right now, someone on a personal laptop could download your entire customer list to their desktop and IT would never know. CEP stops that without requiring MDM enrollment."
+            },
+            {
+              "id": "contractors-third-party",
+              "label": "Contractors / third-party access",
+              "pitchBullet": "Managed profiles can be provisioned for contractors in minutes and revoked the instant an engagement ends — no device enrollment, no data left behind",
+              "sayThis": "When a contractor finishes, can you revoke access to data they've already downloaded to their personal machine? That's the question most organisations can't answer."
+            },
+            {
+              "id": "no-mdm",
+              "label": "No MDM on unmanaged devices",
+              "pitchBullet": "CEP applies corporate IT controls via a single managed Chrome profile — no MDM agent, no device enrollment, no changes to the device at all",
+              "sayThis": "You get full security controls without the MDM overhead. The user just opens a Chrome profile — IT has complete policy control inside it."
+            },
+            {
+              "id": "seasonal-staff",
+              "label": "Seasonal / temporary staff",
+              "pitchBullet": "Managed profiles for temporary staff are provisioned and deprovisioned in minutes — full controls during the engagement, nothing left behind on the device",
+              "sayThis": "Seasonal workers are one of the highest-risk groups for data leakage and credential misuse. Managed profiles fix that with zero infrastructure overhead per user."
+            }
+          ]
         },
         {
           "id": "d-q-security",
@@ -67,7 +145,33 @@
           "industryTips": {
             "financial-services": "Financial services is the #1 target for phishing globally. Even a near-miss carries significant regulatory and reputational cost.",
             "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft — ask about those specifically."
-          }
+          },
+          "answerChips": [
+            {
+              "id": "had-phishing-malware",
+              "label": "Had phishing / malware incidents",
+              "pitchBullet": "CEP's real-time threat protection blocks malicious sites and phishing pages at the browser layer — before credentials or data are submitted — not after the fact",
+              "sayThis": "The attacker doesn't need to breach your firewall if they can get your user to click a link in Chrome. CEP intercepts that before the user ever reaches the fake login page."
+            },
+            {
+              "id": "no-browser-in-ir",
+              "label": "Browser not in incident response",
+              "pitchBullet": "CEP logs full browser-layer activity — sites visited, files downloaded, extensions active — giving your security team the forensic evidence needed to investigate fast",
+              "sayThis": "One thing we find consistently: when a breach happens, the browser timeline is the hardest thing to reconstruct. CEP changes that — every session is logged and searchable."
+            },
+            {
+              "id": "no-browser-visibility",
+              "label": "No visibility into browser activity",
+              "pitchBullet": "CEP feeds browser telemetry directly into Chronicle, Splunk, or your existing SIEM — so browser-layer events appear in your security monitoring alongside network and endpoint events",
+              "sayThis": "You can see network traffic, you can see endpoint events — but between the endpoint and the web, you're currently flying blind. That gap is exactly where modern attacks live."
+            },
+            {
+              "id": "ransomware-concern",
+              "label": "Ransomware / malware download risk",
+              "pitchBullet": "CEP's download controls and malware scanning prevent malicious files reaching the endpoint — configurable by file type, domain, or user group",
+              "sayThis": "Ransomware almost always enters via a browser download or a phishing click. CEP blocks both at the source — before anything reaches the endpoint."
+            }
+          ]
         },
         {
           "id": "d-q-dlp",
@@ -82,7 +186,33 @@
           "industryTips": {
             "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling — it's a compliance investment, not just security.",
             "technology": "Source code and IP exfiltration via personal cloud storage is a serious risk for SaaS companies — CEP's DLP controls can block this at the browser layer."
-          }
+          },
+          "answerChips": [
+            {
+              "id": "no-download-controls",
+              "label": "No download controls",
+              "pitchBullet": "CEP enforces download policy by file type, destination, or user group — blocking, logging, or watermarking files as they leave corporate web applications",
+              "sayThis": "Right now, anyone could download your entire customer database via the browser to an unmanaged device and IT would never know. CEP stops that and logs every attempt."
+            },
+            {
+              "id": "no-cloud-upload-controls",
+              "label": "No personal cloud upload controls",
+              "pitchBullet": "CEP blocks or alerts on uploads to personal cloud storage — personal Google Drive, Dropbox, OneDrive — while allowing approved corporate destinations through",
+              "sayThis": "If someone copies a confidential document to their personal Dropbox right now, would IT know? CEP blocks that and records the attempt — silently, with no user friction."
+            },
+            {
+              "id": "no-clipboard-controls",
+              "label": "No copy-paste / clipboard controls",
+              "pitchBullet": "CEP's clipboard policies prevent sensitive data being copied from corporate web apps and pasted into personal apps, emails, or unapproved external tools",
+              "sayThis": "Copy-paste is the most underestimated data exfiltration channel. A user can walk out with an entire salary spreadsheet in their clipboard, and nothing flags it today."
+            },
+            {
+              "id": "no-audit-trail",
+              "label": "No data movement audit trail",
+              "pitchBullet": "CEP generates a full audit log of browser-layer data events — downloads, uploads, clipboard use — ready for compliance reporting and forensic investigation",
+              "sayThis": "When your auditor asks 'how do you know sensitive data isn't leaving via the browser?' — this is the answer. CEP gives you the evidence trail that's currently missing."
+            }
+          ]
         },
         {
           "id": "d-q-it-visibility",
@@ -93,7 +223,33 @@
             "Is browser activity included in your SIEM or security monitoring?",
             "How long would it take to detect a data exfiltration via the browser?"
           ],
-          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight"]
+          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight"],
+          "answerChips": [
+            {
+              "id": "no-browser-logging",
+              "label": "No browser event logging",
+              "pitchBullet": "CEP reports browser telemetry to Chronicle, Splunk, or any SIEM — extension events, download attempts, safe browsing blocks — all visible in existing security dashboards",
+              "sayThis": "You can see your firewalls, your endpoints, your cloud logs — but inside the browser, you're currently blind. CEP fills that last mile of visibility."
+            },
+            {
+              "id": "no-extension-audit",
+              "label": "No extension inventory / audit",
+              "pitchBullet": "CEP gives IT a real-time inventory of every extension installed across the entire fleet — risk-scored, flagged, and controllable centrally from one dashboard",
+              "sayThis": "If I asked you right now what extensions your 200 users have installed, could you answer? One of those could be logging every keystroke on every web app they open."
+            },
+            {
+              "id": "slow-anomaly-detection",
+              "label": "Slow to detect anomalies",
+              "pitchBullet": "CEP's analytics flag anomalous patterns — unusual download spikes, new extension installs, access to blocked categories — in real time, not days later in a log review",
+              "sayThis": "The average time to detect a browser-based breach is 197 days. CEP compresses that dramatically because it's watching in real time, not flagging after the fact."
+            },
+            {
+              "id": "compliance-visibility-gap",
+              "label": "Compliance visibility gap",
+              "pitchBullet": "CEP audit logs satisfy browser-layer visibility requirements in PCI-DSS, FCA, SOC2, and ISO27001 — with exportable reports ready for auditors",
+              "sayThis": "When the auditor asks 'show me your browser controls' — most organisations have nothing to show. CEP makes that question very easy to answer."
+            }
+          ]
         }
       ],
       "talkingPoints": [],

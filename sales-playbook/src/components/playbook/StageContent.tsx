@@ -32,6 +32,8 @@ interface Props {
   industry: string
   triggerKeywords: string[]
   onMatchCountChange: (count: number) => void
+  taggedAnswers?: Record<string, string[]>
+  onToggleAnswer?: (questionId: string, chipId: string) => void
 }
 
 function itemMatchesIndustry(item: { industries?: string[] }, industry: string): boolean {
@@ -53,6 +55,8 @@ export default function StageContent({
   industry,
   triggerKeywords,
   onMatchCountChange,
+  taggedAnswers = {},
+  onToggleAnswer,
 }: Props) {
   const [expandedQuestions, setExpandedQuestions] = useState<Record<string, boolean>>({})
   const [expandedObjections, setExpandedObjections] = useState<Record<string, boolean>>({})
@@ -141,7 +145,29 @@ export default function StageContent({
                       <p className={`text-sm font-medium leading-snug ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
                         {q.question}
                       </p>
-                      {q.purpose && !expanded && (
+                      {/* Answer chips — always visible */}
+                      {q.answerChips && q.answerChips.length > 0 && onToggleAnswer && (
+                        <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          {q.answerChips.map((chip) => {
+                            const isTagged = (taggedAnswers[q.id] ?? []).includes(chip.id)
+                            return (
+                              <button
+                                key={chip.id}
+                                onClick={(e) => { e.stopPropagation(); onToggleAnswer(q.id, chip.id) }}
+                                className={`text-xs font-medium px-2.5 py-1 rounded-full border transition ${
+                                  isTagged
+                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                    : 'bg-white border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600'
+                                }`}
+                              >
+                                {isTagged && <span className="mr-1">✓</span>}{chip.label}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      )}
+                      {/* Expanded: follow-ups, why, industry tip */}
+                      {q.purpose && !expanded && !q.answerChips?.length && (
                         <p className="text-xs text-slate-400 mt-1 line-clamp-1">{q.purpose}</p>
                       )}
                       {expanded && (
@@ -154,7 +180,7 @@ export default function StageContent({
                           )}
                           {q.followUps.length > 0 && (
                             <div>
-                              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Follow-ups</p>
+                              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Drill-downs</p>
                               <ul className="space-y-1.5">
                                 {q.followUps.map((fu, i) => (
                                   <li key={i} className="flex items-start gap-2">
@@ -163,6 +189,21 @@ export default function StageContent({
                                   </li>
                                 ))}
                               </ul>
+                            </div>
+                          )}
+                          {/* Say-this hints for tagged chips */}
+                          {q.answerChips && (taggedAnswers[q.id] ?? []).length > 0 && (
+                            <div className="space-y-2">
+                              {(taggedAnswers[q.id] ?? []).map((chipId) => {
+                                const chip = q.answerChips!.find((c) => c.id === chipId)
+                                if (!chip?.sayThis) return null
+                                return (
+                                  <div key={chipId} className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                                    <p className="text-xs font-semibold text-amber-700 mb-1">💬 Say this — {chip.label}</p>
+                                    <p className="text-xs text-amber-800 italic">&ldquo;{chip.sayThis}&rdquo;</p>
+                                  </div>
+                                )
+                              })}
                             </div>
                           )}
                           {indTip && (

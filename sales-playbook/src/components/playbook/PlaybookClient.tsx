@@ -10,9 +10,9 @@ import SearchModal from './SearchModal'
 import KeywordTriggerBar from './KeywordTriggerBar'
 import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
-import SignalChips from './SignalChips'
 import PitchBriefing from './PitchBriefing'
 import CloseOptions from './CloseOptions'
+import DiscoveryTransition from './DiscoveryTransition'
 
 interface Props {
   playbook: Playbook
@@ -21,7 +21,7 @@ interface Props {
 const NOTES_KEY = 'sales-playbook-notes'
 const COMPLETED_KEY = 'sales-playbook-completed'
 const CONTEXT_KEY = 'sales-playbook-context'
-const SIGNALS_KEY = 'sales-playbook-signals'
+const TAGGED_ANSWERS_KEY = 'sales-playbook-tagged-answers'
 
 export default function PlaybookClient({ playbook }: Props) {
   const router = useRouter()
@@ -36,7 +36,7 @@ export default function PlaybookClient({ playbook }: Props) {
   const [context, setContext] = useState<PreCallContext | null>(null)
   const [triggerKeywords, setTriggerKeywords] = useState<string[]>([])
   const [triggerMatchCount, setTriggerMatchCount] = useState(0)
-  const [signals, setSignals] = useState<string[]>([])
+  const [taggedAnswers, setTaggedAnswers] = useState<Record<string, string[]>>({})
   const [preferredNextStep, setPreferredNextStep] = useState('')
 
   useEffect(() => {
@@ -47,8 +47,8 @@ export default function PlaybookClient({ playbook }: Props) {
       if (savedCompleted) setCompletedItems(JSON.parse(savedCompleted))
       const savedContext = localStorage.getItem(CONTEXT_KEY)
       if (savedContext) setContext(JSON.parse(savedContext))
-      const savedSignals = localStorage.getItem(SIGNALS_KEY)
-      if (savedSignals) setSignals(JSON.parse(savedSignals))
+      const savedTagged = localStorage.getItem(TAGGED_ANSWERS_KEY)
+      if (savedTagged) setTaggedAnswers(JSON.parse(savedTagged))
     } catch {}
   }, [])
 
@@ -61,8 +61,27 @@ export default function PlaybookClient({ playbook }: Props) {
   }, [completedItems])
 
   useEffect(() => {
-    try { localStorage.setItem(SIGNALS_KEY, JSON.stringify(signals)) } catch {}
-  }, [signals])
+    try { localStorage.setItem(TAGGED_ANSWERS_KEY, JSON.stringify(taggedAnswers)) } catch {}
+  }, [taggedAnswers])
+
+  const discoveryStage = stages.find((s) => s.id === 'discovery')
+  const discoveryQuestions = discoveryStage?.questions ?? []
+
+  const toggleAnswer = useCallback((questionId: string, chipId: string) => {
+    setTaggedAnswers((prev) => {
+      const current = prev[questionId] ?? []
+      const updated = current.includes(chipId)
+        ? current.filter((id) => id !== chipId)
+        : [...current, chipId]
+      return { ...prev, [questionId]: updated }
+    })
+  }, [])
+
+  const chipLabels = discoveryQuestions.flatMap((q) =>
+    (taggedAnswers[q.id] ?? []).map(
+      (chipId) => q.answerChips?.find((c) => c.id === chipId)?.label ?? chipId
+    )
+  )
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
@@ -98,13 +117,13 @@ export default function PlaybookClient({ playbook }: Props) {
     setCompletedItems({})
     setNotes('')
     setContext(null)
-    setSignals([])
+    setTaggedAnswers({})
     setPreferredNextStep('')
     setActiveStageId(stages[0]?.id ?? '')
     localStorage.removeItem(NOTES_KEY)
     localStorage.removeItem(COMPLETED_KEY)
     localStorage.removeItem(CONTEXT_KEY)
-    localStorage.removeItem(SIGNALS_KEY)
+    localStorage.removeItem(TAGGED_ANSWERS_KEY)
   }
 
   const handleNewCall = useCallback(() => {
@@ -207,16 +226,14 @@ export default function PlaybookClient({ playbook }: Props) {
           </div>
         )}
 
-        <SmartPromptCard context={context} activeStageId={activeStageId} />
-
-        {/* Discovery: gap signal chips */}
-        {activeStageId === 'discovery' && (
-          <SignalChips selected={signals} onChange={setSignals} />
+        {/* Context-aware next question — only useful on objections / close */}
+        {(activeStageId === 'objections' || activeStageId === 'close') && (
+          <SmartPromptCard context={context} activeStageId={activeStageId} />
         )}
 
-        {/* Pitch: tailored briefing based on identified gaps */}
+        {/* Pitch: tailored briefing from tagged discovery answers */}
         {activeStageId === 'pitch' && (
-          <PitchBriefing signalIds={signals} />
+          <PitchBriefing taggedAnswers={taggedAnswers} questions={discoveryQuestions} />
         )}
 
         {/* Close: agreed next step selector */}
@@ -234,9 +251,20 @@ export default function PlaybookClient({ playbook }: Props) {
               industry={context?.industry ?? ''}
               triggerKeywords={triggerKeywords}
               onMatchCountChange={setTriggerMatchCount}
+              taggedAnswers={taggedAnswers}
+              onToggleAnswer={toggleAnswer}
             />
           )}
         </div>
+
+        {/* Discovery: transition prompt + move to pitch */}
+        {activeStageId === 'discovery' && (
+          <DiscoveryTransition
+            taggedAnswers={taggedAnswers}
+            questions={discoveryQuestions}
+            onNavigateToPitch={() => setActiveStageId('pitch')}
+          />
+        )}
 
         {/* Stage navigation */}
         <div className="px-6 pb-8 flex justify-between">
@@ -302,7 +330,7 @@ export default function PlaybookClient({ playbook }: Props) {
         <EndCallModal
           context={context}
           notes={notes}
-          signals={signals}
+          signals={chipLabels}
           preferredNextStep={preferredNextStep}
           onClose={() => setEndCallOpen(false)}
           onSaved={handleCallSaved}
