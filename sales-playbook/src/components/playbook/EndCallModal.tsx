@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { PreCallContext, CallIntent, INTENT_CONFIG, NEXT_STEP_OPTIONS, CallRecord } from '@/types'
 import { saveCall } from '@/lib/firestore'
 import { industryName } from '@/lib/industries'
+import type { GenerateEmailPayload } from '@/app/api/generate-email/route'
 
 interface Props {
   context: PreCallContext | null
@@ -227,6 +228,7 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
   const [saved, setSaved] = useState(false)
   const [crmSummary, setCrmSummary] = useState('')
   const [emailDraft, setEmailDraft] = useState('')
+  const [generatingEmail, setGeneratingEmail] = useState(false)
 
   const configured =
     !!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
@@ -256,18 +258,57 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
     }
 
     const crm = generateCRMSummary(context, signals, intent, nextStep, nextStepNotes, editedNotes)
-    const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
     setCrmSummary(crm)
-    setEmailDraft(`Subject: ${subject}\n\n${body}`)
+
+    // Show the summary screen immediately — email generates in background
+    const showSummary = () => {
+      setSaved(true)
+      setGeneratingEmail(true)
+
+      const payload: GenerateEmailPayload = {
+        repName:         context?.repName         ?? '',
+        contactName:     context?.contactName     ?? '',
+        contactTitle:    context?.contactTitle    ?? '',
+        company:         context?.companyName     ?? '',
+        industry:        context?.industry        ?? '',
+        companySize:     context?.companySize     ?? '',
+        currentSolution: context?.currentSolution ?? '',
+        signals,
+        nextStep,
+        nextStepNotes,
+        notes: editedNotes,
+      }
+
+      fetch('/api/generate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then((r) => r.ok ? r.json() : null)
+        .then((data) => {
+          if (data?.subject && data?.body) {
+            setEmailDraft(`Subject: ${data.subject}\n\n${data.body}`)
+          } else {
+            // Gemini not configured or errored — fall back to template
+            const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
+            setEmailDraft(`Subject: ${subject}\n\n${body}`)
+          }
+        })
+        .catch(() => {
+          const { subject, body } = generateEmailDraft(context, signals, nextStep, nextStepNotes)
+          setEmailDraft(`Subject: ${subject}\n\n${body}`)
+        })
+        .finally(() => setGeneratingEmail(false))
+    }
 
     if (!configured) {
-      setSaved(true)
+      showSummary()
       return
     }
 
     try {
       await saveCall(record)
-      setSaved(true)
+      showSummary()
     } catch (err) {
       console.error(err)
       setError('Failed to save to Firestore. Check your Firebase config in .env.local.')
@@ -321,18 +362,43 @@ export default function EndCallModal({ context, notes, signals = [], preferredNe
             {/* Email draft */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm font-semibold text-slate-700">Follow-up email draft</p>
-                <CopyButton text={emailDraft} label="Copy email" />
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-slate-700">Follow-up email draft</p>
+                  {generatingEmail && (
+                    <span className="flex items-center gap-1.5 text-xs text-blue-600">
+                      <svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Writing…
+                    </span>
+                  )}
+                </div>
+                {!generatingEmail && <CopyButton text={emailDraft} label="Copy email" />}
               </div>
-              <textarea
-                value={emailDraft}
-                onChange={(e) => setEmailDraft(e.target.value)}
-                rows={16}
-                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-700 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-              <p className="text-xs text-slate-400 mt-1.5">
-                Edit above before copying — bracketed placeholders indicate spots to personalise.
-              </p>
+              {generatingEmail ? (
+                <div className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-5 space-y-2.5 animate-pulse">
+                  <div className="h-3 bg-slate-200 rounded w-2/5" />
+                  <div className="h-3 bg-slate-200 rounded w-full mt-4" />
+                  <div className="h-3 bg-slate-200 rounded w-4/5" />
+                  <div className="h-3 bg-slate-200 rounded w-full mt-2" />
+                  <div className="h-3 bg-slate-200 rounded w-3/4" />
+                  <div className="h-3 bg-slate-200 rounded w-full mt-2" />
+                  <div className="h-3 bg-slate-200 rounded w-1/4" />
+                </div>
+              ) : (
+                <textarea
+                  value={emailDraft}
+                  onChange={(e) => setEmailDraft(e.target.value)}
+                  rows={16}
+                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-700 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                />
+              )}
+              {!generatingEmail && (
+                <p className="text-xs text-slate-400 mt-1.5">
+                  Edit above before copying. Generated from your call context — tweak as needed.
+                </p>
+              )}
             </div>
           </div>
 
