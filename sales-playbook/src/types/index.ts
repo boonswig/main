@@ -55,8 +55,37 @@ export interface Stage {
   objections: Objection[]
 }
 
+export interface OpenerStyle {
+  id: string
+  label: string
+  tag: string
+  tagColorKey: 'blue' | 'amber' | 'slate' | 'green' | 'purple' | 'red' | 'orange' | 'teal'
+  opener: string   // template: {{name}}, {{company}}
+  agenda: string
+  bridge: string   // template: {{company}}
+}
+
+export interface OpenerRule {
+  id: string
+  titleKeywords: string[]  // any keyword match against contactTitle (case-insensitive)
+  industries: string[]     // any match against industry id
+  styleId: string
+  priority: number         // higher wins; default = 0
+}
+
+export interface CloseRecommendation {
+  id: string
+  chipIds: string[]        // any tagged chip from this list triggers this rec
+  nextStep: string         // value from NEXT_STEP_OPTIONS
+  askThis: string          // suggested language for the rep
+  rationale: string        // brief explanation shown in the card
+}
+
 export interface Playbook {
   stages: Stage[]
+  closeRecommendations?: CloseRecommendation[]
+  openerRules?: OpenerRule[]
+  openerStyles?: OpenerStyle[]
 }
 
 export interface User {

@@ -723,5 +723,110 @@
       ],
       "objections": []
     }
+  ],
+  "closeRecommendations": [
+    {
+      "id": "cr-poc",
+      "chipIds": ["has-citrix-rds", "local-windows-installs", "legacy-erp", "multi-device-access"],
+      "nextStep": "Technical review / POC",
+      "rationale": "They have specific legacy app dependencies — a hands-on POC is far more persuasive than a deck.",
+      "askThis": "Based on what you've described with your legacy applications, the most valuable next step would be a quick technical POC. We can set up a sandbox environment where your team sees those apps running through Cameyo in a browser — no VDI, no client to install. Would it be worth 30 minutes of your architect's time this week?"
+    },
+    {
+      "id": "cr-demo",
+      "chipIds": ["no-central-policy", "no-extension-control", "no-browser-visibility", "had-phishing-malware", "ransomware-concern", "no-browser-logging", "compliance-visibility-gap"],
+      "nextStep": "Product demo scheduled",
+      "rationale": "Security and browser management gaps are most compellingly shown live — screenshots don't do it justice.",
+      "askThis": "The best way to make this concrete is a live demo — I'll show you the Chrome Admin Console in action, walk through how policies deploy fleet-wide in under 15 minutes, and demonstrate the DLP controls so you can see exactly what visibility looks like. I can bring in our SE. Does Thursday work, or would early next week be better?"
+    },
+    {
+      "id": "cr-proposal",
+      "chipIds": ["high-byod", "contractors-third-party", "seasonal-staff", "no-mdm"],
+      "nextStep": "Send proposal / quote",
+      "rationale": "Unmanaged device problem is well-defined — they need commercials to take it forward internally.",
+      "askThis": "It sounds like you've got a clear picture of the problem already — a lot of unmanaged devices and no clean way to enforce security on them today. The right move is probably a proposal so you can take something concrete to your IT team or budget holder. Let me put together a scoped option based on what you've told me — is it worth me getting that to you by Friday?"
+    },
+    {
+      "id": "cr-discovery-call",
+      "chipIds": ["compliance-visibility-gap", "no-browser-in-ir", "no-audit-trail", "no-download-controls"],
+      "nextStep": "Discovery call scheduled",
+      "rationale": "Compliance-driven prospects need a deeper conversation with the right technical resources before we can be specific.",
+      "askThis": "There's more I'd want to understand about your compliance framework before I can be genuinely useful. Would it be worth getting our compliance specialist on a short call — say 30 minutes — to map out exactly where the browser layer fits into your audit requirements? I can set that up for next week."
+    }
+  ],
+  "openerRules": [
+    {
+      "id": "or-ciso",
+      "titleKeywords": ["ciso", "security", "cyber", "infosec", "information security"],
+      "industries": [],
+      "styleId": "challenger",
+      "priority": 10
+    },
+    {
+      "id": "or-cto",
+      "titleKeywords": ["cto", "chief technology", "vp engineering", "head of engineering", "vp of engineering"],
+      "industries": [],
+      "styleId": "direct",
+      "priority": 8
+    },
+    {
+      "id": "or-financial",
+      "titleKeywords": [],
+      "industries": ["financial-services", "banking", "insurance"],
+      "styleId": "challenger",
+      "priority": 5
+    },
+    {
+      "id": "or-tech",
+      "titleKeywords": [],
+      "industries": ["technology", "software", "saas"],
+      "styleId": "direct",
+      "priority": 5
+    },
+    {
+      "id": "or-healthcare",
+      "titleKeywords": [],
+      "industries": ["healthcare", "pharma", "life-sciences"],
+      "styleId": "warm",
+      "priority": 5
+    }
+  ],
+  "openerStyles": [
+    {
+      "id": "consultative",
+      "label": "Consultative",
+      "tag": "Question-led",
+      "tagColorKey": "blue",
+      "opener": "Hi {{name}}, great to connect — thanks for making the time. Before I tell you anything about what we do, I'd love to understand your setup first. It means anything I share will actually be relevant to you rather than a generic pitch. Would that be OK?",
+      "agenda": "My plan for today: a few questions about how your team handles browsers, applications, and security — then I'll share specifically what Chrome Enterprise Premium and Cameyo do — and we'll decide together whether there's a fit. Does that sound useful?",
+      "bridge": "Great. Let me start with browsers — it's usually where we find the most interesting gaps. How are browsers managed across {{company}} today?"
+    },
+    {
+      "id": "challenger",
+      "label": "Challenger",
+      "tag": "Insight-led",
+      "tagColorKey": "amber",
+      "opener": "Hi {{name}}, thanks for making time. I looked at a few companies your size before this call and there are usually two or three things around browser security and application delivery that create real risk — often without anyone on the IT side realising it until it becomes a problem. I'd like to ask you a few questions to see whether any of those apply to {{company}}.",
+      "agenda": "I'll keep it focused — a few questions about your environment, then a targeted view of where Chrome Enterprise Premium and Cameyo fit in. If it's not relevant, I'll tell you straight and we can wrap up early. Fair?",
+      "bridge": "Let me start here: how are browsers managed across your organisation today — does IT push policies centrally, or are users largely running whatever they like?"
+    },
+    {
+      "id": "direct",
+      "label": "Direct",
+      "tag": "No-fluff",
+      "tagColorKey": "slate",
+      "opener": "Hi {{name}}, good to speak. Quick intro — I work with companies your size on two things: securing the browser layer across managed and unmanaged devices, and modernising legacy Windows application delivery without VDI infrastructure. Rather than pitch you straight away, three quick questions to understand your setup, and I'll be honest about whether we can actually help.",
+      "agenda": "Questions about your environment, then what Chrome Enterprise Premium and Cameyo do, then an honest conversation about fit. Shouldn't take long.",
+      "bridge": "First question: how are browsers managed at {{company}} today?"
+    },
+    {
+      "id": "warm",
+      "label": "Warm",
+      "tag": "Relationship-first",
+      "tagColorKey": "green",
+      "opener": "Hi {{name}}, really good to meet you. I always find these calls are much more useful when I take the time to understand what someone's actually dealing with day-to-day before I start talking about products. So if it's OK with you, I'd love to hear a bit about your setup first.",
+      "agenda": "I'll ask a few questions about your environment, then share what Chrome Enterprise Premium and Cameyo can do, and we'll have a proper conversation about whether there's a fit. No pressure — just a useful chat. Sound good?",
+      "bridge": "Brilliant. So tell me about {{company}} — how are things managed from a browser and application standpoint today? Centralised IT, or more distributed?"
+    }
   ]
 }

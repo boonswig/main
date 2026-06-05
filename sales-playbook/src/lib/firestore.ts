@@ -4,16 +4,24 @@ import { db } from './firebase'
 import {
   collection,
   addDoc,
+  doc,
+  setDoc,
+  onSnapshot,
   query,
   orderBy,
-  onSnapshot,
   Timestamp,
+  serverTimestamp,
   where,
   QueryConstraint,
 } from 'firebase/firestore'
-import { CallRecord } from '@/types'
+import { CallRecord, Playbook } from '@/types'
 
 const COLLECTION = 'calls'
+
+export const firestoreConfigured = !!(
+  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+  process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+)
 
 export async function saveCall(record: Omit<CallRecord, 'id' | 'createdAt'>): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTION), {
@@ -22,6 +30,30 @@ export async function saveCall(record: Omit<CallRecord, 'id' | 'createdAt'>): Pr
   })
   return docRef.id
 }
+
+// ── Playbook ──────────────────────────────────────────────────
+
+export async function savePlaybook(playbook: Playbook): Promise<void> {
+  if (!firestoreConfigured) return
+  await setDoc(doc(db, 'playbook', 'current'), {
+    ...playbook,
+    updatedAt: serverTimestamp(),
+  })
+}
+
+export function subscribeToPlaybook(
+  callback: (playbook: Playbook) => void
+): () => void {
+  if (!firestoreConfigured) return () => {}
+  return onSnapshot(doc(db, 'playbook', 'current'), (snap) => {
+    if (snap.exists()) {
+      const { updatedAt: _ts, ...data } = snap.data()
+      callback(data as Playbook)
+    }
+  })
+}
+
+// ── Calls ─────────────────────────────────────────────────────
 
 export function subscribeToCalls(
   callback: (records: CallRecord[]) => void,

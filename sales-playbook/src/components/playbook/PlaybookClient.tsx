@@ -3,12 +3,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Playbook, Stage, PreCallContext } from '@/types'
+import { subscribeToPlaybook } from '@/lib/firestore'
 import StageSidebar from './StageSidebar'
 import StageContent from './StageContent'
 import CallNotesPanel from './CallNotesPanel'
 import SearchModal from './SearchModal'
 import EndCallModal from './EndCallModal'
 import SmartPromptCard from './SmartPromptCard'
+import SmartCloseCard from './SmartCloseCard'
+import FloatingObjections from './FloatingObjections'
 import PitchBriefing from './PitchBriefing'
 import CloseOptions from './CloseOptions'
 import DiscoveryTransition from './DiscoveryTransition'
@@ -36,10 +39,19 @@ const STAGE_COLORS: Record<string, string> = {
   indigo: 'bg-indigo-600',
 }
 
-export default function PlaybookClient({ playbook }: Props) {
+export default function PlaybookClient({ playbook: initialPlaybook }: Props) {
   const router  = useRouter()
   const mainRef = useRef<HTMLElement>(null)
-  const stages  = [...playbook.stages].sort((a, b) => a.order - b.order)
+
+  // Live playbook — updated via Firestore subscription when admin saves
+  const [livePlaybook, setLivePlaybook] = useState<Playbook>(initialPlaybook)
+
+  useEffect(() => {
+    const unsub = subscribeToPlaybook((fresh) => setLivePlaybook(fresh))
+    return unsub
+  }, [])
+
+  const stages  = [...livePlaybook.stages].sort((a, b) => a.order - b.order)
 
   const [activeStageId,    setActiveStageId]    = useState(stages[0]?.id ?? '')
   const [completedItems,   setCompletedItems]   = useState<Record<string, boolean>>({})
@@ -292,8 +304,14 @@ export default function PlaybookClient({ playbook }: Props) {
             </div>
           )}
 
-          {/* Discovery: call opener */}
-          {activeStageId === 'discovery' && <CallOpener context={context} />}
+          {/* Discovery: call opener — passes openerStyles and openerRules from live playbook */}
+          {activeStageId === 'discovery' && (
+            <CallOpener
+              context={context}
+              openerStyles={livePlaybook.openerStyles}
+              openerRules={livePlaybook.openerRules}
+            />
+          )}
 
           {/* Pitch: personalised briefing */}
           {activeStageId === 'pitch' && (
@@ -303,6 +321,17 @@ export default function PlaybookClient({ playbook }: Props) {
           {/* Close: next step selector — primary action, comes first */}
           {activeStageId === 'close' && (
             <CloseOptions selected={preferredNextStep} onSelect={setPreferredNextStep} />
+          )}
+
+          {/* Close: chip-based smart recommendation */}
+          {activeStageId === 'close' && (livePlaybook.closeRecommendations?.length ?? 0) > 0 && (
+            <SmartCloseCard
+              closeRecommendations={livePlaybook.closeRecommendations!}
+              taggedAnswers={taggedAnswers}
+              questions={discoveryQuestions}
+              selectedNextStep={preferredNextStep}
+              onSelectNextStep={setPreferredNextStep}
+            />
           )}
 
           {/* Objections + Close: smart prompt */}
@@ -345,10 +374,10 @@ export default function PlaybookClient({ playbook }: Props) {
             />
           )}
 
-          {/* Objections: adoption roadmap — below content so handlers come first */}
+          {/* Objections: adoption roadmap */}
           {activeStageId === 'objections' && <AdoptionRoadmap variant="objection" />}
 
-          {/* Close: adoption roadmap — below CloseOptions as supporting reference */}
+          {/* Close: adoption roadmap */}
           {activeStageId === 'close' && <AdoptionRoadmap variant="close" />}
 
           <div className="pb-4" />
@@ -374,7 +403,7 @@ export default function PlaybookClient({ playbook }: Props) {
             )}
           </div>
 
-          {/* Keyword trigger input — always visible */}
+          {/* Keyword trigger input */}
           <div className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-xl border transition ${
             kwActive ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200'
           }`}>
@@ -441,6 +470,9 @@ export default function PlaybookClient({ playbook }: Props) {
         </div>
       </div>
 
+      {/* Floating objections panel — accessible from any stage */}
+      <FloatingObjections stages={stages} />
+
       {notesOpen && (
         <CallNotesPanel
           notes={notes}
@@ -453,7 +485,7 @@ export default function PlaybookClient({ playbook }: Props) {
 
       {searchOpen && (
         <SearchModal
-          playbook={playbook}
+          playbook={livePlaybook}
           onClose={() => setSearchOpen(false)}
           onNavigate={(stageId) => { setActiveStageId(stageId); setSearchOpen(false) }}
         />
