@@ -1,3 +1,15 @@
+// Provenance for generated/reviewed content. See docs/CONTENT_PIPELINE.md.
+// Presence of `approvedAt` marks content as reviewed and frozen/live; its
+// absence marks an unreviewed draft.
+export interface ContentProvenance {
+  source?: 'vertex' | 'manual' | 'admin'
+  sourceRefs?: string[]   // Vertex resource ids/uris this was generated from
+  generatedAt?: string
+  reviewedBy?: string
+  approvedAt?: string
+  version?: number
+}
+
 export interface AnswerChip {
   id: string
   label: string
@@ -19,6 +31,7 @@ export interface Question {
   industries?: string[]
   industryTips?: Record<string, string>
   answerChips?: AnswerChip[]
+  provenance?: ContentProvenance
 }
 
 export interface TalkingPoint {
@@ -29,6 +42,7 @@ export interface TalkingPoint {
   keywords?: string[]
   industries?: string[]
   industryTips?: Record<string, string>
+  provenance?: ContentProvenance
 }
 
 export interface Objection {
@@ -39,6 +53,7 @@ export interface Objection {
   keywords?: string[]
   industries?: string[]
   industryTips?: Record<string, string>
+  provenance?: ContentProvenance
 }
 
 export type StageColor = 'blue' | 'purple' | 'green' | 'orange' | 'teal' | 'red' | 'pink' | 'indigo'
@@ -85,6 +100,7 @@ export interface IndustryNote {
   industry: string              // matches INDUSTRIES id
   label: string                 // display name
   talkingPoints: IndustryTalkingPoint[]
+  provenance?: ContentProvenance
 }
 
 export interface CloseRecommendation {

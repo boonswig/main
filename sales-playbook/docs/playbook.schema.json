@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sales-playbook/docs/playbook.schema.json",
+  "title": "Playbook",
+  "description": "Machine contract for data/playbook.json. Mirrors src/types/index.ts. Keep all three (types, this schema, DATA_MODEL.md) in sync.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["stages"],
+  "properties": {
+    "stages": { "type": "array", "items": { "$ref": "#/definitions/Stage" } },
+    "closeRecommendations": { "type": "array", "items": { "$ref": "#/definitions/CloseRecommendation" } },
+    "openerRules": { "type": "array", "items": { "$ref": "#/definitions/OpenerRule" } },
+    "openerStyles": { "type": "array", "items": { "$ref": "#/definitions/OpenerStyle" } },
+    "industryNotes": { "type": "array", "items": { "$ref": "#/definitions/IndustryNote" } }
+  },
+  "definitions": {
+    "StageColor": {
+      "type": "string",
+      "enum": ["blue", "purple", "green", "orange", "teal", "red", "pink", "indigo"]
+    },
+    "ContentProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string", "enum": ["vertex", "manual", "admin"] },
+        "sourceRefs": { "type": "array", "items": { "type": "string" } },
+        "generatedAt": { "type": "string" },
+        "reviewedBy": { "type": "string" },
+        "approvedAt": { "type": "string", "description": "Presence means content is reviewed and frozen/live." },
+        "version": { "type": "number" }
+      }
+    },
+    "Targeting": {
+      "type": "object",
+      "properties": {
+        "industries": { "type": "array", "items": { "type": "string" }, "description": "Industry ids this item applies to; empty/absent or 'all' = all industries." },
+        "industryTips": { "type": "object", "additionalProperties": { "type": "string" } },
+        "keywords": { "type": "array", "items": { "type": "string" } },
+        "provenance": { "$ref": "#/definitions/ContentProvenance" }
+      }
+    },
+    "AnswerChip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "pitchBullet"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "pitchBullet": { "type": "string" },
+        "sayThis": { "type": "string" },
+        "deepDive": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["howItWorks", "additionalProtections"],
+          "properties": {
+            "howItWorks": { "type": "string" },
+            "additionalProtections": { "type": "array", "items": { "type": "string" } },
+            "proofPoint": { "type": "string" }
+          }
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": ["id", "question", "purpose", "followUps"],
+      "properties": {
+        "id": { "type": "string" },
+        "question": { "type": "string" },
+        "purpose": { "type": "string" },
+        "followUps": { "type": "array", "items": { "type": "string" } },
+        "answerChips": { "type": "array", "items": { "$ref": "#/definitions/AnswerChip" } }
+      },
+      "allOf": [{ "$ref": "#/definitions/Targeting" }]
+    },
+    "TalkingPoint": {
+      "type": "object",
+      "required": ["id", "title", "content", "tips"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "tips": { "type": "array", "items": { "type": "string" } }
+      },
+      "allOf": [{ "$ref": "#/definitions/Targeting" }]
+    },
+    "Objection": {
+      "type": "object",
+      "required": ["id", "objection", "response", "tips"],
+      "properties": {
+        "id": { "type": "string" },
+        "objection": { "type": "string" },
+        "response": { "type": "string" },
+        "tips": { "type": "array", "items": { "type": "string" } }
+      },
+      "allOf": [{ "$ref": "#/definitions/Targeting" }]
+    },
+    "Stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "order", "description", "color", "icon", "questions", "talkingPoints", "objections"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "order": { "type": "number" },
+        "description": { "type": "string" },
+        "color": { "$ref": "#/definitions/StageColor" },
+        "icon": { "type": "string" },
+        "questions": { "type": "array", "items": { "$ref": "#/definitions/Question" } },
+        "talkingPoints": { "type": "array", "items": { "$ref": "#/definitions/TalkingPoint" } },
+        "objections": { "type": "array", "items": { "$ref": "#/definitions/Objection" } }
+      }
+    },
+    "OpenerStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "tag", "tagColorKey", "opener", "agenda", "bridge"],
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "tag": { "type": "string" },
+        "tagColorKey": { "type": "string", "enum": ["blue", "amber", "slate", "green", "purple", "red", "orange", "teal"] },
+        "opener": { "type": "string" },
+        "agenda": { "type": "string" },
+        "bridge": { "type": "string" }
+      }
+    },
+    "OpenerRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "titleKeywords", "industries", "styleId", "priority"],
+      "properties": {
+        "id": { "type": "string" },
+        "titleKeywords": { "type": "array", "items": { "type": "string" } },
+        "industries": { "type": "array", "items": { "type": "string" } },
+        "styleId": { "type": "string" },
+        "priority": { "type": "number" }
+      }
+    },
+    "IndustryTalkingPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "content"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "tips": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "IndustryNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "industry", "label", "talkingPoints"],
+      "properties": {
+        "id": { "type": "string" },
+        "industry": { "type": "string" },
+        "label": { "type": "string" },
+        "talkingPoints": { "type": "array", "items": { "$ref": "#/definitions/IndustryTalkingPoint" } }
+      }
+    },
+    "CloseRecommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "chipIds", "nextStep", "askThis", "rationale"],
+      "properties": {
+        "id": { "type": "string" },
+        "chipIds": { "type": "array", "items": { "type": "string" } },
+        "nextStep": {
+          "type": "string",
+          "enum": [
+            "Follow-up email",
+            "Send proposal / quote",
+            "Product demo scheduled",
+            "Discovery call scheduled",
+            "Nurture sequence",
+            "Technical review / POC",
+            "Contract sent",
+            "No next step agreed"
+          ]
+        },
+        "askThis": { "type": "string" },
+        "rationale": { "type": "string" }
+      }
+    }
+  }
+}

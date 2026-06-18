@@ -4,6 +4,7 @@ export const INDUSTRIES = [
   { id: 'manufacturing',      name: 'Manufacturing',       description: 'Factories, supply chain, logistics' },
   { id: 'professional-services', name: 'Professional Services', description: 'Agencies, consultancies, law firms' },
   { id: 'technology',         name: 'Technology / SaaS',   description: 'Tech companies buying SaaS tools' },
+  { id: 'healthcare',         name: 'Healthcare',          description: 'Providers, payers, health systems, life sciences' },
 ] as const
 
 export type IndustryId = typeof INDUSTRIES[number]['id']
