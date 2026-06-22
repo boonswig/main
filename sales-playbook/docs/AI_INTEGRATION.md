@@ -8,8 +8,9 @@ Where AI is allowed, where it isn't, and how the offline content pipeline works.
 |--------|-------|-------|----------|
 | Parse BDR notes → structured context | `POST /api/parse-bdr-notes` (runtime) | Gemini (`@google/generative-ai`) | ✅ Yes |
 | Draft follow-up email | `POST /api/generate-email` (runtime) | Gemini | ✅ Yes |
-| Generate **playbook content** (questions/talking points/objections) | `scripts/generate-industry-content.ts` (offline) | Vertex.ai (grounded) | ✅ Offline only |
-| Generate **playbook content at runtime / during a call** | — | — | ❌ **Forbidden** |
+| Generate **playbook content** (admin clicks Generate, human reviews + saves) | `POST /api/admin/generate-content` (authoring time) | Vertex.ai (grounded) | ✅ Admin only, gated by review |
+| Generate **playbook content** in bulk / bootstrap | `scripts/generate-industry-content.ts` (offline) | Vertex.ai (grounded) | ✅ Offline only |
+| Generate **playbook content during a live rep call** | — | — | ❌ **Forbidden** |
 
 **Rule:** the live call flow never calls an LLM to produce playbook content.
 Playbook content is offline-generated, reviewed, and frozen

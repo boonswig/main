@@ -17,7 +17,9 @@ silently diverge.
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | …change the stack, data layer, or where logic lives. |
 | [DATA_MODEL.md](./DATA_MODEL.md) | …change content shape or `data/playbook.json`. |
 | [playbook.schema.json](./playbook.schema.json) | …generate or validate playbook content (machine contract). |
-| [CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md) | …generate, review, or promote industry content. |
+| [CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md) | …generate, review, or promote content (any source). |
+| [ADMIN_GENERATION.md](./ADMIN_GENERATION.md) | …build/change the admin "Generate from source" flow. |
+| [TRIAL_WORKFLOW.md](./TRIAL_WORKFLOW.md) | …work on the config-driven free-trial workflow. |
 | [INDUSTRY_PLAYBOOKS.md](./INDUSTRY_PLAYBOOKS.md) | …add an industry or industry-specific content. |
 | [AI_INTEGRATION.md](./AI_INTEGRATION.md) | …touch anything involving Gemini or Vertex. |
 

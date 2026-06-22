@@ -15,10 +15,12 @@ changes to the UI or to playbook content.
 3. **Playbook content is data, not code.** It lives in `data/playbook.json`
    (committed source of truth) and the Firestore `playbook/current` doc (live
    runtime copy). See [ARCHITECTURE.md](./ARCHITECTURE.md).
-4. **Content is never generated at runtime.** The app must not call an LLM to
-   produce questions, talking points, or objections while a rep is on a call.
-   Content is generated **offline**, reviewed, and frozen. See
-   [CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md).
+4. **Content is generated at authoring time, never during a live call.** The app
+   must not call an LLM to produce questions, talking points, or objections while
+   a rep is on a call. Generation is triggered by an admin (Generate button) or
+   an offline script, then **reviewed by a human and saved** before going live.
+   See [CONTENT_PIPELINE.md](./CONTENT_PIPELINE.md) and
+   [ADMIN_GENERATION.md](./ADMIN_GENERATION.md).
 5. **The Admin dashboard is the only sanctioned writer of live content.**
    Promotion of reviewed content into `data/playbook.json` + Firestore happens
    through Admin (or a reviewed pipeline step), never by hand-editing JSON in a

@@ -15,7 +15,9 @@ relevant to your change. Full index in [docs/README.md](docs/README.md):
 - **UX_FLOW.md** — screens, navigation, the call flow.
 - **ARCHITECTURE.md** — stack, data layer (JSON + Firestore), where logic lives.
 - **DATA_MODEL.md** + **playbook.schema.json** — content shape (incl. the Close stage).
-- **CONTENT_PIPELINE.md** — generate-once → review → freeze workflow for industry content.
+- **CONTENT_PIPELINE.md** — generate → review → freeze workflow (admin or script trigger).
+- **ADMIN_GENERATION.md** — admin "Generate from source" flow (Vertex / Google Doc / text).
+- **TRIAL_WORKFLOW.md** — config-driven free-trial workflow (data, not generated UI).
 - **INDUSTRY_PLAYBOOKS.md** — industry targeting + UI tagging / standard-only toggle.
 - **AI_INTEGRATION.md** — Gemini (runtime) vs Vertex (offline) boundary.
 
