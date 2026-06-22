@@ -58,18 +58,36 @@ industry-specific vs. standard, and be able to fall back to the standard set.
 Until an industry has reviewed content, generic (`industries: []`) content still
 shows, so the flow degrades gracefully.
 
+## Priority verticals
+
+These are the focus verticals (best product-market fit) — build and review their
+content first. They are flagged `priority: true` in `INDUSTRIES` and grouped
+first (under "Priority verticals", marked ★) in the pre-call industry picker:
+
+- `healthcare` — Healthcare
+- `financial-services` — Finance
+- `construction` — Construction
+- `government-federal` — Government — Federal
+- `government-local` — Government — Local
+
+> Note: `financial-services` is the id for the "Finance" priority vertical — the
+> id is kept stable so existing content/opener rules keep matching.
+
 ## Coverage status
 
-Legend: ✅ done · 🟡 in progress · ⬜ not started
+Legend: ✅ done · 🟡 in progress · ⬜ not started · ⭐ priority
 
-| Industry (id) | Vertex sources | Generated | Reviewed | Live |
-|---|---|---|---|---|
-| financial-services | ⬜ | ⬜ | ⬜ | ⬜ |
-| retail | ⬜ | ⬜ | ⬜ | ⬜ |
-| manufacturing | ⬜ | ⬜ | ⬜ | ⬜ |
-| professional-services | ⬜ | ⬜ | ⬜ | ⬜ |
-| technology | ⬜ | ⬜ | ⬜ | ⬜ |
-| healthcare | ⬜ | ⬜ | ⬜ | ⬜ |
+| Industry (id) | Priority | Vertex sources | Generated | Reviewed | Live |
+|---|---|---|---|---|---|
+| healthcare | ⭐ | ⬜ | ⬜ | ⬜ | ⬜ |
+| financial-services (Finance) | ⭐ | ⬜ | ⬜ | ⬜ | ⬜ |
+| construction | ⭐ | ⬜ | ⬜ | ⬜ | ⬜ |
+| government-federal | ⭐ | ⬜ | ⬜ | ⬜ | ⬜ |
+| government-local | ⭐ | ⬜ | ⬜ | ⬜ | ⬜ |
+| retail | | ⬜ | ⬜ | ⬜ | ⬜ |
+| manufacturing | | ⬜ | ⬜ | ⬜ | ⬜ |
+| professional-services | | ⬜ | ⬜ | ⬜ | ⬜ |
+| technology | | ⬜ | ⬜ | ⬜ | ⬜ |
 
 > Keep this table in sync with `INDUSTRIES` and with what is actually live in
 > `data/playbook.json`. It is the at-a-glance source of truth for coverage.
