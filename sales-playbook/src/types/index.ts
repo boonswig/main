@@ -101,6 +101,50 @@ export interface Playbook {
   openerRules?: OpenerRule[]
   openerStyles?: OpenerStyle[]
   industryNotes?: IndustryNote[]
+  useCaseQuestions?: UseCaseQuestion[]
+  pitchCards?: RepPitchCard[]
+  resourceLinks?: ResourceLink[]
+}
+
+export const USE_CASES = [
+  { id: 'contractors',   label: 'Contractor Access',         emoji: '👷' },
+  { id: 'byod',         label: 'BYOD / Personal Devices',   emoji: '📱' },
+  { id: 'data-exfil',   label: 'Data Protection',           emoji: '🛡️' },
+  { id: 'gen-ai',       label: 'Gen AI Oversight',          emoji: '🤖' },
+  { id: 'web-filtering', label: 'Web Filtering',            emoji: '🌐' },
+  { id: 'citrix-vdi',   label: 'Citrix / VDI Replacement', emoji: '🖥️' },
+] as const
+
+export type UseCaseId = typeof USE_CASES[number]['id']
+
+export interface UseCaseQuestion {
+  id: string
+  question: string
+  rationale: string
+  listenFor: string[]
+  followUp?: string
+  useCases: string[]
+  industries?: string[]
+}
+
+export interface RepPitchCard {
+  id: string
+  useCases: string[]
+  title: string
+  pitch: string
+  keyPoints: string[]
+  product: 'cep' | 'cameyo' | 'both'
+  industries?: string[]
+}
+
+export interface ResourceLink {
+  id: string
+  title: string
+  description: string
+  url: string
+  type: 'internal' | 'customer-facing'
+  useCases?: string[]
+  industries?: string[]
 }
 
 export interface User {
@@ -135,7 +179,7 @@ export interface PreCallContext {
   hasTimeline: string
 }
 
-export type SearchResultType = 'question' | 'talking-point' | 'objection'
+export type SearchResultType = 'question' | 'talking-point' | 'objection' | 'resource'
 
 export interface SearchResult {
   stageId: string
@@ -145,6 +189,7 @@ export interface SearchResult {
   id: string
   title: string
   content: string
+  url?: string
 }
 
 // ── Call records (saved to Firestore) ──────────────────────────

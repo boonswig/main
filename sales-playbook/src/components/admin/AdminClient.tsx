@@ -2,13 +2,14 @@
 
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
-import { Playbook, Stage, StageColor, CloseRecommendation, OpenerStyle, OpenerRule, IndustryNote } from '@/types'
+import { Playbook, Stage, StageColor, CloseRecommendation, OpenerStyle, OpenerRule, IndustryNote, ResourceLink } from '@/types'
 import { savePlaybook as firestoreSavePlaybook, firestoreConfigured } from '@/lib/firestore'
 import StageEditor from './StageEditor'
 import UserManager from './UserManager'
 import CloseRecommendationsEditor from './CloseRecommendationsEditor'
 import OpenerEditor from './OpenerEditor'
 import IndustryNotesEditor from './IndustryNotesEditor'
+import ResourceLibraryEditor from './ResourceLibraryEditor'
 
 const COLORS: StageColor[] = ['blue', 'purple', 'green', 'orange', 'teal', 'red', 'pink', 'indigo']
 
@@ -27,7 +28,7 @@ interface Props {
   initialPlaybook: Playbook
 }
 
-type View = 'stage' | 'close' | 'opener' | 'industry' | 'users'
+type View = 'stage' | 'close' | 'opener' | 'industry' | 'resources' | 'users'
 
 export default function AdminClient({ initialPlaybook }: Props) {
   const [playbook, setPlaybook] = useState<Playbook>(initialPlaybook)
@@ -115,6 +116,15 @@ export default function AdminClient({ initialPlaybook }: Props) {
     [playbook]
   )
 
+  const updateResourceLinks = useCallback(
+    (links: ResourceLink[]) => {
+      const updated: Playbook = { ...playbook, resourceLinks: links }
+      setPlaybook(updated)
+      savePlaybook(updated)
+    },
+    [playbook]
+  )
+
   function addStage() {
     const maxOrder = stages.reduce((max, s) => Math.max(max, s.order), 0)
     const newStage: Stage = {
@@ -195,6 +205,15 @@ export default function AdminClient({ initialPlaybook }: Props) {
         </svg>
       ),
     },
+    {
+      id: 'resources',
+      label: 'Resource Library',
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
+      ),
+    },
   ]
 
   return (
@@ -267,17 +286,28 @@ export default function AdminClient({ initialPlaybook }: Props) {
                 <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${COLOR_DOT[stage.color] ?? 'bg-slate-500'}`} />
                 <span className="flex-1 text-sm text-slate-300 truncate">{stage.name}</span>
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition">
-                  <button onClick={(e) => { e.stopPropagation(); moveStage(stage.id, 'up') }} disabled={idx === 0} className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-30">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); moveStage(stage.id, 'up') }}
+                    disabled={idx === 0}
+                    className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-30"
+                  >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                     </svg>
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); moveStage(stage.id, 'down') }} disabled={idx === stages.length - 1} className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-30">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); moveStage(stage.id, 'down') }}
+                    disabled={idx === stages.length - 1}
+                    className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-30"
+                  >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); deleteStage(stage.id) }} className="p-0.5 text-red-400 hover:text-red-300">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); deleteStage(stage.id) }}
+                    className="p-0.5 text-red-400 hover:text-red-300"
+                  >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -294,19 +324,12 @@ export default function AdminClient({ initialPlaybook }: Props) {
             <div className={`text-xs px-3 py-1.5 rounded-lg text-center ${
               saveStatus === 'saved' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-red-900/50 text-red-400'
             }`}>
-              {saveStatus === 'saved'
-                ? `✓ Saved${firestoreConfigured ? ' (JSON + Firestore)' : ' (JSON)'}`
-                : '✗ Save failed'}
+              {saveStatus === 'saved' ? '✓ Changes saved' : '✗ Save failed'}
             </div>
           )}
           {saving && (
             <div className="text-xs px-3 py-1.5 rounded-lg text-center bg-slate-800 text-slate-400">
               Saving…
-            </div>
-          )}
-          {!firestoreConfigured && (
-            <div className="text-xs px-3 py-1.5 rounded-lg text-center bg-amber-900/30 text-amber-400">
-              Firestore not configured — saves to JSON only
             </div>
           )}
           <Link
@@ -341,6 +364,11 @@ export default function AdminClient({ initialPlaybook }: Props) {
           <IndustryNotesEditor
             notes={playbook.industryNotes ?? []}
             onChange={updateIndustryNotes}
+          />
+        ) : view === 'resources' ? (
+          <ResourceLibraryEditor
+            resourceLinks={playbook.resourceLinks ?? []}
+            onChange={updateResourceLinks}
           />
         ) : selectedStage ? (
           <StageEditor

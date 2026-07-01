@@ -18,6 +18,7 @@ const TYPE_LABEL: Record<string, string> = {
   question: 'Question',
   'talking-point': 'Talking Point',
   objection: 'Objection',
+  resource: 'Resource',
 }
 
 interface Props {
@@ -62,6 +63,19 @@ function buildIndex(playbook: Playbook): SearchResult[] {
         content: obj.response,
       })
     }
+  }
+  // Resource links
+  for (const link of (playbook.resourceLinks ?? [])) {
+    results.push({
+      stageId: '',
+      stageName: 'Resource',
+      stageColor: 'teal' as StageColor,
+      type: 'resource',
+      id: link.id,
+      title: link.title,
+      content: link.description,
+      url: link.url,
+    })
   }
   return results
 }
@@ -123,7 +137,12 @@ export default function SearchModal({ playbook, onClose, onNavigate }: Props) {
         e.preventDefault()
         setSelected((prev) => Math.max(prev - 1, 0))
       } else if (e.key === 'Enter' && results[selected]) {
-        onNavigate(results[selected].stageId)
+        const r = results[selected]
+        if (r.type === 'resource' && r.url) {
+          window.open(r.url, '_blank')
+        } else {
+          onNavigate(r.stageId)
+        }
       }
     },
     [results, selected, onClose, onNavigate]
@@ -175,7 +194,13 @@ export default function SearchModal({ playbook, onClose, onNavigate }: Props) {
                         className={`w-full text-left px-4 py-3 flex items-start gap-3 transition ${
                           i === selected ? 'bg-blue-50' : 'hover:bg-slate-50'
                         }`}
-                        onClick={() => onNavigate(r.stageId)}
+                        onClick={() => {
+                          if (r.type === 'resource' && r.url) {
+                            window.open(r.url, '_blank')
+                          } else {
+                            onNavigate(r.stageId)
+                          }
+                        }}
                         onMouseEnter={() => setSelected(i)}
                       >
                         <div className="flex-1 min-w-0">

@@ -10,77 +10,86 @@
       "questions": [
         {
           "id": "d-q-browser-mgmt",
-          "question": "How are your employees' browsers currently managed — does IT push policies centrally, or are users running whatever they like?",
-          "purpose": "Determine whether there's any existing browser governance — the starting point for the CEP conversation. Most orgs have zero visibility here.",
+          "question": "How are your employees' browsers currently managed \u2014 does IT push policies centrally, or are users running whatever they like?",
+          "purpose": "Determine whether there's any existing browser governance \u2014 the starting point for the CEP conversation. Most orgs have zero visibility here.",
           "followUps": [
             "Who in IT owns browser policy today?",
             "Are browser updates handled centrally or left to individual users?",
             "Do you have visibility into which extensions employees have installed?"
           ],
-          "keywords": ["browser", "chrome", "edge", "firefox", "managed", "policy", "extension", "update"],
+          "keywords": [
+            "browser",
+            "chrome",
+            "edge",
+            "firefox",
+            "managed",
+            "policy",
+            "extension",
+            "update"
+          ],
           "industryTips": {
-            "financial-services": "Unmanaged browsers are a frequent finding in FCA and PCI-DSS audits — frame browser governance as a compliance gap, not just an IT preference.",
-            "technology": "Even tech-savvy teams often have blind spots here — browser-based credential harvesting and OAuth token theft target developers specifically."
+            "financial-services": "Unmanaged browsers are a frequent finding in FCA and PCI-DSS audits \u2014 frame browser governance as a compliance gap, not just an IT preference.",
+            "technology": "Even tech-savvy teams often have blind spots here \u2014 browser-based credential harvesting and OAuth token theft target developers specifically."
           },
           "answerChips": [
             {
               "id": "no-central-policy",
               "label": "No central browser policy",
-              "pitchBullet": "Chrome Admin Console pushes security policies to every managed browser instantly — no user prompt or action required",
+              "pitchBullet": "Chrome Admin Console pushes security policies to every managed browser instantly \u2014 no user prompt or action required",
               "sayThis": "So today, any employee can change their browser settings or disable protections without IT knowing. That's the exact gap CEP closes.",
               "deepDive": {
-                "howItWorks": "Chrome Admin Console is a cloud-hosted management console — no on-prem infrastructure required. Connect it to Google Workspace or Entra ID/Azure AD, and every policy you configure applies the instant a user signs into managed Chrome with their work account: extension controls, DLP rules, safe browsing enforcement, site restrictions. The managed profile follows the user to any device they sign into. Set it once; it applies everywhere across the fleet.",
+                "howItWorks": "Chrome Admin Console is a cloud-hosted management console \u2014 no on-prem infrastructure required. Connect it to Google Workspace or Entra ID/Azure AD, and every policy you configure applies the instant a user signs into managed Chrome with their work account: extension controls, DLP rules, safe browsing enforcement, site restrictions. The managed profile follows the user to any device they sign into. Set it once; it applies everywhere across the fleet.",
                 "additionalProtections": [
-                  "Policy sync in under 15 minutes — changes apply fleet-wide without any endpoint visits",
-                  "Separate work and personal Chrome profiles on the same device — policies only apply inside the work context, personal browsing stays private",
+                  "Policy sync in under 15 minutes \u2014 changes apply fleet-wide without any endpoint visits",
+                  "Separate work and personal Chrome profiles on the same device \u2014 policies only apply inside the work context, personal browsing stays private",
                   "Force-install approved extensions and block high-risk ones from one central console"
                 ],
-                "proofPoint": "Most organisations complete initial CEP policy configuration in 2–4 hours of IT time. Zero endpoint visits, zero user disruption."
+                "proofPoint": "Most organisations complete initial CEP policy configuration in 2\u20134 hours of IT time. Zero endpoint visits, zero user disruption."
               }
             },
             {
               "id": "no-extension-control",
               "label": "No extension visibility/control",
               "pitchBullet": "CEP shows every extension installed across the entire fleet in real time, and lets IT block risky ones or force-install approved ones centrally",
-              "sayThis": "Browser extensions can read every page a user opens — including login screens and sensitive documents. Without visibility, you have no idea what's running across your org.",
+              "sayThis": "Browser extensions can read every page a user opens \u2014 including login screens and sensitive documents. Without visibility, you have no idea what's running across your org.",
               "deepDive": {
-                "howItWorks": "The Chrome Admin Console provides a live inventory of every extension installed across your managed fleet — grouped by extension, user, or device. Each extension shows its name, version, publisher, permissions requested (e.g., 'access all site data'), and a risk classification. You can block specific extensions by ID, block entire categories (e.g., all screen recorders), force-install approved extensions, or set allowlist mode so users can only install pre-approved extensions. Changes apply within 15 minutes with no user action required.",
+                "howItWorks": "The Chrome Admin Console provides a live inventory of every extension installed across your managed fleet \u2014 grouped by extension, user, or device. Each extension shows its name, version, publisher, permissions requested (e.g., 'access all site data'), and a risk classification. You can block specific extensions by ID, block entire categories (e.g., all screen recorders), force-install approved extensions, or set allowlist mode so users can only install pre-approved extensions. Changes apply within 15 minutes with no user action required.",
                 "additionalProtections": [
-                  "New extension install alerts — notified immediately when any user installs an extension not on your approved list",
-                  "Extension update monitoring — flag when an approved extension receives a major update that changes its permission scope",
-                  "Shadow IT discovery — extensions often reveal unsanctioned SaaS tools accessing sensitive pages (Grammarly reading HR docs, personal AI assistants reading CRM data)"
+                  "New extension install alerts \u2014 notified immediately when any user installs an extension not on your approved list",
+                  "Extension update monitoring \u2014 flag when an approved extension receives a major update that changes its permission scope",
+                  "Shadow IT discovery \u2014 extensions often reveal unsanctioned SaaS tools accessing sensitive pages (Grammarly reading HR docs, personal AI assistants reading CRM data)"
                 ],
-                "proofPoint": "In a typical 500-seat first extension audit, organisations find an average of 12–15 high-risk extensions — screen recorders, in-browser credential managers, and productivity tools with excessive data access permissions."
+                "proofPoint": "In a typical 500-seat first extension audit, organisations find an average of 12\u201315 high-risk extensions \u2014 screen recorders, in-browser credential managers, and productivity tools with excessive data access permissions."
               }
             },
             {
               "id": "manual-updates",
               "label": "Users self-update (or don't)",
-              "pitchBullet": "CEP enforces silent Chrome auto-updates across all managed browsers — always current, no user prompt, no exceptions",
+              "pitchBullet": "CEP enforces silent Chrome auto-updates across all managed browsers \u2014 always current, no user prompt, no exceptions",
               "sayThis": "Outdated browsers are one of the top five exploit entry points. If updates depend on users, you'll always have a tail of vulnerable versions.",
               "deepDive": {
-                "howItWorks": "CEP's update policy enforces Chrome auto-updates across all managed browsers — you set a minimum acceptable version and users cannot postpone or disable updates. Chrome releases a new stable version every 4 weeks; with CEP enforcement, your entire fleet can be on the latest version within hours of release. You can also configure a staged rollout — push to a test group first, validate, then fleet-wide. All enforced remotely from Admin Console.",
+                "howItWorks": "CEP's update policy enforces Chrome auto-updates across all managed browsers \u2014 you set a minimum acceptable version and users cannot postpone or disable updates. Chrome releases a new stable version every 4 weeks; with CEP enforcement, your entire fleet can be on the latest version within hours of release. You can also configure a staged rollout \u2014 push to a test group first, validate, then fleet-wide. All enforced remotely from Admin Console.",
                 "additionalProtections": [
-                  "Update compliance reporting — real-time dashboard showing which devices are on which Chrome version",
+                  "Update compliance reporting \u2014 real-time dashboard showing which devices are on which Chrome version",
                   "Block older insecure versions from accessing corporate Workspace apps via access policy",
-                  "Zero user action required — silent background update, no pop-ups, no deferred restarts"
+                  "Zero user action required \u2014 silent background update, no pop-ups, no deferred restarts"
                 ],
-                "proofPoint": "The average enterprise browser fleet lags 30–60 days behind the latest Chrome release. In that window, known CVEs with public exploits are actively used in attacks. CEP closes that gap."
+                "proofPoint": "The average enterprise browser fleet lags 30\u201360 days behind the latest Chrome release. In that window, known CVEs with public exploits are actively used in attacks. CEP closes that gap."
               }
             },
             {
               "id": "mixed-browsers",
               "label": "Mixed / uncontrolled browsers",
-              "pitchBullet": "CEP deploys a managed Chrome profile that coexists with personal browsers — no user change required, full IT policy control in the work profile",
+              "pitchBullet": "CEP deploys a managed Chrome profile that coexists with personal browsers \u2014 no user change required, full IT policy control in the work profile",
               "sayThis": "You can't enforce consistent security policies across Chrome, Edge, and Firefox simultaneously. CEP makes Chrome the managed work browser without asking anyone to switch their personal setup.",
               "deepDive": {
-                "howItWorks": "CEP deploys as a managed Chrome profile alongside whatever browsers the user already has. The user's personal Chrome profile stays completely unchanged — their bookmarks, extensions, and history are untouched. The work Chrome profile (identifiable by a managed badge) enforces all IT policies: DLP, extension controls, safe browsing, site restrictions. For Microsoft shops, managed Chrome coexists with Edge — users can switch based on task. CEP doesn't remove anything; it adds a controlled work context.",
+                "howItWorks": "CEP deploys as a managed Chrome profile alongside whatever browsers the user already has. The user's personal Chrome profile stays completely unchanged \u2014 their bookmarks, extensions, and history are untouched. The work Chrome profile (identifiable by a managed badge) enforces all IT policies: DLP, extension controls, safe browsing, site restrictions. For Microsoft shops, managed Chrome coexists with Edge \u2014 users can switch based on task. CEP doesn't remove anything; it adds a controlled work context.",
                 "additionalProtections": [
-                  "SSO integration — Entra ID or Workspace credentials auto-sign the work profile, no separate login",
-                  "Works on Windows, Mac, Linux, and ChromeOS — the same managed profile experience on every device the user signs into",
-                  "Profile switching is instant — users move between work and personal Chrome with one click"
+                  "SSO integration \u2014 Entra ID or Workspace credentials auto-sign the work profile, no separate login",
+                  "Works on Windows, Mac, Linux, and ChromeOS \u2014 the same managed profile experience on every device the user signs into",
+                  "Profile switching is instant \u2014 users move between work and personal Chrome with one click"
                 ],
-                "proofPoint": "The 'users won't change' objection dissolves here — they don't change anything. They get a second profile badge in their existing Chrome browser. Most users forget it's there within a week."
+                "proofPoint": "The 'users won't change' objection dissolves here \u2014 they don't change anything. They get a second profile badge in their existing Chrome browser. Most users forget it's there within a week."
               }
             }
           ]
@@ -88,77 +97,91 @@
         {
           "id": "d-q-legacy-apps",
           "question": "Do any of your teams rely on Windows-based or legacy applications that need a specific environment to run?",
-          "purpose": "Surface the Cameyo opportunity. Any Windows or legacy app dependency — Citrix, RDS, local installs — is a direct use case for app delivery in the browser.",
+          "purpose": "Surface the Cameyo opportunity. Any Windows or legacy app dependency \u2014 Citrix, RDS, local installs \u2014 is a direct use case for app delivery in the browser.",
           "followUps": [
-            "How are those apps delivered today — Citrix, RDS, local install?",
+            "How are those apps delivered today \u2014 Citrix, RDS, local install?",
             "How many users need access, and on what types of devices?",
-            "What's the current cost per seat for that infrastructure — licenses, servers, IT support?"
+            "What's the current cost per seat for that infrastructure \u2014 licenses, servers, IT support?"
           ],
-          "keywords": ["legacy", "windows", "citrix", "rdp", "rds", "vdi", "vmware", "horizon", "xenapp", "application", "erp", "sap", "software"],
+          "keywords": [
+            "legacy",
+            "windows",
+            "citrix",
+            "rdp",
+            "rds",
+            "vdi",
+            "vmware",
+            "horizon",
+            "xenapp",
+            "application",
+            "erp",
+            "sap",
+            "software"
+          ],
           "industryTips": {
             "manufacturing": "Manufacturing teams almost always have legacy ERP, MES, or SCADA systems that need Windows. Ask specifically about shop floor access.",
-            "retail": "Back-office and POS management tools are often Windows-only — Cameyo delivers these to any device, including Chromebooks in stores.",
-            "professional-services": "Ask about legacy time-billing, case management, or document management systems — these are often the last reason a firm maintains Windows infrastructure."
+            "retail": "Back-office and POS management tools are often Windows-only \u2014 Cameyo delivers these to any device, including Chromebooks in stores.",
+            "professional-services": "Ask about legacy time-billing, case management, or document management systems \u2014 these are often the last reason a firm maintains Windows infrastructure."
           },
           "answerChips": [
             {
               "id": "has-citrix-rds",
               "label": "Has Citrix / RDS / VDI",
-              "pitchBullet": "Cameyo replaces Citrix and RDS infrastructure entirely — Windows apps stream in a Chrome tab at 40–60% lower TCO, with zero servers to maintain",
-              "sayThis": "What are you paying per seat for Citrix today — including licenses, servers, and IT support? That number is usually where the conversation gets very interesting.",
+              "pitchBullet": "Cameyo replaces Citrix and RDS infrastructure entirely \u2014 Windows apps stream in a Chrome tab at 40\u201360% lower TCO, with zero servers to maintain",
+              "sayThis": "What are you paying per seat for Citrix today \u2014 including licenses, servers, and IT support? That number is usually where the conversation gets very interesting.",
               "deepDive": {
-                "howItWorks": "Cameyo packages Windows applications as Progressive Web Apps (PWAs) — the app runs in a cloud-hosted Windows container; the user interacts with it via a Chrome tab. There's no RDP client, no plugin, no VPN tunnel. The application behaves identically to local — keyboard shortcuts, printing, file dialogs — because it IS running on Windows, just hosted in Cameyo's cloud infrastructure. For IT, management is a web console: upload the application, assign it to users or groups, done. Cameyo handles the Windows licensing, server patching, and uptime.",
+                "howItWorks": "Cameyo packages Windows applications as Progressive Web Apps (PWAs) \u2014 the app runs in a cloud-hosted Windows container; the user interacts with it via a Chrome tab. There's no RDP client, no plugin, no VPN tunnel. The application behaves identically to local \u2014 keyboard shortcuts, printing, file dialogs \u2014 because it IS running on Windows, just hosted in Cameyo's cloud infrastructure. For IT, management is a web console: upload the application, assign it to users or groups, done. Cameyo handles the Windows licensing, server patching, and uptime.",
                 "additionalProtections": [
-                  "All compute happens server-side — no corporate application data ever touches the endpoint device",
-                  "Full session audit logging — every interaction with the application is logged for security and compliance",
-                  "Works on Chromebook, iPad, thin client, personal laptop — any device with a Chrome browser, no Windows required on the endpoint"
+                  "All compute happens server-side \u2014 no corporate application data ever touches the endpoint device",
+                  "Full session audit logging \u2014 every interaction with the application is logged for security and compliance",
+                  "Works on Chromebook, iPad, thin client, personal laptop \u2014 any device with a Chrome browser, no Windows required on the endpoint"
                 ],
-                "proofPoint": "Average Cameyo deployment: 3–5 days from decision to users running the app. Citrix migrations typically run 3–9 months and require dedicated infrastructure teams. TCO reduction vs Citrix: 40–60% in year one, including licence and infrastructure savings."
+                "proofPoint": "Average Cameyo deployment: 3\u20135 days from decision to users running the app. Citrix migrations typically run 3\u20139 months and require dedicated infrastructure teams. TCO reduction vs Citrix: 40\u201360% in year one, including licence and infrastructure savings."
               }
             },
             {
               "id": "local-windows-installs",
               "label": "Local Windows app installs",
-              "pitchBullet": "Cameyo delivers any Windows app as a cloud-hosted web session — nothing installed on end-user devices, works on any device including Chromebooks",
+              "pitchBullet": "Cameyo delivers any Windows app as a cloud-hosted web session \u2014 nothing installed on end-user devices, works on any device including Chromebooks",
               "sayThis": "Every local Windows install is an IT management overhead and a potential attack surface. Cameyo moves those apps to the cloud without rewriting a single line of code.",
               "deepDive": {
-                "howItWorks": "Cameyo's packaging process captures an existing Windows application installer and virtualises it into a hosted cloud session. You run the app's installer through Cameyo's packaging wizard — it captures all dependencies, registry entries, and runtime requirements — and publishes it as a hosted app. No code changes, no redevelopment. IT manages one cloud-hosted instance; one update there updates it for all users simultaneously. Users access via a Chrome tab — the app appears fully functional within seconds.",
+                "howItWorks": "Cameyo's packaging process captures an existing Windows application installer and virtualises it into a hosted cloud session. You run the app's installer through Cameyo's packaging wizard \u2014 it captures all dependencies, registry entries, and runtime requirements \u2014 and publishes it as a hosted app. No code changes, no redevelopment. IT manages one cloud-hosted instance; one update there updates it for all users simultaneously. Users access via a Chrome tab \u2014 the app appears fully functional within seconds.",
                 "additionalProtections": [
-                  "Eliminates endpoint-as-attack-surface risk — the application and its data never touch the user's local drive",
-                  "Centralised licence management — one hosted instance, one licence to manage, no per-device installs to track or audit",
-                  "Instant deprovisioning — remove a user's access to the application in one click from the Cameyo console"
+                  "Eliminates endpoint-as-attack-surface risk \u2014 the application and its data never touch the user's local drive",
+                  "Centralised licence management \u2014 one hosted instance, one licence to manage, no per-device installs to track or audit",
+                  "Instant deprovisioning \u2014 remove a user's access to the application in one click from the Cameyo console"
                 ],
-                "proofPoint": "Organisations migrating to Cameyo typically report 60–80% fewer application-related IT support tickets in the first quarter — no local installs means no installation failures, version conflicts, or device-specific compatibility issues."
+                "proofPoint": "Organisations migrating to Cameyo typically report 60\u201380% fewer application-related IT support tickets in the first quarter \u2014 no local installs means no installation failures, version conflicts, or device-specific compatibility issues."
               }
             },
             {
               "id": "legacy-erp",
               "label": "Legacy ERP / specialist software",
-              "pitchBullet": "Cameyo virtualises any application — SAP, legacy ERP, line-of-business tools — no rewrite or migration needed, users see no difference",
+              "pitchBullet": "Cameyo virtualises any application \u2014 SAP, legacy ERP, line-of-business tools \u2014 no rewrite or migration needed, users see no difference",
               "sayThis": "The beauty of Cameyo is you never touch the application itself. It runs exactly as-is, streamed via Chrome. No redevelopment, no user retraining.",
               "deepDive": {
-                "howItWorks": "Cameyo runs the application in a Windows Server environment in Cameyo's cloud. To the ERP or legacy software, it looks like a normal Windows desktop session — same OS version, same dependencies, same printer drivers. Users open a Chrome tab and the application appears, fully functional, within a few seconds. Cameyo handles all Windows Server licensing, patching, and infrastructure management. Your organisation never touches a server; the application just works.",
+                "howItWorks": "Cameyo runs the application in a Windows Server environment in Cameyo's cloud. To the ERP or legacy software, it looks like a normal Windows desktop session \u2014 same OS version, same dependencies, same printer drivers. Users open a Chrome tab and the application appears, fully functional, within a few seconds. Cameyo handles all Windows Server licensing, patching, and infrastructure management. Your organisation never touches a server; the application just works.",
                 "additionalProtections": [
-                  "Isolation — legacy applications run in sandboxed cloud sessions, not on endpoints where they create security risk or compatibility conflicts",
-                  "No endpoint OS dependency — legacy 32-bit apps run perfectly on modern hardware without compatibility shims",
-                  "DLP at the session level — restrict copy-paste, clipboard, or file transfer within specific legacy application sessions for sensitive data controls"
+                  "Isolation \u2014 legacy applications run in sandboxed cloud sessions, not on endpoints where they create security risk or compatibility conflicts",
+                  "No endpoint OS dependency \u2014 legacy 32-bit apps run perfectly on modern hardware without compatibility shims",
+                  "DLP at the session level \u2014 restrict copy-paste, clipboard, or file transfer within specific legacy application sessions for sensitive data controls"
                 ],
-                "proofPoint": "Customers running SAP, AS/400, and other legacy ERP via Cameyo report zero end-user complaints about application behaviour — it works identically to a local install. One manufacturing customer moved 400 ERP users from Citrix to Cameyo in 8 days."
+                "proofPoint": "Customers running SAP, AS/400, and other legacy ERP via Cameyo report zero end-user complaints about application behaviour \u2014 it works identically to a local install. One manufacturing customer moved 400 ERP users from Citrix to Cameyo in 8 days."
               }
             },
             {
               "id": "multi-device-access",
               "label": "Needs multi-device / thin client access",
-              "pitchBullet": "Cameyo runs those apps on any device — Chromebook, tablet, thin client — without modifying the application at all",
+              "pitchBullet": "Cameyo runs those apps on any device \u2014 Chromebook, tablet, thin client \u2014 without modifying the application at all",
               "sayThis": "Imagine giving shop floor workers or remote teams access to that application on a Chromebook that costs a fraction of a Windows laptop.",
               "deepDive": {
-                "howItWorks": "Because the application runs in a cloud session and is accessed purely via Chrome, the endpoint device is completely irrelevant. A Chromebook, a personal Windows laptop, a MacBook, an iPad, or a thin client all deliver the same application experience — it streams from Cameyo's cloud containers regardless of local hardware. For organisations deploying Chromebooks to reduce hardware costs, Cameyo removes the last remaining blocker: 'but we still need Windows devices for [specific app]'.",
+                "howItWorks": "Because the application runs in a cloud session and is accessed purely via Chrome, the endpoint device is completely irrelevant. A Chromebook, a personal Windows laptop, a MacBook, an iPad, or a thin client all deliver the same application experience \u2014 it streams from Cameyo's cloud containers regardless of local hardware. For organisations deploying Chromebooks to reduce hardware costs, Cameyo removes the last remaining blocker: 'but we still need Windows devices for [specific app]'.",
                 "additionalProtections": [
-                  "Session persistence — if a user loses their connection mid-session, they reconnect and the application session resumes exactly where they left off",
-                  "Concurrent sessions — the same user on multiple devices is handled cleanly without licence conflicts",
-                  "Offline PWA caching for some application types — light offline capability for users with intermittent connections"
+                  "Session persistence \u2014 if a user loses their connection mid-session, they reconnect and the application session resumes exactly where they left off",
+                  "Concurrent sessions \u2014 the same user on multiple devices is handled cleanly without licence conflicts",
+                  "Offline PWA caching for some application types \u2014 light offline capability for users with intermittent connections"
                 ],
-                "proofPoint": "Chromebooks cost 40–60% less than equivalent Windows hardware. For organisations with large frontline, seasonal, or high-turnover workforces, Cameyo + Chromebook is consistently the fastest TCO improvement in the first 12 months."
+                "proofPoint": "Chromebooks cost 40\u201360% less than equivalent Windows hardware. For organisations with large frontline, seasonal, or high-turnover workforces, Cameyo + Chromebook is consistently the fastest TCO improvement in the first 12 months."
               }
             }
           ]
@@ -166,30 +189,40 @@
         {
           "id": "d-q-devices",
           "question": "What's the mix of company-managed devices versus personal, unmanaged, or contractor devices in your organisation?",
-          "purpose": "BYOD and unmanaged endpoints are the biggest gap CEP fills. Users on personal devices are completely outside IT's control today — and most customers haven't fully reckoned with this.",
+          "purpose": "BYOD and unmanaged endpoints are the biggest gap CEP fills. Users on personal devices are completely outside IT's control today \u2014 and most customers haven't fully reckoned with this.",
           "followUps": [
             "How do contractors or temps access your systems?",
             "Can IT push security controls to a personal device?",
             "When a contractor finishes, can you revoke access to data they've already downloaded?"
           ],
-          "keywords": ["byod", "unmanaged", "personal", "device", "contractor", "remote", "laptop", "chromebook", "bring your own"],
+          "keywords": [
+            "byod",
+            "unmanaged",
+            "personal",
+            "device",
+            "contractor",
+            "remote",
+            "laptop",
+            "chromebook",
+            "bring your own"
+          ],
           "industryTips": {
-            "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks — and often completely unaddressed.",
-            "professional-services": "Contractors accessing client data from personal devices is a liability many firms haven't fully addressed — it's a DLP conversation waiting to happen."
+            "retail": "High contractor and seasonal staff turnover means unmanaged device access and offboarding are real risks \u2014 and often completely unaddressed.",
+            "professional-services": "Contractors accessing client data from personal devices is a liability many firms haven't fully addressed \u2014 it's a DLP conversation waiting to happen."
           },
           "answerChips": [
             {
               "id": "high-byod",
               "label": "High BYOD / personal device use",
-              "pitchBullet": "CEP's managed Chrome profile enforces full corporate DLP and security policies inside the browser on personal devices — without MDM, without touching the personal side of the device",
+              "pitchBullet": "CEP's managed Chrome profile enforces full corporate DLP and security policies inside the browser on personal devices \u2014 without MDM, without touching the personal side of the device",
               "sayThis": "Right now, someone on a personal laptop could download your entire customer list to their desktop and IT would never know. CEP stops that without requiring MDM enrollment.",
               "deepDive": {
-                "howItWorks": "CEP deploys a managed Chrome profile through your directory — when a user signs into managed Chrome with their work account on a personal device, the work profile appears. Inside that profile: all DLP controls, safe browsing enforcement, extension restrictions, and site policies apply exactly as they would on a corporate-managed device. Outside that profile — in the user's personal Chrome — nothing changes and nothing is monitored. IT cannot see personal browsing; the user cannot transfer corporate data outside the managed profile.",
+                "howItWorks": "CEP deploys a managed Chrome profile through your directory \u2014 when a user signs into managed Chrome with their work account on a personal device, the work profile appears. Inside that profile: all DLP controls, safe browsing enforcement, extension restrictions, and site policies apply exactly as they would on a corporate-managed device. Outside that profile \u2014 in the user's personal Chrome \u2014 nothing changes and nothing is monitored. IT cannot see personal browsing; the user cannot transfer corporate data outside the managed profile.",
                 "additionalProtections": [
-                  "No MDM enrollment required — the personal device never enters your MDM programme, avoiding privacy and consent complexities",
-                  "Instant revocation — remove the user from your directory and the work profile on their personal device becomes inaccessible immediately",
-                  "Screen capture DLP — prevent screenshots and screen recordings within the managed profile, even on personal devices",
-                  "Download blocking — stop corporate documents being saved to personal device local storage"
+                  "No MDM enrollment required \u2014 the personal device never enters your MDM programme, avoiding privacy and consent complexities",
+                  "Instant revocation \u2014 remove the user from your directory and the work profile on their personal device becomes inaccessible immediately",
+                  "Screen capture DLP \u2014 prevent screenshots and screen recordings within the managed profile, even on personal devices",
+                  "Download blocking \u2014 stop corporate documents being saved to personal device local storage"
                 ],
                 "proofPoint": "Managed profile deployment takes under 5 minutes per user and requires no IT visit or physical access. The user just signs into Chrome with their work account on any device they own."
               }
@@ -197,44 +230,44 @@
             {
               "id": "contractors-third-party",
               "label": "Contractors / third-party access",
-              "pitchBullet": "Managed profiles can be provisioned for contractors in minutes and revoked the instant an engagement ends — no device enrollment, no data left behind",
+              "pitchBullet": "Managed profiles can be provisioned for contractors in minutes and revoked the instant an engagement ends \u2014 no device enrollment, no data left behind",
               "sayThis": "When a contractor finishes, can you revoke access to data they've already downloaded to their personal machine? That's the question most organisations can't answer.",
               "deepDive": {
-                "howItWorks": "Contractor onboarding becomes a directory account creation — Google Workspace or Azure AD. Once created, the work profile appears on any device the contractor uses when they sign in. Your DLP policies, approved app access list, and security controls apply from day one. When the engagement ends, you deactivate the account — the work profile on their device becomes inaccessible immediately and all cached session data is gone. No physical device collection, no forensic verification, no manual data wipe needed.",
+                "howItWorks": "Contractor onboarding becomes a directory account creation \u2014 Google Workspace or Azure AD. Once created, the work profile appears on any device the contractor uses when they sign in. Your DLP policies, approved app access list, and security controls apply from day one. When the engagement ends, you deactivate the account \u2014 the work profile on their device becomes inaccessible immediately and all cached session data is gone. No physical device collection, no forensic verification, no manual data wipe needed.",
                 "additionalProtections": [
-                  "Data never touches the personal device — downloads blocked or silently redirected to corporate cloud storage rather than local disk",
-                  "Session-level access only — contractors access approved web apps without ever touching the corporate network layer",
-                  "Full audit trail — every site visited, file accessed, and download attempted during the engagement, available for review if a dispute arises"
+                  "Data never touches the personal device \u2014 downloads blocked or silently redirected to corporate cloud storage rather than local disk",
+                  "Session-level access only \u2014 contractors access approved web apps without ever touching the corporate network layer",
+                  "Full audit trail \u2014 every site visited, file accessed, and download attempted during the engagement, available for review if a dispute arises"
                 ],
-                "proofPoint": "For a typical 50-contractor engagement, onboarding and offboarding IT overhead drops from 2–3 days of device logistics to under 30 minutes of account management."
+                "proofPoint": "For a typical 50-contractor engagement, onboarding and offboarding IT overhead drops from 2\u20133 days of device logistics to under 30 minutes of account management."
               }
             },
             {
               "id": "no-mdm",
               "label": "No MDM on unmanaged devices",
-              "pitchBullet": "CEP applies corporate IT controls via a single managed Chrome profile — no MDM agent, no device enrollment, no changes to the device at all",
-              "sayThis": "You get full security controls without the MDM overhead. The user just opens a Chrome profile — IT has complete policy control inside it.",
+              "pitchBullet": "CEP applies corporate IT controls via a single managed Chrome profile \u2014 no MDM agent, no device enrollment, no changes to the device at all",
+              "sayThis": "You get full security controls without the MDM overhead. The user just opens a Chrome profile \u2014 IT has complete policy control inside it.",
               "deepDive": {
-                "howItWorks": "MDM manages the device at the OS level — CEP manages the browser at the application level. These are completely separate security layers and CEP requires no MDM. The managed Chrome profile is a user-level construct: the user signs into Chrome with their work account, and policies enforce inside that browser context. No device enrollment, no MDM profile, no user consent for device-level monitoring. The managed profile is sandboxed from the rest of the device — IT controls what happens inside Chrome, nothing else.",
+                "howItWorks": "MDM manages the device at the OS level \u2014 CEP manages the browser at the application level. These are completely separate security layers and CEP requires no MDM. The managed Chrome profile is a user-level construct: the user signs into Chrome with their work account, and policies enforce inside that browser context. No device enrollment, no MDM profile, no user consent for device-level monitoring. The managed profile is sandboxed from the rest of the device \u2014 IT controls what happens inside Chrome, nothing else.",
                 "additionalProtections": [
-                  "Compatible with locked-down devices where MDM enrollment is impossible — customer-owned devices, partner-managed machines, kiosk hardware",
-                  "No device inventory or management overhead — only the browser profile is managed, not the underlying OS",
-                  "If you add MDM later, CEP and MDM policies coexist — CEP handles browser-layer; MDM handles device-layer — without conflict"
+                  "Compatible with locked-down devices where MDM enrollment is impossible \u2014 customer-owned devices, partner-managed machines, kiosk hardware",
+                  "No device inventory or management overhead \u2014 only the browser profile is managed, not the underlying OS",
+                  "If you add MDM later, CEP and MDM policies coexist \u2014 CEP handles browser-layer; MDM handles device-layer \u2014 without conflict"
                 ],
-                "proofPoint": "CEP is the only enterprise security control that works identically on a fully managed corporate laptop, a contractor's personal MacBook, and a Chromebook on a public WiFi network — because security enforces at identity, not at device enrollment."
+                "proofPoint": "CEP is the only enterprise security control that works identically on a fully managed corporate laptop, a contractor's personal MacBook, and a Chromebook on a public WiFi network \u2014 because security enforces at identity, not at device enrollment."
               }
             },
             {
               "id": "seasonal-staff",
               "label": "Seasonal / temporary staff",
-              "pitchBullet": "Managed profiles for temporary staff are provisioned and deprovisioned in minutes — full controls during the engagement, nothing left behind on the device",
+              "pitchBullet": "Managed profiles for temporary staff are provisioned and deprovisioned in minutes \u2014 full controls during the engagement, nothing left behind on the device",
               "sayThis": "Seasonal workers are one of the highest-risk groups for data leakage and credential misuse. Managed profiles fix that with zero infrastructure overhead per user.",
               "deepDive": {
-                "howItWorks": "For each seasonal or temporary worker, you create a time-limited directory account and assign it to a policy group configured for that role. They sign into Chrome with that account on any available device — shared Chromebooks, their own laptop, or a kiosk device — and your policies apply immediately. At season end, deactivate the accounts (or configure automatic expiry). No laptop imaging, no device collection, no account cleanup. For shared devices, each user's session in their work profile is fully isolated from other users' sessions.",
+                "howItWorks": "For each seasonal or temporary worker, you create a time-limited directory account and assign it to a policy group configured for that role. They sign into Chrome with that account on any available device \u2014 shared Chromebooks, their own laptop, or a kiosk device \u2014 and your policies apply immediately. At season end, deactivate the accounts (or configure automatic expiry). No laptop imaging, no device collection, no account cleanup. For shared devices, each user's session in their work profile is fully isolated from other users' sessions.",
                 "additionalProtections": [
-                  "Shared device mode — multiple temporary workers can use the same Chromebook with fully isolated, private sessions",
-                  "Kiosk mode — lock a device to a single application (a warehouse fulfilment tool, a retail POS system) for roles that don't need general browser access",
-                  "Automatic account expiry — set an end date on the account so offboarding happens without any manual IT action at season end"
+                  "Shared device mode \u2014 multiple temporary workers can use the same Chromebook with fully isolated, private sessions",
+                  "Kiosk mode \u2014 lock a device to a single application (a warehouse fulfilment tool, a retail POS system) for roles that don't need general browser access",
+                  "Automatic account expiry \u2014 set an end date on the account so offboarding happens without any manual IT action at season end"
                 ],
                 "proofPoint": "Retailers using CEP for seasonal workforces report 80%+ reduction in IT overhead per seasonal hire compared to traditional Windows device provisioning and decommissioning cycles."
               }
@@ -243,30 +276,40 @@
         },
         {
           "id": "d-q-security",
-          "question": "Has your organisation experienced any security incidents, phishing attempts, or malware in the past 12 months — even near-misses?",
+          "question": "Has your organisation experienced any security incidents, phishing attempts, or malware in the past 12 months \u2014 even near-misses?",
           "purpose": "Establish security as a current, lived business problem rather than a theoretical risk. This is where urgency lives.",
           "followUps": [
-            "What was the impact — downtime, data loss, regulatory exposure?",
+            "What was the impact \u2014 downtime, data loss, regulatory exposure?",
             "Was the browser involved in any of those incidents?",
             "Did you have visibility into what the user was doing in the browser at the time?"
           ],
-          "keywords": ["phishing", "malware", "ransomware", "breach", "incident", "attack", "hack", "security", "compromise"],
+          "keywords": [
+            "phishing",
+            "malware",
+            "ransomware",
+            "breach",
+            "incident",
+            "attack",
+            "hack",
+            "security",
+            "compromise"
+          ],
           "industryTips": {
             "financial-services": "Financial services is the #1 target for phishing globally. Even a near-miss carries significant regulatory and reputational cost.",
-            "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft — ask about those specifically."
+            "technology": "SaaS companies are increasingly targeted via browser-based credential harvesting and OAuth token theft \u2014 ask about those specifically."
           },
           "answerChips": [
             {
               "id": "had-phishing-malware",
               "label": "Had phishing / malware incidents",
-              "pitchBullet": "CEP's real-time threat protection blocks malicious sites and phishing pages at the browser layer — before credentials or data are submitted — not after the fact",
+              "pitchBullet": "CEP's real-time threat protection blocks malicious sites and phishing pages at the browser layer \u2014 before credentials or data are submitted \u2014 not after the fact",
               "sayThis": "The attacker doesn't need to breach your firewall if they can get your user to click a link in Chrome. CEP intercepts that before the user ever reaches the fake login page.",
               "deepDive": {
-                "howItWorks": "CEP's real-time threat protection runs Safe Browsing checks against every URL before the page loads — comparing against Google's continuously updated threat intelligence database of malicious sites, phishing pages, and malware distribution points. For enterprise customers, Enhanced Protection mode sends additional real-time signals for faster detection of novel threats. This happens before any page content is rendered, before any credentials are entered, and before any file is served. It doesn't rely on the user identifying a suspicious URL.",
+                "howItWorks": "CEP's real-time threat protection runs Safe Browsing checks against every URL before the page loads \u2014 comparing against Google's continuously updated threat intelligence database of malicious sites, phishing pages, and malware distribution points. For enterprise customers, Enhanced Protection mode sends additional real-time signals for faster detection of novel threats. This happens before any page content is rendered, before any credentials are entered, and before any file is served. It doesn't rely on the user identifying a suspicious URL.",
                 "additionalProtections": [
-                  "Malware scanning on downloads — files scanned against threat intelligence before they reach the endpoint filesystem",
-                  "Password protection alerts — warns users if they enter a work credential on a non-corporate site, catching credential harvesting in real time",
-                  "Zero-day phishing protection — even brand-new phishing domains with no prior history are risk-scored by ML models and blocked or flagged"
+                  "Malware scanning on downloads \u2014 files scanned against threat intelligence before they reach the endpoint filesystem",
+                  "Password protection alerts \u2014 warns users if they enter a work credential on a non-corporate site, catching credential harvesting in real time",
+                  "Zero-day phishing protection \u2014 even brand-new phishing domains with no prior history are risk-scored by ML models and blocked or flagged"
                 ],
                 "proofPoint": "Google's Safe Browsing protects over 4 billion devices and blocks more than 3 million phishing pages per week. CEP's enterprise tier adds telemetry logging, policy control, and enhanced signals beyond what the consumer version provides."
               }
@@ -274,109 +317,120 @@
             {
               "id": "no-browser-in-ir",
               "label": "Browser not in incident response",
-              "pitchBullet": "CEP logs full browser-layer activity — sites visited, files downloaded, extensions active — giving your security team the forensic evidence needed to investigate fast",
-              "sayThis": "One thing we find consistently: when a breach happens, the browser timeline is the hardest thing to reconstruct. CEP changes that — every session is logged and searchable.",
+              "pitchBullet": "CEP logs full browser-layer activity \u2014 sites visited, files downloaded, extensions active \u2014 giving your security team the forensic evidence needed to investigate fast",
+              "sayThis": "One thing we find consistently: when a breach happens, the browser timeline is the hardest thing to reconstruct. CEP changes that \u2014 every session is logged and searchable.",
               "deepDive": {
-                "howItWorks": "CEP generates structured event logs for every managed browser session — sites visited, extensions installed and removed, file downloads (attempted, blocked, or completed), Safe Browsing events triggered, and password alerts. These logs are retained in Chrome Browser Cloud Management and exportable on demand. For SIEM integration, CEP forwards events via API connector to Chronicle, Splunk, CrowdStrike Falcon, or any SIEM with a webhook receiver — giving your SOC browser events in the same dashboard as endpoint and network telemetry.",
+                "howItWorks": "CEP generates structured event logs for every managed browser session \u2014 sites visited, extensions installed and removed, file downloads (attempted, blocked, or completed), Safe Browsing events triggered, and password alerts. These logs are retained in Chrome Browser Cloud Management and exportable on demand. For SIEM integration, CEP forwards events via API connector to Chronicle, Splunk, CrowdStrike Falcon, or any SIEM with a webhook receiver \u2014 giving your SOC browser events in the same dashboard as endpoint and network telemetry.",
                 "additionalProtections": [
-                  "Timeline reconstruction — for any user, pull a complete browser session history for any date range in seconds",
-                  "Alert policies — configure automatic SOC alerts for high-risk event patterns (e.g., user attempted 50+ file downloads in one hour)",
-                  "Tamper-resistant logging — events are written to Google's infrastructure and cannot be modified by local administrators or compromised devices"
+                  "Timeline reconstruction \u2014 for any user, pull a complete browser session history for any date range in seconds",
+                  "Alert policies \u2014 configure automatic SOC alerts for high-risk event patterns (e.g., user attempted 50+ file downloads in one hour)",
+                  "Tamper-resistant logging \u2014 events are written to Google's infrastructure and cannot be modified by local administrators or compromised devices"
                 ],
-                "proofPoint": "For organisations that have experienced a browser-based breach, the absence of browser logs is consistently the #1 factor cited by incident response teams that extended their investigation timeline — often from days to weeks."
+                "proofPoint": "For organisations that have experienced a browser-based breach, the absence of browser logs is consistently the #1 factor cited by incident response teams that extended their investigation timeline \u2014 often from days to weeks."
               }
             },
             {
               "id": "no-browser-visibility",
               "label": "No visibility into browser activity",
-              "pitchBullet": "CEP feeds browser telemetry directly into Chronicle, Splunk, or your existing SIEM — so browser-layer events appear in your security monitoring alongside network and endpoint events",
-              "sayThis": "You can see network traffic, you can see endpoint events — but between the endpoint and the web, you're currently flying blind. That gap is exactly where modern attacks live.",
+              "pitchBullet": "CEP feeds browser telemetry directly into Chronicle, Splunk, or your existing SIEM \u2014 so browser-layer events appear in your security monitoring alongside network and endpoint events",
+              "sayThis": "You can see network traffic, you can see endpoint events \u2014 but between the endpoint and the web, you're currently flying blind. That gap is exactly where modern attacks live.",
               "deepDive": {
-                "howItWorks": "Chrome Browser Cloud Management provides a fleet-wide telemetry dashboard showing browser versions, installed extensions with risk scores, active policy compliance, Safe Browsing events, and DLP policy triggers — all in real time. The SIEM connector streams structured JSON events to your existing tools on a configurable event type filter — you forward only the signals your SOC cares about to avoid noise. Custom alert rules can be configured directly in the console: for example, 'alert if any user installs an extension with screen-recording permissions' or 'alert if download volume exceeds 500MB in a session.'",
+                "howItWorks": "Chrome Browser Cloud Management provides a fleet-wide telemetry dashboard showing browser versions, installed extensions with risk scores, active policy compliance, Safe Browsing events, and DLP policy triggers \u2014 all in real time. The SIEM connector streams structured JSON events to your existing tools on a configurable event type filter \u2014 you forward only the signals your SOC cares about to avoid noise. Custom alert rules can be configured directly in the console: for example, 'alert if any user installs an extension with screen-recording permissions' or 'alert if download volume exceeds 500MB in a session.'",
                 "additionalProtections": [
-                  "Zero additional endpoint agents — all telemetry is native to Chrome, no instrumentation software to deploy or maintain",
-                  "Policy compliance dashboard — instantly shows which devices and users are non-compliant with which specific policies",
-                  "User risk profiling — surface users who are consistently triggering Safe Browsing or DLP events across sessions"
+                  "Zero additional endpoint agents \u2014 all telemetry is native to Chrome, no instrumentation software to deploy or maintain",
+                  "Policy compliance dashboard \u2014 instantly shows which devices and users are non-compliant with which specific policies",
+                  "User risk profiling \u2014 surface users who are consistently triggering Safe Browsing or DLP events across sessions"
                 ],
-                "proofPoint": "Security teams that instrument the browser layer with CEP telemetry typically discover 3–5x more security events than they were previously capturing — not because threats increased, but because the visibility gap is filled."
+                "proofPoint": "Security teams that instrument the browser layer with CEP telemetry typically discover 3\u20135x more security events than they were previously capturing \u2014 not because threats increased, but because the visibility gap is filled."
               }
             },
             {
               "id": "ransomware-concern",
               "label": "Ransomware / malware download risk",
-              "pitchBullet": "CEP's download controls and malware scanning prevent malicious files reaching the endpoint — configurable by file type, domain, or user group",
-              "sayThis": "Ransomware almost always enters via a browser download or a phishing click. CEP blocks both at the source — before anything reaches the endpoint.",
+              "pitchBullet": "CEP's download controls and malware scanning prevent malicious files reaching the endpoint \u2014 configurable by file type, domain, or user group",
+              "sayThis": "Ransomware almost always enters via a browser download or a phishing click. CEP blocks both at the source \u2014 before anything reaches the endpoint.",
               "deepDive": {
-                "howItWorks": "Ransomware enters enterprise environments via two primary browser vectors: drive-by downloads (malicious files served from compromised or typosquatted sites) and phishing (credential theft leading to remote access or malicious document delivery). CEP intercepts both: Safe Browsing blocks the malicious URL before the file download is initiated; for phishing, the page is blocked before any credentials can be submitted. CEP's download controls add a second layer: you can restrict which file types can be downloaded from which site categories — blocking .exe, .zip, or macro-enabled Office files from uncategorised domains entirely.",
+                "howItWorks": "Ransomware enters enterprise environments via two primary browser vectors: drive-by downloads (malicious files served from compromised or typosquatted sites) and phishing (credential theft leading to remote access or malicious document delivery). CEP intercepts both: Safe Browsing blocks the malicious URL before the file download is initiated; for phishing, the page is blocked before any credentials can be submitted. CEP's download controls add a second layer: you can restrict which file types can be downloaded from which site categories \u2014 blocking .exe, .zip, or macro-enabled Office files from uncategorised domains entirely.",
                 "additionalProtections": [
-                  "Site isolation — Chrome's sandboxed rendering limits what any single page can access on the device, containing potential exploits",
-                  "Block file downloads from non-allowlisted domains — only approved sources can deliver executable or archive content to managed users",
-                  "Rapid response — if a user's profile is suspected compromised, IT can remotely sign them out of managed Chrome across all devices instantly"
+                  "Site isolation \u2014 Chrome's sandboxed rendering limits what any single page can access on the device, containing potential exploits",
+                  "Block file downloads from non-allowlisted domains \u2014 only approved sources can deliver executable or archive content to managed users",
+                  "Rapid response \u2014 if a user's profile is suspected compromised, IT can remotely sign them out of managed Chrome across all devices instantly"
                 ],
-                "proofPoint": "In Verizon's 2024 Data Breach Investigations Report, 68% of breaches involved a human element — primarily phishing clicks or stolen credentials. Both attack types are interceptable at the browser layer before they reach the endpoint or network."
+                "proofPoint": "In Verizon's 2024 Data Breach Investigations Report, 68% of breaches involved a human element \u2014 primarily phishing clicks or stolen credentials. Both attack types are interceptable at the browser layer before they reach the endpoint or network."
               }
             },
             {
               "id": "travelling-remote-vpn",
               "label": "Travelling / remote users, no VPN",
-              "pitchBullet": "CEP enforces security at the browser layer regardless of network — travelling users get the same DLP, phishing protection, and policy enforcement on public WiFi or foreign networks as they would in the office",
-              "sayThis": "VPNs secure the tunnel — they don't control what happens inside the browser once you're through it. CEP's controls live inside Chrome itself, so whether your user is on hotel WiFi in Singapore or a coffee shop in London, the exact same policies apply. No VPN tunnel required for browser-layer protection.",
+              "pitchBullet": "CEP enforces security at the browser layer regardless of network \u2014 travelling users get the same DLP, phishing protection, and policy enforcement on public WiFi or foreign networks as they would in the office",
+              "sayThis": "VPNs secure the tunnel \u2014 they don't control what happens inside the browser once you're through it. CEP's controls live inside Chrome itself, so whether your user is on hotel WiFi in Singapore or a coffee shop in London, the exact same policies apply. No VPN tunnel required for browser-layer protection.",
               "deepDive": {
-                "howItWorks": "CEP's security model is identity-based, not network-based. When a user signs into managed Chrome with their work account, all policies enforce via the browser profile — regardless of what network they're on. Safe browsing runs against every URL, DLP rules apply to every download or upload, extension controls are active, and all events are logged — without traffic routing through a corporate proxy. For advanced zero-trust architectures, CEP integrates with BeyondCorp Enterprise to provide context-aware access: granting or restricting access to corporate apps based on browser management status, user identity, and device posture. No VPN required.",
+                "howItWorks": "CEP's security model is identity-based, not network-based. When a user signs into managed Chrome with their work account, all policies enforce via the browser profile \u2014 regardless of what network they're on. Safe browsing runs against every URL, DLP rules apply to every download or upload, extension controls are active, and all events are logged \u2014 without traffic routing through a corporate proxy. For advanced zero-trust architectures, CEP integrates with BeyondCorp Enterprise to provide context-aware access: granting or restricting access to corporate apps based on browser management status, user identity, and device posture. No VPN required.",
                 "additionalProtections": [
-                  "HTTPS-only enforcement — CEP blocks protocol downgrades that attackers use for man-in-the-middle attacks on public WiFi",
-                  "DNS-over-HTTPS — prevents DNS hijacking on compromised public or hotel networks",
-                  "Certificate transparency — blocks access to sites with invalid or spoofed certificates",
-                  "BeyondCorp context-aware access — replaces VPN with identity + managed-browser verification for Workspace apps"
+                  "HTTPS-only enforcement \u2014 CEP blocks protocol downgrades that attackers use for man-in-the-middle attacks on public WiFi",
+                  "DNS-over-HTTPS \u2014 prevents DNS hijacking on compromised public or hotel networks",
+                  "Certificate transparency \u2014 blocks access to sites with invalid or spoofed certificates",
+                  "BeyondCorp context-aware access \u2014 replaces VPN with identity + managed-browser verification for Workspace apps"
                 ],
-                "proofPoint": "Organisations moving from VPN-based access to CEP + BeyondCorp for remote workers typically reduce VPN helpdesk tickets by 70%+ while improving security posture — access is granted based on identity and browser management status, not network location."
+                "proofPoint": "Organisations moving from VPN-based access to CEP + BeyondCorp for remote workers typically reduce VPN helpdesk tickets by 70%+ while improving security posture \u2014 access is granted based on identity and browser management status, not network location."
               }
             }
           ]
         },
         {
           "id": "d-q-dlp",
-          "question": "What controls do you have today to prevent sensitive data leaving via the browser — downloads to personal devices, uploads to personal cloud storage, copy-paste to external tools?",
+          "question": "What controls do you have today to prevent sensitive data leaving via the browser \u2014 downloads to personal devices, uploads to personal cloud storage, copy-paste to external tools?",
           "purpose": "DLP at the browser layer is a key CEP differentiator. Most organisations realise they have zero controls here once asked directly.",
           "followUps": [
             "What happens if an employee copies a client list to their personal Google Drive or Dropbox?",
             "Can IT audit what's been downloaded from your web applications?",
             "How do you handle contractors who need to access sensitive data?"
           ],
-          "keywords": ["dlp", "data loss", "download", "upload", "copy", "paste", "sensitive", "confidential", "exfiltration", "prevent"],
+          "keywords": [
+            "dlp",
+            "data loss",
+            "download",
+            "upload",
+            "copy",
+            "paste",
+            "sensitive",
+            "confidential",
+            "exfiltration",
+            "prevent"
+          ],
           "industryTips": {
-            "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling — it's a compliance investment, not just security.",
-            "technology": "Source code and IP exfiltration via personal cloud storage is a serious risk for SaaS companies — CEP's DLP controls can block this at the browser layer."
+            "financial-services": "Browser-based DLP maps directly to PCI-DSS 3.x and FCA Consumer Duty expectations around data handling \u2014 it's a compliance investment, not just security.",
+            "technology": "Source code and IP exfiltration via personal cloud storage is a serious risk for SaaS companies \u2014 CEP's DLP controls can block this at the browser layer."
           },
           "answerChips": [
             {
               "id": "no-download-controls",
               "label": "No download controls",
-              "pitchBullet": "CEP enforces download policy by file type, destination, or user group — blocking, logging, or watermarking files as they leave corporate web applications",
+              "pitchBullet": "CEP enforces download policy by file type, destination, or user group \u2014 blocking, logging, or watermarking files as they leave corporate web applications",
               "sayThis": "Right now, anyone could download your entire customer database via the browser to an unmanaged device and IT would never know. CEP stops that and logs every attempt.",
               "deepDive": {
                 "howItWorks": "CEP's DLP download rules are configured in Chrome Admin Console and enforce at the browser profile level. Rules can trigger based on: file type (block .xlsx, .pdf, .csv), source domain (block downloads from non-corporate cloud storage), destination (block to local storage on unmanaged devices), or content inspection (CEP's DLP scanner detects credit card patterns, NI numbers, or custom regex in files being downloaded). When a rule fires, the download is blocked or redirected, a configurable policy message is shown to the user, and the event is logged with full context.",
                 "additionalProtections": [
-                  "Watermarking mode — instead of blocking, silently add a visible watermark to sensitive documents on download so exfiltrated files are traceable back to the source user",
-                  "Print DLP — apply the same controls to printing sensitive web app content",
-                  "Clipboard DLP — simultaneously block copy-paste of content from the same sensitive pages"
+                  "Watermarking mode \u2014 instead of blocking, silently add a visible watermark to sensitive documents on download so exfiltrated files are traceable back to the source user",
+                  "Print DLP \u2014 apply the same controls to printing sensitive web app content",
+                  "Clipboard DLP \u2014 simultaneously block copy-paste of content from the same sensitive pages"
                 ],
-                "proofPoint": "Most organisations find, after deploying CEP DLP rules, that 5–10 downloads per user per week would have been flagged by a standard policy — many of which the user making the download wouldn't have considered a policy issue."
+                "proofPoint": "Most organisations find, after deploying CEP DLP rules, that 5\u201310 downloads per user per week would have been flagged by a standard policy \u2014 many of which the user making the download wouldn't have considered a policy issue."
               }
             },
             {
               "id": "no-cloud-upload-controls",
               "label": "No personal cloud upload controls",
-              "pitchBullet": "CEP blocks or alerts on uploads to personal cloud storage — personal Google Drive, Dropbox, OneDrive — while allowing approved corporate destinations through",
-              "sayThis": "If someone copies a confidential document to their personal Dropbox right now, would IT know? CEP blocks that and records the attempt — silently, with no user friction.",
+              "pitchBullet": "CEP blocks or alerts on uploads to personal cloud storage \u2014 personal Google Drive, Dropbox, OneDrive \u2014 while allowing approved corporate destinations through",
+              "sayThis": "If someone copies a confidential document to their personal Dropbox right now, would IT know? CEP blocks that and records the attempt \u2014 silently, with no user friction.",
               "deepDive": {
-                "howItWorks": "CEP monitors all file upload events at the browser layer and can block uploads to specific domains — personal Google Drive (drive.google.com) while allowing the corporate Workspace domain, Dropbox, Box, WeTransfer, or any domain not on an approved allowlist. The control is in the browser, not at the network layer — it applies on home networks, mobile hotspots, and public WiFi where a corporate proxy would not intercept the traffic. The user sees a configurable policy message; the attempt is logged for the security team.",
+                "howItWorks": "CEP monitors all file upload events at the browser layer and can block uploads to specific domains \u2014 personal Google Drive (drive.google.com) while allowing the corporate Workspace domain, Dropbox, Box, WeTransfer, or any domain not on an approved allowlist. The control is in the browser, not at the network layer \u2014 it applies on home networks, mobile hotspots, and public WiFi where a corporate proxy would not intercept the traffic. The user sees a configurable policy message; the attempt is logged for the security team.",
                 "additionalProtections": [
-                  "Real-time content scanning — detect whether a file being uploaded contains sensitive data patterns before the upload is blocked or allowed",
-                  "Approved channels enforcement — users are automatically guided to use corporate Workspace, SharePoint, or Teams instead of blocked personal destinations",
-                  "DLP incident dashboard — all blocked upload attempts visible to the security team in real time, with user, file type, and destination recorded"
+                  "Real-time content scanning \u2014 detect whether a file being uploaded contains sensitive data patterns before the upload is blocked or allowed",
+                  "Approved channels enforcement \u2014 users are automatically guided to use corporate Workspace, SharePoint, or Teams instead of blocked personal destinations",
+                  "DLP incident dashboard \u2014 all blocked upload attempts visible to the security team in real time, with user, file type, and destination recorded"
                 ],
-                "proofPoint": "For organisations with significant contractor populations, upload controls are often the single highest-impact CEP DLP control — they close the personal cloud exfiltration channel that traditional network-layer DLP tools miss when users are on home or mobile networks."
+                "proofPoint": "For organisations with significant contractor populations, upload controls are often the single highest-impact CEP DLP control \u2014 they close the personal cloud exfiltration channel that traditional network-layer DLP tools miss when users are on home or mobile networks."
               }
             },
             {
@@ -385,26 +439,26 @@
               "pitchBullet": "CEP's clipboard policies prevent sensitive data being copied from corporate web apps and pasted into personal apps, emails, or unapproved external tools",
               "sayThis": "Copy-paste is the most underestimated data exfiltration channel. A user can walk out with an entire salary spreadsheet in their clipboard, and nothing flags it today.",
               "deepDive": {
-                "howItWorks": "CEP's clipboard DLP policy can prevent copy operations from within specified web applications — block copy-paste from your HR system, CRM, banking portal, or any designated sensitive web app to applications outside the managed Chrome profile. You can allow copy within the managed profile (internal app to internal app) while blocking paste to personal email drafts, external tools, Slack, or AI assistants. Controls are configurable by source application URL pattern, destination type, or data content classification.",
+                "howItWorks": "CEP's clipboard DLP policy can prevent copy operations from within specified web applications \u2014 block copy-paste from your HR system, CRM, banking portal, or any designated sensitive web app to applications outside the managed Chrome profile. You can allow copy within the managed profile (internal app to internal app) while blocking paste to personal email drafts, external tools, Slack, or AI assistants. Controls are configurable by source application URL pattern, destination type, or data content classification.",
                 "additionalProtections": [
-                  "Screenshot prevention — block Print Screen and screenshotting tools within the managed profile for applications designated as sensitive",
-                  "Print restriction — prevent printing from specific web applications that handle confidential data",
-                  "Session recording for privileged roles — optional full session recording for administrator or finance accounts accessing sensitive applications, with audit trail"
+                  "Screenshot prevention \u2014 block Print Screen and screenshotting tools within the managed profile for applications designated as sensitive",
+                  "Print restriction \u2014 prevent printing from specific web applications that handle confidential data",
+                  "Session recording for privileged roles \u2014 optional full session recording for administrator or finance accounts accessing sensitive applications, with audit trail"
                 ],
-                "proofPoint": "Clipboard-based data exfiltration generates zero network traffic — it is completely invisible to DLP systems that inspect packets or proxy connections. It is only catchable at the browser layer, which is exactly where CEP enforces."
+                "proofPoint": "Clipboard-based data exfiltration generates zero network traffic \u2014 it is completely invisible to DLP systems that inspect packets or proxy connections. It is only catchable at the browser layer, which is exactly where CEP enforces."
               }
             },
             {
               "id": "no-audit-trail",
               "label": "No data movement audit trail",
-              "pitchBullet": "CEP generates a full audit log of browser-layer data events — downloads, uploads, clipboard use — ready for compliance reporting and forensic investigation",
-              "sayThis": "When your auditor asks 'how do you know sensitive data isn't leaving via the browser?' — this is the answer. CEP gives you the evidence trail that's currently missing.",
+              "pitchBullet": "CEP generates a full audit log of browser-layer data events \u2014 downloads, uploads, clipboard use \u2014 ready for compliance reporting and forensic investigation",
+              "sayThis": "When your auditor asks 'how do you know sensitive data isn't leaving via the browser?' \u2014 this is the answer. CEP gives you the evidence trail that's currently missing.",
               "deepDive": {
                 "howItWorks": "CEP generates structured audit events for every DLP-relevant browser action: file downloads (allowed and blocked), file uploads, clipboard operations in restricted apps, print events, and Safe Browsing triggers. Each event includes user identity, device identifier, timestamp, source URL, file name and type, and the specific policy that triggered. Events are retained in Chrome Browser Cloud Management and can be exported via API or forwarded to a SIEM. For compliance reporting, queries like 'show all download events for user X in the last 30 days' execute in seconds.",
                 "additionalProtections": [
-                  "Immutable log storage — events are written to Google's infrastructure and cannot be modified by local IT administrators or compromised accounts",
+                  "Immutable log storage \u2014 events are written to Google's infrastructure and cannot be modified by local IT administrators or compromised accounts",
                   "Pre-built compliance report templates for PCI-DSS, ISO 27001, FCA, and SOC 2 audit requirements",
-                  "Automated alert escalation — configure notifications to the security team or compliance officer for high-severity DLP events in real time"
+                  "Automated alert escalation \u2014 configure notifications to the security team or compliance officer for high-severity DLP events in real time"
                 ],
                 "proofPoint": "A financial services customer using CEP produced all browser-layer evidence required for a PCI audit in 4 hours. Without CEP, their prior audit required 3 weeks of manual log reconstruction from proxy and endpoint data that still had significant gaps."
               }
@@ -413,56 +467,65 @@
         },
         {
           "id": "d-q-it-visibility",
-          "question": "Does your IT team have any visibility into what's happening inside the browser today — sites visited, extensions installed, file downloads, data transfers?",
-          "purpose": "Surface the visibility gap. IT can often see the network perimeter but is completely blind inside the browser — this is the insight that creates urgency.",
+          "question": "Does your IT team have any visibility into what's happening inside the browser today \u2014 sites visited, extensions installed, file downloads, data transfers?",
+          "purpose": "Surface the visibility gap. IT can often see the network perimeter but is completely blind inside the browser \u2014 this is the insight that creates urgency.",
           "followUps": [
             "If a user installs a malicious extension today, would IT know?",
             "Is browser activity included in your SIEM or security monitoring?",
             "How long would it take to detect a data exfiltration via the browser?"
           ],
-          "keywords": ["visibility", "monitoring", "siem", "audit", "extension", "logs", "telemetry", "insight"],
+          "keywords": [
+            "visibility",
+            "monitoring",
+            "siem",
+            "audit",
+            "extension",
+            "logs",
+            "telemetry",
+            "insight"
+          ],
           "answerChips": [
             {
               "id": "no-browser-logging",
               "label": "No browser event logging",
-              "pitchBullet": "CEP reports browser telemetry to Chronicle, Splunk, or any SIEM — extension events, download attempts, safe browsing blocks — all visible in existing security dashboards",
-              "sayThis": "You can see your firewalls, your endpoints, your cloud logs — but inside the browser, you're currently blind. CEP fills that last mile of visibility.",
+              "pitchBullet": "CEP reports browser telemetry to Chronicle, Splunk, or any SIEM \u2014 extension events, download attempts, safe browsing blocks \u2014 all visible in existing security dashboards",
+              "sayThis": "You can see your firewalls, your endpoints, your cloud logs \u2014 but inside the browser, you're currently blind. CEP fills that last mile of visibility.",
               "deepDive": {
-                "howItWorks": "Chrome Browser Cloud Management collects and forwards structured telemetry events via a connector to your SIEM. Event types include: URL visited (with Google-classified category), extension installs and removals, download events (allowed and blocked), Safe Browsing trigger events, DLP policy fires, and password alerts. The connector supports Chronicle (native Google integration), Splunk (via HTTP Event Collector), and any SIEM with an API or webhook receiver. Initial connector setup takes 1–2 hours; once live, browser events appear in your existing dashboards alongside endpoint and network events.",
+                "howItWorks": "Chrome Browser Cloud Management collects and forwards structured telemetry events via a connector to your SIEM. Event types include: URL visited (with Google-classified category), extension installs and removals, download events (allowed and blocked), Safe Browsing trigger events, DLP policy fires, and password alerts. The connector supports Chronicle (native Google integration), Splunk (via HTTP Event Collector), and any SIEM with an API or webhook receiver. Initial connector setup takes 1\u20132 hours; once live, browser events appear in your existing dashboards alongside endpoint and network events.",
                 "additionalProtections": [
-                  "Custom event filters — forward only high-priority events to your SIEM to avoid alert fatigue and reduce ingest costs",
-                  "User behaviour analytics ready — browser telemetry feeds UEBA models with session data to identify anomalous user activity patterns",
-                  "Raw log export for retention — export full event logs to your own cloud storage for long-term compliance archiving"
+                  "Custom event filters \u2014 forward only high-priority events to your SIEM to avoid alert fatigue and reduce ingest costs",
+                  "User behaviour analytics ready \u2014 browser telemetry feeds UEBA models with session data to identify anomalous user activity patterns",
+                  "Raw log export for retention \u2014 export full event logs to your own cloud storage for long-term compliance archiving"
                 ],
-                "proofPoint": "SOC teams that add CEP browser telemetry to their SIEM typically see mean-time-to-detect on browser-based threats drop from weeks to hours — the gap in telemetry is filled, and previously invisible events start generating alerts."
+                "proofPoint": "SOC teams that add CEP browser telemetry to their SIEM typically see mean-time-to-detect on browser-based threats drop from weeks to hours \u2014 the gap in telemetry is filled, and previously invisible events start generating alerts."
               }
             },
             {
               "id": "no-extension-audit",
               "label": "No extension inventory / audit",
-              "pitchBullet": "CEP gives IT a real-time inventory of every extension installed across the entire fleet — risk-scored, flagged, and controllable centrally from one dashboard",
+              "pitchBullet": "CEP gives IT a real-time inventory of every extension installed across the entire fleet \u2014 risk-scored, flagged, and controllable centrally from one dashboard",
               "sayThis": "If I asked you right now what extensions your 200 users have installed, could you answer? One of those could be logging every keystroke on every web app they open.",
               "deepDive": {
-                "howItWorks": "The Chrome Admin Console provides a continuously updated inventory of every extension installed across your managed fleet. For each extension you see: name, version, publisher, Chrome Web Store link, permissions requested (plain-language, e.g., 'read and change all data on all websites'), install date, and user and device counts. You can block a specific extension by ID with a single click — the extension is removed from all affected devices within 15 minutes. Allowlist mode prevents any new extension installs without explicit IT approval — users are shown a request flow instead.",
+                "howItWorks": "The Chrome Admin Console provides a continuously updated inventory of every extension installed across your managed fleet. For each extension you see: name, version, publisher, Chrome Web Store link, permissions requested (plain-language, e.g., 'read and change all data on all websites'), install date, and user and device counts. You can block a specific extension by ID with a single click \u2014 the extension is removed from all affected devices within 15 minutes. Allowlist mode prevents any new extension installs without explicit IT approval \u2014 users are shown a request flow instead.",
                 "additionalProtections": [
-                  "New extension install alerts — get an immediate notification when any managed user installs an extension not on your approved list",
-                  "Extension permission change monitoring — flag when a trusted extension receives an update that expands its permission scope",
-                  "Shadow IT discovery — extensions reveal unsanctioned tools in use: personal AI writing assistants reading document content, personal cloud storage sync tools, productivity trackers"
+                  "New extension install alerts \u2014 get an immediate notification when any managed user installs an extension not on your approved list",
+                  "Extension permission change monitoring \u2014 flag when a trusted extension receives an update that expands its permission scope",
+                  "Shadow IT discovery \u2014 extensions reveal unsanctioned tools in use: personal AI writing assistants reading document content, personal cloud storage sync tools, productivity trackers"
                 ],
-                "proofPoint": "In a typical 500-seat first extension audit, organisations discover an average of 12–15 high-risk extensions installed across the fleet — including screen recorders, in-browser credential vaults, and personal productivity extensions with permissions to read all page content."
+                "proofPoint": "In a typical 500-seat first extension audit, organisations discover an average of 12\u201315 high-risk extensions installed across the fleet \u2014 including screen recorders, in-browser credential vaults, and personal productivity extensions with permissions to read all page content."
               }
             },
             {
               "id": "slow-anomaly-detection",
               "label": "Slow to detect anomalies",
-              "pitchBullet": "CEP's analytics flag anomalous patterns — unusual download spikes, new extension installs, access to blocked categories — in real time, not days later in a log review",
+              "pitchBullet": "CEP's analytics flag anomalous patterns \u2014 unusual download spikes, new extension installs, access to blocked categories \u2014 in real time, not days later in a log review",
               "sayThis": "The average time to detect a browser-based breach is 197 days. CEP compresses that dramatically because it's watching in real time, not flagging after the fact.",
               "deepDive": {
-                "howItWorks": "CEP's reporting dashboard includes pre-built anomaly detection views for the most common high-risk patterns: large download volume spikes, access to blocked site categories, DLP policy trigger clusters, and new extension installs across multiple users simultaneously. Custom alert rules are configured in the console using event type and threshold criteria — for example, 'fire alert if any user attempts to download more than 50 files within one hour' or 'alert if download volume from any single user exceeds 500MB in a session.' Alerts fire in real time and can route to email, webhook, or your SIEM.",
+                "howItWorks": "CEP's reporting dashboard includes pre-built anomaly detection views for the most common high-risk patterns: large download volume spikes, access to blocked site categories, DLP policy trigger clusters, and new extension installs across multiple users simultaneously. Custom alert rules are configured in the console using event type and threshold criteria \u2014 for example, 'fire alert if any user attempts to download more than 50 files within one hour' or 'alert if download volume from any single user exceeds 500MB in a session.' Alerts fire in real time and can route to email, webhook, or your SIEM.",
                 "additionalProtections": [
-                  "UEBA integration — browser activity patterns feed directly into User and Entity Behaviour Analytics tools (CrowdStrike Falcon, Splunk UBA, Microsoft Sentinel) if deployed",
-                  "Peer group baseline comparison — flag users who deviate significantly from their cohort's browser behaviour patterns",
-                  "Time-based access policies — restrict access to sensitive site categories or applications outside defined business hours"
+                  "UEBA integration \u2014 browser activity patterns feed directly into User and Entity Behaviour Analytics tools (CrowdStrike Falcon, Splunk UBA, Microsoft Sentinel) if deployed",
+                  "Peer group baseline comparison \u2014 flag users who deviate significantly from their cohort's browser behaviour patterns",
+                  "Time-based access policies \u2014 restrict access to sensitive site categories or applications outside defined business hours"
                 ],
                 "proofPoint": "The median time to detect insider threats via traditional log review is 197 days. With real-time browser-layer alerting configured in CEP, anomalous data exfiltration patterns are typically flagged within 24 hours."
               }
@@ -470,16 +533,16 @@
             {
               "id": "compliance-visibility-gap",
               "label": "Compliance visibility gap",
-              "pitchBullet": "CEP audit logs satisfy browser-layer visibility requirements in PCI-DSS, FCA, SOC2, and ISO27001 — with exportable reports ready for auditors",
-              "sayThis": "When the auditor asks 'show me your browser controls' — most organisations have nothing to show. CEP makes that question very easy to answer.",
+              "pitchBullet": "CEP audit logs satisfy browser-layer visibility requirements in PCI-DSS, FCA, SOC2, and ISO27001 \u2014 with exportable reports ready for auditors",
+              "sayThis": "When the auditor asks 'show me your browser controls' \u2014 most organisations have nothing to show. CEP makes that question very easy to answer.",
               "deepDive": {
                 "howItWorks": "CEP provides exportable audit evidence covering the browser-layer control requirements most commonly cited in enterprise compliance frameworks. PCI-DSS: cardholder data access controls, download restrictions, and audit logs for web application access. FCA and UK financial regulation: data handling evidence, DLP controls, and user activity logs. SOC 2: logical access controls, DLP configuration evidence, and security event logs. ISO 27001: browser security policy enforcement documentation and continuous monitoring evidence. All reports are generated from Chrome Browser Cloud Management and can be exported in CSV or accessed via API for automated evidence collection.",
                 "additionalProtections": [
-                  "Policy attestation reports — document which security policies are active, enforced, and applied to which user groups at any point in time",
-                  "Chrome Security Assessment — Google's tooling shows your current browser security posture against CIS benchmark baselines with remediation recommendations",
-                  "Auditor-ready dashboards — pre-built report views designed for evidence submission format, not just internal monitoring use"
+                  "Policy attestation reports \u2014 document which security policies are active, enforced, and applied to which user groups at any point in time",
+                  "Chrome Security Assessment \u2014 Google's tooling shows your current browser security posture against CIS benchmark baselines with remediation recommendations",
+                  "Auditor-ready dashboards \u2014 pre-built report views designed for evidence submission format, not just internal monitoring use"
                 ],
-                "proofPoint": "A financial services firm using CEP reduced their browser security audit preparation time from three weeks of manual log reconstruction to four hours of report export — the evidence is pre-structured, timestamped, and available on demand."
+                "proofPoint": "A financial services firm using CEP reduced their browser security audit preparation time from three weeks of manual log reconstruction to four hours of report export \u2014 the evidence is pre-structured, timestamped, and available on demand."
               }
             }
           ]
@@ -500,66 +563,114 @@
         {
           "id": "p-tp-cep",
           "title": "Chrome Enterprise Premium: the browser is your new security perimeter",
-          "content": "Your team already spends 80%+ of their working day in a browser. Chrome Enterprise Premium turns that surface into a zero-trust security perimeter — policy-controlled, threat-protected, and DLP-enforced. No VPN required. No new hardware. Deploys to existing Chrome browsers in hours.",
+          "content": "Your team already spends 80%+ of their working day in a browser. Chrome Enterprise Premium turns that surface into a zero-trust security perimeter \u2014 policy-controlled, threat-protected, and DLP-enforced. No VPN required. No new hardware. Deploys to existing Chrome browsers in hours.",
           "tips": [
-            "Lead with: 'The browser is now the #1 attack surface — yet most security budgets allocate less than 10% to it'",
-            "Ask: 'What does your current security stack cost per user vs. what CEP adds — and what's the cost of one incident?'",
+            "Lead with: 'The browser is now the #1 attack surface \u2014 yet most security budgets allocate less than 10% to it'",
+            "Ask: 'What does your current security stack cost per user vs. what CEP adds \u2014 and what's the cost of one incident?'",
             "For Google Workspace customers: mention they may already have entitlements included"
           ],
-          "keywords": ["zero trust", "security", "browser", "vpn", "dlp", "policy", "threat", "phishing"],
+          "keywords": [
+            "zero trust",
+            "security",
+            "browser",
+            "vpn",
+            "dlp",
+            "policy",
+            "threat",
+            "phishing"
+          ],
           "industryTips": {
-            "financial-services": "CEP's DLP and screen-capture controls map directly to PCI-DSS and FCA requirements — frame it as a compliance investment. Regulators are increasingly asking about browser controls.",
-            "technology": "For SaaS companies, CEP protects against OAuth token theft and credential harvesting — the #1 attack vector against tech-forward teams."
+            "financial-services": "CEP's DLP and screen-capture controls map directly to PCI-DSS and FCA requirements \u2014 frame it as a compliance investment. Regulators are increasingly asking about browser controls.",
+            "technology": "For SaaS companies, CEP protects against OAuth token theft and credential harvesting \u2014 the #1 attack vector against tech-forward teams."
           }
         },
         {
           "id": "p-tp-cameyo",
-          "title": "Cameyo: your Windows apps in a Chrome tab — no Citrix, no VDI infrastructure",
-          "content": "Any application that runs on Windows can be delivered as a web app via Cameyo. Users open a Chrome tab, the app streams from the cloud. No servers to build or maintain. No client software to install. Typical deployment: days, not months. Customers replace Citrix at 40–60% lower TCO.",
+          "title": "Cameyo: your Windows apps in a Chrome tab \u2014 no Citrix, no VDI infrastructure",
+          "content": "Any application that runs on Windows can be delivered as a web app via Cameyo. Users open a Chrome tab, the app streams from the cloud. No servers to build or maintain. No client software to install. Typical deployment: days, not months. Customers replace Citrix at 40\u201360% lower TCO.",
           "tips": [
-            "If they have Citrix: get the per-seat cost before presenting Cameyo pricing — the TCO comparison is the close",
-            "Key message: 'Your users don't change anything — the Windows app just opens in a tab'",
+            "If they have Citrix: get the per-seat cost before presenting Cameyo pricing \u2014 the TCO comparison is the close",
+            "Key message: 'Your users don't change anything \u2014 the Windows app just opens in a tab'",
             "Speed angle: 'You could have 10 users running [specific app name] by end of this week'"
           ],
-          "keywords": ["citrix", "vdi", "rdp", "rds", "windows", "legacy", "application", "vmware", "infrastructure", "tco"],
+          "keywords": [
+            "citrix",
+            "vdi",
+            "rdp",
+            "rds",
+            "windows",
+            "legacy",
+            "application",
+            "vmware",
+            "infrastructure",
+            "tco"
+          ],
           "industryTips": {
-            "manufacturing": "Position as a Citrix replacement for ERP and MES access — especially for shop floor workers who need one app, not a full Windows desktop.",
-            "retail": "Ideal for delivering back-office and POS management tools to Chromebooks or thin clients in stores — zero Windows infrastructure required."
+            "manufacturing": "Position as a Citrix replacement for ERP and MES access \u2014 especially for shop floor workers who need one app, not a full Windows desktop.",
+            "retail": "Ideal for delivering back-office and POS management tools to Chromebooks or thin clients in stores \u2014 zero Windows infrastructure required."
           }
         },
         {
           "id": "p-tp-byod",
-          "title": "Corporate browser controls on personal and unmanaged devices — without touching the device",
+          "title": "Corporate browser controls on personal and unmanaged devices \u2014 without touching the device",
           "content": "For BYOD, contractor, and remote workers, CEP deploys a managed Chrome profile that enforces corporate policies within the browser, while leaving the personal side of the device completely untouched. Users get their personal Chrome profile; IT controls the work profile. The change is invisible to users; the control is real for IT.",
           "tips": [
-            "This is often the 'wow' moment for HR and legal — corporate DLP on personal devices without MDM is a novel concept for most customers",
-            "Ask first: 'What's your current policy for contractors accessing client data from their own laptop?' — silence is the answer you want"
+            "This is often the 'wow' moment for HR and legal \u2014 corporate DLP on personal devices without MDM is a novel concept for most customers",
+            "Ask first: 'What's your current policy for contractors accessing client data from their own laptop?' \u2014 silence is the answer you want"
           ],
-          "keywords": ["byod", "contractor", "unmanaged", "personal", "profile", "mdm", "bring your own device"]
+          "keywords": [
+            "byod",
+            "contractor",
+            "unmanaged",
+            "personal",
+            "profile",
+            "mdm",
+            "bring your own device"
+          ]
         },
         {
           "id": "p-tp-deployment",
-          "title": "Hours to deploy — not a 6-month infrastructure project",
-          "content": "CEP policy rollout to existing Chrome browsers takes hours. If the customer is on Google Workspace, many settings are pre-configured. Cameyo app onboarding is days. Compare that to a Citrix or traditional VDI rollout — which typically runs 3–9 months and requires dedicated infrastructure teams.",
+          "title": "Hours to deploy \u2014 not a 6-month infrastructure project",
+          "content": "CEP policy rollout to existing Chrome browsers takes hours. If the customer is on Google Workspace, many settings are pre-configured. Cameyo app onboarding is days. Compare that to a Citrix or traditional VDI rollout \u2014 which typically runs 3\u20139 months and requires dedicated infrastructure teams.",
           "tips": [
             "Speed is a major differentiator vs. legacy security and virtualisation vendors",
             "Good pilot close: 'What if we had 10 users running [specific use case] by end of next week?'",
             "For sceptical IT buyers: low-risk pilot is more compelling than a long business case"
           ],
-          "keywords": ["deploy", "rollout", "pilot", "implementation", "timeline", "fast", "quick", "speed"]
+          "keywords": [
+            "deploy",
+            "rollout",
+            "pilot",
+            "implementation",
+            "timeline",
+            "fast",
+            "quick",
+            "speed"
+          ]
         },
         {
           "id": "p-tp-integration",
-          "title": "Works with what you already have — Google Workspace or Microsoft",
+          "title": "Works with what you already have \u2014 Google Workspace or Microsoft",
           "content": "For Google Workspace customers, the Chrome Admin Console is included and may already have licences. For Microsoft-first environments, CEP integrates with Entra ID (Azure AD) via SAML/SCIM and works alongside Intune for device context. No new identity platform. No rip-and-replace.",
           "tips": [
-            "For Workspace customers: 'You may already be paying for this — let's check your entitlements'",
-            "For Microsoft shops: don't fight the stack — show how CEP augments Entra and Intune rather than replacing them",
+            "For Workspace customers: 'You may already be paying for this \u2014 let's check your entitlements'",
+            "For Microsoft shops: don't fight the stack \u2014 show how CEP augments Entra and Intune rather than replacing them",
             "Cameyo similarly integrates with Azure AD and Okta for SSO"
           ],
-          "keywords": ["workspace", "google", "microsoft", "intune", "azure ad", "entra", "saml", "sso", "okta", "integration"],
+          "keywords": [
+            "workspace",
+            "google",
+            "microsoft",
+            "intune",
+            "azure ad",
+            "entra",
+            "saml",
+            "sso",
+            "okta",
+            "integration"
+          ],
           "industryTips": {
-            "technology": "SaaS-native companies on Google Workspace likely already own the Chrome Admin Console — CEP is an uplift to infrastructure they're already paying for."
+            "technology": "SaaS-native companies on Google Workspace likely already own the Chrome Admin Console \u2014 CEP is an uplift to infrastructure they're already paying for."
           }
         }
       ],
@@ -569,7 +680,7 @@
       "id": "objections",
       "name": "Objections",
       "order": 3,
-      "description": "Address concerns about incumbent solutions, cost, change management, and IT complexity. Stay curious — every objection is information.",
+      "description": "Address concerns about incumbent solutions, cost, change management, and IT complexity. Stay curious \u2014 every objection is information.",
       "color": "orange",
       "icon": "ShieldAlert",
       "questions": [],
@@ -578,69 +689,126 @@
         {
           "id": "o-intune",
           "objection": "We already manage endpoints with Intune / SCCM / MDM",
-          "response": "Intune manages the device — what happens inside the browser is invisible to it. CEP fills exactly that gap: browser-layer DLP, threat protection, and policy enforcement that Intune simply can't see. They're additive, not competing. Intune handles device compliance; CEP handles what happens at the application layer. You keep everything you have and gain visibility where you currently have none.",
+          "response": "Intune manages the device \u2014 what happens inside the browser is invisible to it. CEP fills exactly that gap: browser-layer DLP, threat protection, and policy enforcement that Intune simply can't see. They're additive, not competing. Intune handles device compliance; CEP handles what happens at the application layer. You keep everything you have and gain visibility where you currently have none.",
           "tips": [
             "Ask: 'Can Intune tell you what your users are downloading from the web today?'",
-            "The 'additive, not competing' framing is essential — don't position as a replacement",
+            "The 'additive, not competing' framing is essential \u2014 don't position as a replacement",
             "Follow up with the visibility gap question: 'If a user installs a malicious extension tomorrow, how long until IT knows?'"
           ],
-          "keywords": ["intune", "sccm", "mdm", "endpoint", "device management", "microsoft", "already have"]
+          "keywords": [
+            "intune",
+            "sccm",
+            "mdm",
+            "endpoint",
+            "device management",
+            "microsoft",
+            "already have"
+          ]
         },
         {
           "id": "o-edge",
-          "objection": "We're a Microsoft shop — we use Edge / M365 / Azure",
-          "response": "Completely valid — and CEP is built for exactly this. It integrates natively with Entra ID, Intune, and Azure AD, so you're not abandoning Microsoft; you're adding a browser-layer security control that augments your existing stack. Managed Chrome and managed Edge can also coexist on the same machine for different use cases. A 30-day pilot on 10 users costs nothing to find out whether the added security layer is worth it.",
+          "objection": "We're a Microsoft shop \u2014 we use Edge / M365 / Azure",
+          "response": "Completely valid \u2014 and CEP is built for exactly this. It integrates natively with Entra ID, Intune, and Azure AD, so you're not abandoning Microsoft; you're adding a browser-layer security control that augments your existing stack. Managed Chrome and managed Edge can also coexist on the same machine for different use cases. A 30-day pilot on 10 users costs nothing to find out whether the added security layer is worth it.",
           "tips": [
-            "Never fight the Microsoft stack — always position as complementary",
+            "Never fight the Microsoft stack \u2014 always position as complementary",
             "If Edge commitment is immovable, pivot to Cameyo as the entry point instead",
             "Key question: 'Does managed Edge give you DLP controls at the browser layer today?'"
           ],
-          "keywords": ["microsoft", "edge", "m365", "office 365", "azure", "teams", "entra", "microsoft shop"]
+          "keywords": [
+            "microsoft",
+            "edge",
+            "m365",
+            "office 365",
+            "azure",
+            "teams",
+            "entra",
+            "microsoft shop"
+          ]
         },
         {
           "id": "o-vdi-painful",
           "objection": "We tried VDI / Citrix before and it was too complex or expensive",
-          "response": "That pain is exactly why Cameyo was built. Traditional VDI means servers, sizing, licensing, and months of project work. Cameyo is fully SaaS — no infrastructure to build or maintain, no upfront capital spend. Customers go from decision to users streaming apps in under a week. The complexity and cost you experienced with Citrix is the specific problem Cameyo eliminates.",
+          "response": "That pain is exactly why Cameyo was built. Traditional VDI means servers, sizing, licensing, and months of project work. Cameyo is fully SaaS \u2014 no infrastructure to build or maintain, no upfront capital spend. Customers go from decision to users streaming apps in under a week. The complexity and cost you experienced with Citrix is the specific problem Cameyo eliminates.",
           "tips": [
-            "Validate the pain first: 'What made it painful — cost, performance, ongoing maintenance?'",
+            "Validate the pain first: 'What made it painful \u2014 cost, performance, ongoing maintenance?'",
             "Then: 'What if you could deliver the same apps with no servers and no infrastructure team?'",
-            "Offer a proof: 'We could have a test environment running in 24 hours — want to see it?'"
+            "Offer a proof: 'We could have a test environment running in 24 hours \u2014 want to see it?'"
           ],
-          "keywords": ["vdi", "citrix", "vmware", "rdp", "painful", "complex", "expensive", "failed", "tried before", "infrastructure"]
+          "keywords": [
+            "vdi",
+            "citrix",
+            "vmware",
+            "rdp",
+            "painful",
+            "complex",
+            "expensive",
+            "failed",
+            "tried before",
+            "infrastructure"
+          ]
         },
         {
           "id": "o-change-mgmt",
           "objection": "My users won't change browsers / we can't force a tool change on the business",
-          "response": "Users don't change anything. CEP deploys as a managed profile alongside their existing Chrome install — they keep their bookmarks, extensions, history, and muscle memory. For Cameyo, the Windows app opens in a Chrome tab. Most users don't know they're in a virtual session. The change is entirely invisible to end users; the security control is entirely visible to IT. That's the point.",
+          "response": "Users don't change anything. CEP deploys as a managed profile alongside their existing Chrome install \u2014 they keep their bookmarks, extensions, history, and muscle memory. For Cameyo, the Windows app opens in a Chrome tab. Most users don't know they're in a virtual session. The change is entirely invisible to end users; the security control is entirely visible to IT. That's the point.",
           "tips": [
             "Lead with: 'This is an IT control, not a user-facing product change'",
             "Good closer: 'What if we ran a 10-user pilot and asked them for feedback after a week?'",
-            "For orgs with a strong Microsoft culture: point out that managed Chrome profile doesn't replace Edge — it coexists"
+            "For orgs with a strong Microsoft culture: point out that managed Chrome profile doesn't replace Edge \u2014 it coexists"
           ],
-          "keywords": ["change management", "adoption", "users", "training", "change", "force", "resistance", "won't use"]
+          "keywords": [
+            "change management",
+            "adoption",
+            "users",
+            "training",
+            "change",
+            "force",
+            "resistance",
+            "won't use"
+          ]
         },
         {
           "id": "o-budget",
           "objection": "We're not ready to budget for this / it's not a priority this year",
-          "response": "Understood — let's make sure you have the numbers to build the case when the window opens. What does your current Citrix or VDI cost per user per year, including support and infrastructure? And what's the cost of one security incident for your organisation — downtime, remediation, regulatory fine? For most customers, CEP pays for itself within the first avoided incident. We can build that TCO model together so it's ready when budget comes around.",
+          "response": "Understood \u2014 let's make sure you have the numbers to build the case when the window opens. What does your current Citrix or VDI cost per user per year, including support and infrastructure? And what's the cost of one security incident for your organisation \u2014 downtime, remediation, regulatory fine? For most customers, CEP pays for itself within the first avoided incident. We can build that TCO model together so it's ready when budget comes around.",
           "tips": [
-            "This is a 'not yet' not a 'no' — keep the deal warm",
+            "This is a 'not yet' not a 'no' \u2014 keep the deal warm",
             "Offer a business case / TCO template as a leave-behind",
-            "Identify whether the blocker is budget cycle timing or internal priority — different solutions",
-            "Ask: 'When does your budget cycle open — and what would you need to have ready for it?'"
+            "Identify whether the blocker is budget cycle timing or internal priority \u2014 different solutions",
+            "Ask: 'When does your budget cycle open \u2014 and what would you need to have ready for it?'"
           ],
-          "keywords": ["budget", "cost", "expensive", "pricing", "not a priority", "next year", "roi", "justify", "business case"]
+          "keywords": [
+            "budget",
+            "cost",
+            "expensive",
+            "pricing",
+            "not a priority",
+            "next year",
+            "roi",
+            "justify",
+            "business case"
+          ]
         },
         {
           "id": "o-security-covered",
-          "objection": "We already have security covered — antivirus, firewall, VPN",
-          "response": "Those are network perimeter controls — they protect the edge. But most modern attacks live entirely inside the browser: phishing via legitimate-looking sites, drive-by downloads, malicious extensions, OAuth token theft. None of these trip a firewall. Antivirus can't see what a user does in a web application. CEP fills the security gap that sits between the network perimeter and the user's fingers — and it's the fastest-growing attack surface in enterprise today.",
+          "objection": "We already have security covered \u2014 antivirus, firewall, VPN",
+          "response": "Those are network perimeter controls \u2014 they protect the edge. But most modern attacks live entirely inside the browser: phishing via legitimate-looking sites, drive-by downloads, malicious extensions, OAuth token theft. None of these trip a firewall. Antivirus can't see what a user does in a web application. CEP fills the security gap that sits between the network perimeter and the user's fingers \u2014 and it's the fastest-growing attack surface in enterprise today.",
           "tips": [
-            "Stat to use: 'The browser is involved in over 80% of enterprise security incidents — yet most security stacks are blind inside it'",
-            "Ask: 'Does your current security stack give you visibility into browser-level activity — downloads, extension installs, site visits?'",
-            "Don't dismiss their stack — acknowledge it, then show what it can't see"
+            "Stat to use: 'The browser is involved in over 80% of enterprise security incidents \u2014 yet most security stacks are blind inside it'",
+            "Ask: 'Does your current security stack give you visibility into browser-level activity \u2014 downloads, extension installs, site visits?'",
+            "Don't dismiss their stack \u2014 acknowledge it, then show what it can't see"
           ],
-          "keywords": ["antivirus", "firewall", "vpn", "already covered", "security", "protection", "crowdstrike", "defender", "endpoint protection"]
+          "keywords": [
+            "antivirus",
+            "firewall",
+            "vpn",
+            "already covered",
+            "security",
+            "protection",
+            "crowdstrike",
+            "defender",
+            "endpoint protection"
+          ]
         }
       ]
     },
@@ -661,7 +829,13 @@
             "Is the priority security, cost reduction, or both?",
             "Does IT or the business own this decision?"
           ],
-          "keywords": ["use case", "starting point", "priority", "focus", "direction"]
+          "keywords": [
+            "use case",
+            "starting point",
+            "priority",
+            "focus",
+            "direction"
+          ]
         },
         {
           "id": "c-q-success",
@@ -672,29 +846,55 @@
             "Is there a security review, IT audit, or compliance milestone this could feed into?",
             "What would make this an easy internal sell to your IT leadership?"
           ],
-          "keywords": ["success", "outcomes", "90 days", "measure", "kpi", "results", "prove"]
+          "keywords": [
+            "success",
+            "outcomes",
+            "90 days",
+            "measure",
+            "kpi",
+            "results",
+            "prove"
+          ]
         },
         {
           "id": "c-q-stakeholders",
-          "question": "Who else needs to be part of the technical evaluation or commercial conversation — IT, security, procurement, a CISO?",
+          "question": "Who else needs to be part of the technical evaluation or commercial conversation \u2014 IT, security, procurement, a CISO?",
           "purpose": "Multi-thread the deal and identify the full buying committee before a proposal goes in. Single-threaded deals die at procurement.",
           "followUps": [
             "Is there a CISO or IT director who would need to sign off?",
             "Does procurement get involved at this stage or later?",
             "Is there an internal security review or vendor evaluation process?"
           ],
-          "keywords": ["stakeholders", "it", "ciso", "security", "procurement", "decision maker", "sign off", "committee"]
+          "keywords": [
+            "stakeholders",
+            "it",
+            "ciso",
+            "security",
+            "procurement",
+            "decision maker",
+            "sign off",
+            "committee"
+          ]
         },
         {
           "id": "c-q-pilot",
           "question": "Would a 30-day, 10-seat pilot help build internal confidence and give your IT team a chance to evaluate the platform hands-on?",
           "purpose": "Low-friction next step that creates forward momentum and surfaces any remaining blockers in a safe, reversible way.",
           "followUps": [
-            "Which use case would you want to validate — browser security, app delivery, or both?",
+            "Which use case would you want to validate \u2014 browser security, app delivery, or both?",
             "Who on the IT team would own the technical evaluation?",
             "What does the internal sign-off process look like to get a pilot approved?"
           ],
-          "keywords": ["pilot", "trial", "poc", "proof of concept", "evaluation", "30 day", "test", "try"]
+          "keywords": [
+            "pilot",
+            "trial",
+            "poc",
+            "proof of concept",
+            "evaluation",
+            "30 day",
+            "test",
+            "try"
+          ]
         }
       ],
       "talkingPoints": [
@@ -703,22 +903,33 @@
           "title": "Proposed pilot structure",
           "content": "10 users, 30 days, one focused use case (browser security or app delivery), evaluated by the IT owner. No infrastructure investment. Clear success criteria agreed upfront. At day 30, review against criteria and decide together on commercial pathway.",
           "tips": [
-            "Keep it simple — one use case, one team, clear criteria",
+            "Keep it simple \u2014 one use case, one team, clear criteria",
             "Offer to write the internal business case for them if needed",
             "Pilot momentum beats perfect business case every time for SMB"
           ],
-          "keywords": ["pilot", "structure", "30 days", "evaluation"]
+          "keywords": [
+            "pilot",
+            "structure",
+            "30 days",
+            "evaluation"
+          ]
         },
         {
           "id": "c-tp-pathway",
           "title": "Commercial pathway from pilot to deployment",
-          "content": "Pilot → internal review → commercial agreement → phased rollout. For sub-1000 seat customers, full deployment is typically achievable within 60–90 days of commercial sign-off. No professional services engagement required for standard deployments.",
+          "content": "Pilot \u2192 internal review \u2192 commercial agreement \u2192 phased rollout. For sub-1000 seat customers, full deployment is typically achievable within 60\u201390 days of commercial sign-off. No professional services engagement required for standard deployments.",
           "tips": [
-            "Emphasise speed-to-value for smaller customers — this isn't an 18-month enterprise project",
+            "Emphasise speed-to-value for smaller customers \u2014 this isn't an 18-month enterprise project",
             "If procurement is involved: get them a written proposal template early",
             "Cameyo + CEP together: position as a bundled browser platform deal, not two separate purchases"
           ],
-          "keywords": ["pathway", "deployment", "timeline", "commercial", "rollout"]
+          "keywords": [
+            "pathway",
+            "deployment",
+            "timeline",
+            "commercial",
+            "rollout"
+          ]
         }
       ],
       "objections": []
@@ -727,44 +938,79 @@
   "closeRecommendations": [
     {
       "id": "cr-poc",
-      "chipIds": ["has-citrix-rds", "local-windows-installs", "legacy-erp", "multi-device-access"],
+      "chipIds": [
+        "has-citrix-rds",
+        "local-windows-installs",
+        "legacy-erp",
+        "multi-device-access"
+      ],
       "nextStep": "Technical review / POC",
-      "rationale": "They have specific legacy app dependencies — a hands-on POC is far more persuasive than a deck.",
-      "askThis": "Based on what you've described with your legacy applications, the most valuable next step would be a quick technical POC. We can set up a sandbox environment where your team sees those apps running through Cameyo in a browser — no VDI, no client to install. Would it be worth 30 minutes of your architect's time this week?"
+      "rationale": "They have specific legacy app dependencies \u2014 a hands-on POC is far more persuasive than a deck.",
+      "askThis": "Based on what you've described with your legacy applications, the most valuable next step would be a quick technical POC. We can set up a sandbox environment where your team sees those apps running through Cameyo in a browser \u2014 no VDI, no client to install. Would it be worth 30 minutes of your architect's time this week?"
     },
     {
       "id": "cr-demo",
-      "chipIds": ["no-central-policy", "no-extension-control", "no-browser-visibility", "had-phishing-malware", "ransomware-concern", "no-browser-logging", "compliance-visibility-gap"],
+      "chipIds": [
+        "no-central-policy",
+        "no-extension-control",
+        "no-browser-visibility",
+        "had-phishing-malware",
+        "ransomware-concern",
+        "no-browser-logging",
+        "compliance-visibility-gap"
+      ],
       "nextStep": "Product demo scheduled",
-      "rationale": "Security and browser management gaps are most compellingly shown live — screenshots don't do it justice.",
-      "askThis": "The best way to make this concrete is a live demo — I'll show you the Chrome Admin Console in action, walk through how policies deploy fleet-wide in under 15 minutes, and demonstrate the DLP controls so you can see exactly what visibility looks like. I can bring in our SE. Does Thursday work, or would early next week be better?"
+      "rationale": "Security and browser management gaps are most compellingly shown live \u2014 screenshots don't do it justice.",
+      "askThis": "The best way to make this concrete is a live demo \u2014 I'll show you the Chrome Admin Console in action, walk through how policies deploy fleet-wide in under 15 minutes, and demonstrate the DLP controls so you can see exactly what visibility looks like. I can bring in our SE. Does Thursday work, or would early next week be better?"
     },
     {
       "id": "cr-proposal",
-      "chipIds": ["high-byod", "contractors-third-party", "seasonal-staff", "no-mdm"],
+      "chipIds": [
+        "high-byod",
+        "contractors-third-party",
+        "seasonal-staff",
+        "no-mdm"
+      ],
       "nextStep": "Send proposal / quote",
-      "rationale": "Unmanaged device problem is well-defined — they need commercials to take it forward internally.",
-      "askThis": "It sounds like you've got a clear picture of the problem already — a lot of unmanaged devices and no clean way to enforce security on them today. The right move is probably a proposal so you can take something concrete to your IT team or budget holder. Let me put together a scoped option based on what you've told me — is it worth me getting that to you by Friday?"
+      "rationale": "Unmanaged device problem is well-defined \u2014 they need commercials to take it forward internally.",
+      "askThis": "It sounds like you've got a clear picture of the problem already \u2014 a lot of unmanaged devices and no clean way to enforce security on them today. The right move is probably a proposal so you can take something concrete to your IT team or budget holder. Let me put together a scoped option based on what you've told me \u2014 is it worth me getting that to you by Friday?"
     },
     {
       "id": "cr-discovery-call",
-      "chipIds": ["compliance-visibility-gap", "no-browser-in-ir", "no-audit-trail", "no-download-controls"],
+      "chipIds": [
+        "compliance-visibility-gap",
+        "no-browser-in-ir",
+        "no-audit-trail",
+        "no-download-controls"
+      ],
       "nextStep": "Discovery call scheduled",
       "rationale": "Compliance-driven prospects need a deeper conversation with the right technical resources before we can be specific.",
-      "askThis": "There's more I'd want to understand about your compliance framework before I can be genuinely useful. Would it be worth getting our compliance specialist on a short call — say 30 minutes — to map out exactly where the browser layer fits into your audit requirements? I can set that up for next week."
+      "askThis": "There's more I'd want to understand about your compliance framework before I can be genuinely useful. Would it be worth getting our compliance specialist on a short call \u2014 say 30 minutes \u2014 to map out exactly where the browser layer fits into your audit requirements? I can set that up for next week."
     }
   ],
   "openerRules": [
     {
       "id": "or-ciso",
-      "titleKeywords": ["ciso", "security", "cyber", "infosec", "information security"],
+      "titleKeywords": [
+        "ciso",
+        "security",
+        "cyber",
+        "infosec",
+        "information security"
+      ],
       "industries": [],
       "styleId": "challenger",
       "priority": 10
     },
     {
       "id": "or-cto",
-      "titleKeywords": ["cto", "chief technology", "vp engineering", "head of engineering", "vp of engineering"],
+      "titleKeywords": [
+        "cto",
+        "chief technology",
+        "vp engineering",
+        "head of engineering",
+        "vp of engineering"
+      ],
       "industries": [],
       "styleId": "direct",
       "priority": 8
@@ -772,21 +1018,33 @@
     {
       "id": "or-financial",
       "titleKeywords": [],
-      "industries": ["financial-services", "banking", "insurance"],
+      "industries": [
+        "financial-services",
+        "banking",
+        "insurance"
+      ],
       "styleId": "challenger",
       "priority": 5
     },
     {
       "id": "or-tech",
       "titleKeywords": [],
-      "industries": ["technology", "software", "saas"],
+      "industries": [
+        "technology",
+        "software",
+        "saas"
+      ],
       "styleId": "direct",
       "priority": 5
     },
     {
       "id": "or-healthcare",
       "titleKeywords": [],
-      "industries": ["healthcare", "pharma", "life-sciences"],
+      "industries": [
+        "healthcare",
+        "pharma",
+        "life-sciences"
+      ],
       "styleId": "warm",
       "priority": 5
     }
@@ -800,9 +1058,9 @@
         {
           "id": "fs-tp-compliance",
           "title": "Regulatory compliance (FCA / PCI-DSS)",
-          "content": "Unmanaged browsers are a routine finding in FCA supervisory reviews and PCI-DSS audits. The browser is where card data, client data, and trading instructions flow — and most firms have no controls on it. CEP closes that gap with enforceable policies and a full audit trail.",
+          "content": "Unmanaged browsers are a routine finding in FCA supervisory reviews and PCI-DSS audits. The browser is where card data, client data, and trading instructions flow \u2014 and most firms have no controls on it. CEP closes that gap with enforceable policies and a full audit trail.",
           "tips": [
-            "Ask about their last PCI or FCA audit — whether browser controls came up",
+            "Ask about their last PCI or FCA audit \u2014 whether browser controls came up",
             "Reference FCA Consumer Duty: firms must evidence controls over data handling end-to-end",
             "PCI-DSS v4.0 explicitly requires controls on browser-based access to cardholder data"
           ]
@@ -810,17 +1068,17 @@
         {
           "id": "fs-tp-dlp",
           "title": "Data leakage via personal cloud uploads",
-          "content": "In financial services, employees routinely handle price-sensitive information, client portfolios, and M&A data. Without DLP controls on the browser, a user can upload a spreadsheet to personal Google Drive or Dropbox in seconds — with no audit trail and no alert.",
+          "content": "In financial services, employees routinely handle price-sensitive information, client portfolios, and M&A data. Without DLP controls on the browser, a user can upload a spreadsheet to personal Google Drive or Dropbox in seconds \u2014 with no audit trail and no alert.",
           "tips": [
             "Ask if they have controls preventing uploads to personal cloud storage from managed devices",
-            "Market abuse and insider trading risk applies here — not just data breach",
+            "Market abuse and insider trading risk applies here \u2014 not just data breach",
             "CEP DLP rules can be set by file type, destination, or data classification"
           ]
         },
         {
           "id": "fs-tp-trading-desk",
           "title": "Trading / dealing desk browser controls",
-          "content": "Dealing desks often run legacy applications alongside web-based trading platforms. Cameyo virtualises legacy apps so they run browser-side — no thick client, no VDI, no separate managed build for traders.",
+          "content": "Dealing desks often run legacy applications alongside web-based trading platforms. Cameyo virtualises legacy apps so they run browser-side \u2014 no thick client, no VDI, no separate managed build for traders.",
           "tips": [
             "Ask if any trading platforms still require Windows thick clients or Java",
             "Reference the complexity of managing multiple desktop images for different desk types",
@@ -847,7 +1105,7 @@
         {
           "id": "tech-tp-saas-sprawl",
           "title": "SaaS sprawl and shadow IT",
-          "content": "Tech companies accumulate SaaS tools fast. CEP gives IT full visibility into which web applications employees are accessing — useful for licence management, shadow IT discovery, and data governance.",
+          "content": "Tech companies accumulate SaaS tools fast. CEP gives IT full visibility into which web applications employees are accessing \u2014 useful for licence management, shadow IT discovery, and data governance.",
           "tips": [
             "Ask how they currently track which SaaS tools staff are using",
             "CEP URL reporting shows every domain accessed across the managed fleet",
@@ -857,7 +1115,7 @@
         {
           "id": "tech-tp-contractor",
           "title": "Contractor and remote access without VPN",
-          "content": "Tech companies frequently use contractors, agencies, and remote staff who work on personal devices. Without VDI or managed devices, you have no control over their browser. CEP Managed Profile gives contractors a secure work context in Chrome — IT-controlled, without touching their personal device.",
+          "content": "Tech companies frequently use contractors, agencies, and remote staff who work on personal devices. Without VDI or managed devices, you have no control over their browser. CEP Managed Profile gives contractors a secure work context in Chrome \u2014 IT-controlled, without touching their personal device.",
           "tips": [
             "Ask what percentage of their workforce is contractors or agency staff",
             "Current solutions are usually VPN (fragile, expensive) or nothing",
@@ -874,17 +1132,17 @@
         {
           "id": "retail-tp-pci",
           "title": "PCI-DSS at the point of sale",
-          "content": "Retail is squarely in scope for PCI-DSS. The browser is increasingly the POS interface — web-based checkouts, web POS systems, and order management all run browser-side. Unmanaged browsers in POS environments create PCI scope creep and audit risk.",
+          "content": "Retail is squarely in scope for PCI-DSS. The browser is increasingly the POS interface \u2014 web-based checkouts, web POS systems, and order management all run browser-side. Unmanaged browsers in POS environments create PCI scope creep and audit risk.",
           "tips": [
             "Ask whether their POS or order management system runs in a browser",
             "PCI requires controls on what can be accessed from a device that touches cardholder data",
-            "CEP kiosk mode locks a browser to a specific URL — commonly used for POS terminals"
+            "CEP kiosk mode locks a browser to a specific URL \u2014 commonly used for POS terminals"
           ]
         },
         {
           "id": "retail-tp-seasonal",
           "title": "Seasonal and temporary workforce",
-          "content": "Retail hires thousands of seasonal staff who need quick, secure access to systems — and then need to be off-boarded just as fast. Managed Chrome profiles make this instant: the rep logs in with their work account, gets full IT-controlled access, and the profile is wiped when they leave.",
+          "content": "Retail hires thousands of seasonal staff who need quick, secure access to systems \u2014 and then need to be off-boarded just as fast. Managed Chrome profiles make this instant: the rep logs in with their work account, gets full IT-controlled access, and the profile is wiped when they leave.",
           "tips": [
             "Ask how they currently onboard / offboard seasonal staff to IT systems",
             "Current pain: IT tickets, device provisioning queues, forgotten offboarding",
@@ -901,7 +1159,7 @@
         {
           "id": "mfg-tp-legacy-erp",
           "title": "Legacy ERP and production software",
-          "content": "Manufacturing runs on legacy — SAP, Oracle ERP, MES systems, bespoke production scheduling tools. Most were never designed for modern devices. Cameyo virtualises these so they run in a Chrome browser tab with no local install, no VDI infrastructure, and no dependency on Windows build versions.",
+          "content": "Manufacturing runs on legacy \u2014 SAP, Oracle ERP, MES systems, bespoke production scheduling tools. Most were never designed for modern devices. Cameyo virtualises these so they run in a Chrome browser tab with no local install, no VDI infrastructure, and no dependency on Windows build versions.",
           "tips": [
             "Ask what ERP or production scheduling software they run",
             "Ask about the pain of managing Windows builds for shop floor vs office staff",
@@ -928,10 +1186,10 @@
         {
           "id": "ps-tp-client-data",
           "title": "Client confidentiality and data controls",
-          "content": "Agencies, consultancies, and law firms handle highly sensitive client data — commercially sensitive strategies, legal privileged documents, financial models. The browser is the primary work surface, and without DLP controls, client data can leak via personal uploads, clipboard, or printing.",
+          "content": "Agencies, consultancies, and law firms handle highly sensitive client data \u2014 commercially sensitive strategies, legal privileged documents, financial models. The browser is the primary work surface, and without DLP controls, client data can leak via personal uploads, clipboard, or printing.",
           "tips": [
             "Ask whether they have any controls preventing client files being uploaded to personal cloud storage",
-            "Legal privilege is lost if data is mishandled — frame as professional liability",
+            "Legal privilege is lost if data is mishandled \u2014 frame as professional liability",
             "CEP screen capture controls, download restrictions, and clipboard DLP all apply here"
           ]
         },
@@ -941,7 +1199,7 @@
           "content": "Professional services firms often resist managing partner and senior employee devices. CEP Managed Profile solves this: IT manages the work browser profile, not the device. Partners keep their personal MacBook or Windows laptop; IT gets control over the work context only.",
           "tips": [
             "Address the cultural resistance to MDM head-on: 'We're not managing the device, just the work profile'",
-            "Partners are often the highest-risk users — they have the most sensitive data access",
+            "Partners are often the highest-risk users \u2014 they have the most sensitive data access",
             "Works on Mac, Windows, and Chrome OS without touching personal files or apps"
           ]
         }
@@ -954,25 +1212,25 @@
       "label": "Consultative",
       "tag": "Question-led",
       "tagColorKey": "blue",
-      "opener": "Hi {{name}}, great to connect — thanks for making the time. Before I tell you anything about what we do, I'd love to understand your setup first. It means anything I share will actually be relevant to you rather than a generic pitch. Would that be OK?",
-      "agenda": "My plan for today: a few questions about how your team handles browsers, applications, and security — then I'll share specifically what Chrome Enterprise Premium and Cameyo do — and we'll decide together whether there's a fit. Does that sound useful?",
-      "bridge": "Great. Let me start with browsers — it's usually where we find the most interesting gaps. How are browsers managed across {{company}} today?"
+      "opener": "Hi {{name}}, great to connect \u2014 thanks for making the time. Before I tell you anything about what we do, I'd love to understand your setup first. It means anything I share will actually be relevant to you rather than a generic pitch. Would that be OK?",
+      "agenda": "My plan for today: a few questions about how your team handles browsers, applications, and security \u2014 then I'll share specifically what Chrome Enterprise Premium and Cameyo do \u2014 and we'll decide together whether there's a fit. Does that sound useful?",
+      "bridge": "Great. Let me start with browsers \u2014 it's usually where we find the most interesting gaps. How are browsers managed across {{company}} today?"
     },
     {
       "id": "challenger",
       "label": "Challenger",
       "tag": "Insight-led",
       "tagColorKey": "amber",
-      "opener": "Hi {{name}}, thanks for making time. I looked at a few companies your size before this call and there are usually two or three things around browser security and application delivery that create real risk — often without anyone on the IT side realising it until it becomes a problem. I'd like to ask you a few questions to see whether any of those apply to {{company}}.",
-      "agenda": "I'll keep it focused — a few questions about your environment, then a targeted view of where Chrome Enterprise Premium and Cameyo fit in. If it's not relevant, I'll tell you straight and we can wrap up early. Fair?",
-      "bridge": "Let me start here: how are browsers managed across your organisation today — does IT push policies centrally, or are users largely running whatever they like?"
+      "opener": "Hi {{name}}, thanks for making time. I looked at a few companies your size before this call and there are usually two or three things around browser security and application delivery that create real risk \u2014 often without anyone on the IT side realising it until it becomes a problem. I'd like to ask you a few questions to see whether any of those apply to {{company}}.",
+      "agenda": "I'll keep it focused \u2014 a few questions about your environment, then a targeted view of where Chrome Enterprise Premium and Cameyo fit in. If it's not relevant, I'll tell you straight and we can wrap up early. Fair?",
+      "bridge": "Let me start here: how are browsers managed across your organisation today \u2014 does IT push policies centrally, or are users largely running whatever they like?"
     },
     {
       "id": "direct",
       "label": "Direct",
       "tag": "No-fluff",
       "tagColorKey": "slate",
-      "opener": "Hi {{name}}, good to speak. Quick intro — I work with companies your size on two things: securing the browser layer across managed and unmanaged devices, and modernising legacy Windows application delivery without VDI infrastructure. Rather than pitch you straight away, three quick questions to understand your setup, and I'll be honest about whether we can actually help.",
+      "opener": "Hi {{name}}, good to speak. Quick intro \u2014 I work with companies your size on two things: securing the browser layer across managed and unmanaged devices, and modernising legacy Windows application delivery without VDI infrastructure. Rather than pitch you straight away, three quick questions to understand your setup, and I'll be honest about whether we can actually help.",
       "agenda": "Questions about your environment, then what Chrome Enterprise Premium and Cameyo do, then an honest conversation about fit. Shouldn't take long.",
       "bridge": "First question: how are browsers managed at {{company}} today?"
     },
@@ -982,8 +1240,339 @@
       "tag": "Relationship-first",
       "tagColorKey": "green",
       "opener": "Hi {{name}}, really good to meet you. I always find these calls are much more useful when I take the time to understand what someone's actually dealing with day-to-day before I start talking about products. So if it's OK with you, I'd love to hear a bit about your setup first.",
-      "agenda": "I'll ask a few questions about your environment, then share what Chrome Enterprise Premium and Cameyo can do, and we'll have a proper conversation about whether there's a fit. No pressure — just a useful chat. Sound good?",
-      "bridge": "Brilliant. So tell me about {{company}} — how are things managed from a browser and application standpoint today? Centralised IT, or more distributed?"
+      "agenda": "I'll ask a few questions about your environment, then share what Chrome Enterprise Premium and Cameyo can do, and we'll have a proper conversation about whether there's a fit. No pressure \u2014 just a useful chat. Sound good?",
+      "bridge": "Brilliant. So tell me about {{company}} \u2014 how are things managed from a browser and application standpoint today? Centralised IT, or more distributed?"
+    }
+  ],
+  "useCaseQuestions": [
+    {
+      "id": "ucq-1",
+      "question": "How are your contractors or third-party workers currently accessing company resources?",
+      "rationale": "Unmanaged contractor access is the most common entry point for data loss. Identifying the gap surfaces urgency.",
+      "listenFor": [
+        "personal devices",
+        "VPN",
+        "no oversight",
+        "shared logins",
+        "nothing in place"
+      ],
+      "followUp": "What happens when a contractor's engagement ends \u2014 how do you revoke access?",
+      "useCases": [
+        "contractors"
+      ]
+    },
+    {
+      "id": "ucq-2",
+      "question": "Do you have visibility into what contractors are doing in your systems once they're in?",
+      "rationale": "Lack of audit trail is a compliance and security risk. Pins the conversation to control, not just access.",
+      "listenFor": [
+        "no visibility",
+        "trust them",
+        "logs",
+        "audit"
+      ],
+      "useCases": [
+        "contractors",
+        "data-exfil"
+      ]
+    },
+    {
+      "id": "ucq-3",
+      "question": "How many of your employees are using personal devices to access work apps or email?",
+      "rationale": "BYOD scope question \u2014 helps quantify the problem and identify whether this is an edge case or widespread.",
+      "listenFor": [
+        "lots",
+        "everyone",
+        "remote workers",
+        "field teams",
+        "sales reps"
+      ],
+      "followUp": "Are those devices enrolled in any MDM, or are they completely unmanaged?",
+      "useCases": [
+        "byod"
+      ]
+    },
+    {
+      "id": "ucq-4",
+      "question": "If an employee left tomorrow using their personal device, could you prevent them taking company data with them?",
+      "rationale": "Reframes BYOD risk from convenience to offboarding \u2014 a concrete, relatable scenario that drives urgency.",
+      "listenFor": [
+        "no",
+        "difficult",
+        "MDM",
+        "wipe the device",
+        "not really"
+      ],
+      "useCases": [
+        "byod",
+        "data-exfil"
+      ]
+    },
+    {
+      "id": "ucq-5",
+      "question": "What's your biggest concern around sensitive data leaving your organisation \u2014 through email, downloads, or the browser?",
+      "rationale": "Open-ended DLP question that surfaces whether the customer is thinking about egress at all.",
+      "listenFor": [
+        "downloads",
+        "USB",
+        "personal email",
+        "not sure",
+        "nothing currently"
+      ],
+      "followUp": "Is this something your compliance or legal team has flagged as a risk?",
+      "useCases": [
+        "data-exfil"
+      ]
+    },
+    {
+      "id": "ucq-6",
+      "question": "Do you have a policy on which AI tools employees can use, and what data they're allowed to put into them?",
+      "rationale": "Most companies don't \u2014 this opens the Gen AI governance conversation quickly.",
+      "listenFor": [
+        "no policy",
+        "ad hoc",
+        "trying to figure it out",
+        "ChatGPT",
+        "Copilot"
+      ],
+      "followUp": "What would be the consequence if an employee pasted customer data into a public AI tool?",
+      "useCases": [
+        "gen-ai"
+      ]
+    },
+    {
+      "id": "ucq-7",
+      "question": "Have you had any incidents with phishing, malicious links, or employees hitting harmful sites?",
+      "rationale": "Incident history creates emotional context \u2014 past pain is the best predictor of purchase urgency.",
+      "listenFor": [
+        "yes",
+        "a few times",
+        "click on links",
+        "training didn't help"
+      ],
+      "followUp": "Was that on managed devices, personal devices, or both?",
+      "useCases": [
+        "web-filtering"
+      ]
+    },
+    {
+      "id": "ucq-8",
+      "question": "Do your employees access the internet directly, or does traffic go through any filtering or proxy today?",
+      "rationale": "Establishes the baseline. If there's nothing, the gap is obvious. If there's something, understand whether it covers unmanaged devices.",
+      "listenFor": [
+        "nothing",
+        "some proxy",
+        "only on corp devices",
+        "not on personal"
+      ],
+      "useCases": [
+        "web-filtering"
+      ]
+    },
+    {
+      "id": "ucq-9",
+      "question": "What's your current setup for delivering Windows applications to your users \u2014 Citrix, RDS, something else?",
+      "rationale": "Identifies the incumbent. Citrix/RDS means TCO and complexity conversation. Nothing means greenfield.",
+      "listenFor": [
+        "Citrix",
+        "RDS",
+        "VDI",
+        "AppV",
+        "on-prem servers",
+        "expensive",
+        "slow"
+      ],
+      "followUp": "When did you last evaluate whether that setup is still the right one?",
+      "useCases": [
+        "citrix-vdi"
+      ]
+    },
+    {
+      "id": "ucq-10",
+      "question": "What are the main Windows apps you need to deliver \u2014 are they line-of-business apps, or more general productivity tools?",
+      "rationale": "Scopes the Cameyo use case. Helps identify whether this is a migration or a new delivery need.",
+      "listenFor": [
+        "ERP",
+        "finance apps",
+        "legacy apps",
+        "just a few specific tools"
+      ],
+      "useCases": [
+        "citrix-vdi"
+      ]
+    },
+    {
+      "id": "ucq-11",
+      "question": "What's driving the need to look at this now \u2014 is there a project, a renewal, or a specific incident that's pushed this up the priority list?",
+      "rationale": "Universal timeline/urgency question. The answer shapes every other part of the call.",
+      "listenFor": [
+        "contract renewal",
+        "audit",
+        "incident",
+        "board pressure",
+        "new hire",
+        "growth"
+      ],
+      "useCases": [
+        "contractors",
+        "byod",
+        "data-exfil",
+        "gen-ai",
+        "web-filtering",
+        "citrix-vdi"
+      ]
+    },
+    {
+      "id": "ucq-12",
+      "question": "What does success look like for you \u2014 if we solve this, what does your day-to-day look like six months from now?",
+      "rationale": "Future-state question that moves from problem to outcome. Generates language for the pitch and close.",
+      "listenFor": [
+        "less time managing",
+        "confident in security",
+        "team can work anywhere",
+        "no more complaints"
+      ],
+      "useCases": [
+        "contractors",
+        "byod",
+        "data-exfil",
+        "gen-ai",
+        "web-filtering",
+        "citrix-vdi"
+      ]
+    }
+  ],
+  "pitchCards": [
+    {
+      "id": "pc-1",
+      "useCases": [
+        "contractors"
+      ],
+      "title": "Contractor Access Without the Risk",
+      "pitch": "Chrome Enterprise Premium lets contractors work from any device \u2014 their own laptop, a shared machine, anything with Chrome \u2014 without ever touching your network or installing agents. They get access to exactly what they need, and you get full visibility and one-click revocation when the engagement ends.",
+      "keyPoints": [
+        "No device management required \u2014 works on personal or unmanaged devices",
+        "Access scoped to approved apps and sites only",
+        "Full audit trail of what they accessed and when",
+        "Revoke access instantly \u2014 no IT ticket needed"
+      ],
+      "product": "cep"
+    },
+    {
+      "id": "pc-2",
+      "useCases": [
+        "byod"
+      ],
+      "title": "Policy Enforcement Without MDM",
+      "pitch": "Most MDM tools require you to enrol the device \u2014 and employees push back. Chrome Enterprise Premium enforces your security policies at the browser level, not the device level. That means you can control what employees do at work, without touching anything personal.",
+      "keyPoints": [
+        "No MDM enrolment needed \u2014 policies live in the browser",
+        "Prevent downloads, copy-paste, screenshots in work context",
+        "Works on any OS \u2014 Windows, Mac, Chromebook, personal phones",
+        "Employees keep full control of their personal apps and data"
+      ],
+      "product": "cep"
+    },
+    {
+      "id": "pc-3",
+      "useCases": [
+        "data-exfil"
+      ],
+      "title": "Stop Data Leaving Through the Browser",
+      "pitch": "The browser is where most work happens \u2014 and most leaks. Chrome Enterprise Premium gives you DLP controls at the point of use: prevent downloads to unmanaged devices, block copy-paste to personal apps, watermark sensitive content, and get alerts when someone tries to exfiltrate data.",
+      "keyPoints": [
+        "Block file downloads to unmanaged or personal devices",
+        "Restrict copy-paste between work and personal contexts",
+        "Watermark sensitive pages and documents",
+        "Real-time alerts on risky data movement"
+      ],
+      "product": "cep"
+    },
+    {
+      "id": "pc-4",
+      "useCases": [
+        "gen-ai"
+      ],
+      "title": "Govern AI Tool Usage Across Your Organisation",
+      "pitch": "You can't stop employees using AI tools \u2014 but you can make sure they're using approved ones, and that sensitive data isn't flowing into public models. Chrome Enterprise Premium lets you allow or block specific AI tools and control what content employees can paste into them.",
+      "keyPoints": [
+        "Allow approved AI tools, block consumer/public alternatives",
+        "Prevent pasting sensitive data into AI prompts",
+        "URL filtering covers new AI tools as they emerge",
+        "Audit log of AI tool access per user"
+      ],
+      "product": "cep"
+    },
+    {
+      "id": "pc-5",
+      "useCases": [
+        "web-filtering"
+      ],
+      "title": "Phishing and Web Threat Protection on Any Device",
+      "pitch": "Traditional web filtering only covers managed, on-network devices. Chrome Enterprise Premium extends protection to every Chrome session \u2014 personal devices, home networks, field workers \u2014 so you're not leaving gaps where the most dangerous clicks happen.",
+      "keyPoints": [
+        "Real-time phishing and malware URL blocking",
+        "Works off-network and on personal devices",
+        "Custom allow/block lists for your industry requirements",
+        "No agent or device enrolment required"
+      ],
+      "product": "cep"
+    },
+    {
+      "id": "pc-6",
+      "useCases": [
+        "citrix-vdi"
+      ],
+      "title": "Windows Apps via Chrome \u2014 Without the Infrastructure",
+      "pitch": "Cameyo streams Windows applications directly into the Chrome browser \u2014 no VDI infrastructure, no Citrix licences, no per-device agents. Users get a native-feeling app experience from any device with Chrome, and IT manages everything from a single web console.",
+      "keyPoints": [
+        "Any Windows app streamed to any device with Chrome",
+        "Eliminate Citrix/RDS infrastructure and licence costs",
+        "Deploy new apps in hours, not weeks",
+        "Pairs with CEP for a fully managed, secure browser workspace"
+      ],
+      "product": "cameyo"
+    }
+  ],
+  "resourceLinks": [
+    {
+      "id": "rl-placeholder-1",
+      "title": "Chrome Enterprise Premium Overview",
+      "description": "High-level product overview deck suitable for sharing with IT decision-makers",
+      "url": "https://workspace.google.com/products/chrome-enterprise/",
+      "type": "customer-facing",
+      "useCases": [
+        "contractors",
+        "byod",
+        "data-exfil",
+        "gen-ai",
+        "web-filtering"
+      ]
+    },
+    {
+      "id": "rl-placeholder-2",
+      "title": "Cameyo Product Overview",
+      "description": "Virtual app delivery overview \u2014 good for Citrix replacement conversations",
+      "url": "https://cameyo.com",
+      "type": "customer-facing",
+      "useCases": [
+        "citrix-vdi"
+      ]
+    },
+    {
+      "id": "rl-placeholder-3",
+      "title": "CEP Pricing & Packaging",
+      "description": "Internal reference for licensing tiers \u2014 do not share directly",
+      "url": "https://workspace.google.com/pricing",
+      "type": "internal",
+      "useCases": [
+        "contractors",
+        "byod",
+        "data-exfil",
+        "gen-ai",
+        "web-filtering",
+        "citrix-vdi"
+      ]
     }
   ]
 }
